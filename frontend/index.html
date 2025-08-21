@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Real Estate Listings</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <h1>Available Properties</h1>
+  <div id="listings"></div>
+
+  <h2>Add Property</h2>
+  <form id="propertyForm">
+    <input type="text" name="title" placeholder="Title" required>
+    <input type="number" name="price" placeholder="Price" required>
+    <input type="text" name="description" placeholder="Description">
+    <input type="text" name="image" placeholder="Image filename (e.g., house.jpg)">
+    <button type="submit">Add</button>
+  </form>
+
+  <script>
+    // Fetch and render properties
+  function loadProperties() {
+  fetch('/api/properties')
+    .then(res => res.json())
+    .then(data => {
+      const container = document.getElementById('listings');
+      container.innerHTML = data.map(p => `
+        <div class="property">
+          <img src="images/${p.image}" width="200" alt="${p.title}">
+          <h2>${p.title}</h2>
+          <p>Price: $${p.price}</p>
+          <p>${p.description}</p>
+        </div>
+      `).join('');
+    });
+}
+
+// Handle form submission
+document.getElementById('propertyForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+  const data = Object.fromEntries(formData.entries());
+
+  fetch('/api/properties', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  }).then(() => {
+    e.target.reset();
+    loadProperties();
+  });
+});
+
+// Initial load
+loadProperties();
+  </script>
+</body>
+</html>

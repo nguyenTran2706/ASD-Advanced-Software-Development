@@ -1,28 +1,30 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const sqlite3 = require('sqlite3').verbose();
-const path = require('path');
+// app.js
+const express = require("express");
+const path = require("path");
+const bodyParser = require("body-parser");
+
+// Import routes
+const propertiesRoute = require("./backend/properties");
 
 const app = express();
-const db = new sqlite3.Database('./database.db');
 
 // Middleware
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
-app.set('view engine', 'ejs');
+app.use(bodyParser.json());
 
-// Routes
-app.get('/', (req, res) => {
-    db.all('SELECT * FROM properties', [], (err, rows) => {
-        if (err) {
-            return res.status(500).send(err.message);
-        }
-        res.render('index', { properties: rows });
-    });
+// Serve static frontend and css
+app.use(express.static(path.join(__dirname, "frontend")));
+app.use("/css", express.static(path.join(__dirname, "css")));
+
+// API routes
+app.use("/api/properties", propertiesRoute);
+
+// Serve frontend index.html on root
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "frontend", "index.html"));
 });
 
 // Start server
 const PORT = 3000;
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
+app.listen(PORT, () =>
+  console.log(`🚀 Server running at http://localhost:${PORT}`)
+);
