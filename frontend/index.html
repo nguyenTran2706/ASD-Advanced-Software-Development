@@ -1,58 +1,213 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Real Estate Listings</title>
-  <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-  <h1>Available Properties</h1>
-  <div id="listings"></div>
+  <head>
+    <title>Real Estate Listings</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/style.css" />
+  </head>
+  <body>
+    <div id="navbar">
+      <a href="index.html">
+        <img style="height: 40px" src="../Assets/Logo.png" alt="logo"
+      /></a>
 
-  <h2>Add Property</h2>
-  <form id="propertyForm">
-    <input type="text" name="title" placeholder="Title" required>
-    <input type="number" name="price" placeholder="Price" required>
-    <input type="text" name="description" placeholder="Description">
-    <input type="text" name="image" placeholder="Image filename (e.g., house.jpg)">
-    <button type="submit">Add</button>
-  </form>
+      <div class="navbar-selector">
+        <a style="color: black; font-weight: 600" href="index.html">Home</a>
 
-  <script>
-    // Fetch and render properties
-  function loadProperties() {
-  fetch('/api/properties')
-    .then(res => res.json())
-    .then(data => {
-      const container = document.getElementById('listings');
-      container.innerHTML = data.map(p => `
+        <div class="dropdown">
+          <a href="Audi.html">Buy</a>
+        </div>
+
+        <div class="dropdown">
+          <a href="Subaru.html">Rent</a>
+        </div>
+
+        <div class="dropdown">
+          <a href="Subaru.html">Sold</a>
+        </div>
+
+        <div class="dropdown">
+          <a href="Subaru.html">Find Agent</a>
+        </div>
+
+        <div class="dropdown">
+          <a href="Subaru.html">News</a>
+        </div>
+      </div>
+
+      <div class="navbar-buttons">
+        <button id="subaruButton" class="button-secondary">Sign Up</button>
+        <button id="subaruButton" class="button-primary">Join</button>
+      </div>
+    </div>
+
+    <div id="hero-section">
+      <div class="hero-section-center">
+        <div class="hero-text">
+          <p class="h1">The Breakthrough Platform for Smarter Home Finding</p>
+          <p class="sub-header">
+            Streamline planning management, enhance collaboration, and deliver
+            results with MyHome
+          </p>
+        </div>
+
+        <div class="search-section">
+          <div class="search-navbar">
+            <div class="search-navbar-texts">
+              <p style="color: black">Description</p>
+              <p>Rent</p>
+              <p>Sold</p>
+              <p>Address</p>
+              <p>Agent</p>
+            </div>
+
+            <div class="line"></div>
+            <div class="line-choosed"></div>
+          </div>
+
+          <div class="search-box">
+            <div class="search-placeholder">
+              <img src="../Assets/search.png" alt="searchicon" />
+              <p>Search suburb, postcode or state</p>
+            </div>
+            <div style="border-radius: 40px" class="button-secondary-round">
+              <img src="../Assets/filter.png" alt="filtericon" /> Filters
+            </div>
+            <div style="border-radius: 40px" class="button-primary-round">
+              Search
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="optimization">
+      <div class="optimization-text">
+        <p class="optimization-h1">
+          Best optimization based on your credentials
+        </p>
+        <p class="optimization-subheader">
+          Streamline planning management, enhance collaboration, and deliver
+          results with Central Quita
+        </p>
+      </div>
+
+      <div class="container-layout">
+        <div class="container">
+          <img src="../Assets/unit2.png" alt="unit-image" />
+          <div class="love">
+            <div class="text-love">
+              <p>312 Zetland, NSW</p>
+              <div class="unit-tag">
+                <img src="../Assets/dot-grey.png" alt="dot" />
+                <p>Apartment</p>
+              </div>
+            </div>
+            <img src="../Assets/love-icon.png" alt="Love-icon" />
+          </div>
+        </div>
+
+        <div class="container">
+          <img src="../Assets/unit2.png" alt="unit-image" />
+          <div class="love">
+            <div class="text-love">
+              <p>312 Zetland, NSW</p>
+              <div class="unit-tag">
+                <img src="../Assets/dot-grey.png" alt="dot" />
+                <p>Apartment</p>
+              </div>
+            </div>
+            <img src="../Assets/love-icon.png" alt="Love-icon" />
+          </div>
+        </div>
+
+        <div class="container">
+          <img src="../Assets/unit2.png" alt="unit-image" />
+          <div class="love">
+            <div class="text-love">
+              <p>312 Zetland, NSW</p>
+              <div class="unit-tag">
+                <img src="../Assets/dot-grey.png" alt="dot" />
+                <p>Apartment</p>
+              </div>
+            </div>
+            <img src="../Assets/love-icon.png" alt="Love-icon" />
+          </div>
+        </div>
+
+        <div class="container">
+          <img src="../Assets/unit2.png" alt="unit-image" />
+          <div class="love">
+            <div class="text-love">
+              <p>312 Zetland, NSW</p>
+              <div class="unit-tag">
+                <img src="../Assets/dot-grey.png" alt="dot" />
+                <p>Apartment</p>
+              </div>
+            </div>
+            <img src="../Assets/love-icon.png" alt="Love-icon" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="newest-development">
+      <div class="optimization-text">
+        <p class="optimization-h1">
+          Newest  Developments
+        </p>
+        <p class="optimization-subheader">
+          Streamline planning management, enhance collaboration, and deliver
+          results with Central Quita
+        </p>
+      </div>
+    </div>
+
+    <script>
+      // Fetch and render properties
+      function loadProperties() {
+        fetch("/api/properties")
+          .then((res) => res.json())
+          .then((data) => {
+            const container = document.getElementById("listings");
+            container.innerHTML = data
+              .map(
+                (p) => `
         <div class="property">
           <img src="images/${p.image}" width="200" alt="${p.title}">
           <h2>${p.title}</h2>
           <p>Price: $${p.price}</p>
           <p>${p.description}</p>
         </div>
-      `).join('');
-    });
-}
+      `
+              )
+              .join("");
+          });
+      }
 
-// Handle form submission
-document.getElementById('propertyForm').addEventListener('submit', e => {
-  e.preventDefault();
-  const formData = new FormData(e.target);
-  const data = Object.fromEntries(formData.entries());
+      // Handle form submission
+      document
+        .getElementById("propertyForm")
+        .addEventListener("submit", (e) => {
+          e.preventDefault();
+          const formData = new FormData(e.target);
+          const data = Object.fromEntries(formData.entries());
 
-  fetch('/api/properties', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-  }).then(() => {
-    e.target.reset();
-    loadProperties();
-  });
-});
+          fetch("/api/properties", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+          }).then(() => {
+            e.target.reset();
+            loadProperties();
+          });
+        });
 
-// Initial load
-loadProperties();
-  </script>
-</body>
+      // Initial load
+      loadProperties();
+    </script>
+  </body>
 </html>
