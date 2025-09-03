@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Find Agent</title>
+
+  <!-- same fonts + site CSS -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <!-- NAV -->
+  <div id="navbar">
+    <a href="index.html">
+      <img style="height: 40px" src="/Assets/Logo.png" alt="logo" />
+    </a>
+
+    <div class="navbar-selector">
+      <a style="color: black; font-weight: 600" href="index.html">Home</a>
+      <div class="dropdown"><a href="buy.html">Buy</a></div>
+      <div class="dropdown"><a href="rent.html">Rent</a></div>
+      <div class="dropdown"><a href="sold.html">Sold</a></div>
+      <div class="dropdown"><a href="findAgent.html">Find Agent</a></div>
+      <div class="dropdown"><a href="news.html">News</a></div>
+    </div>
+
+    <div class="navbar-buttons" id="navbarUser">
+      <a class="button-primary" href="signUp.html" style="text-decoration:none;color:#fff">Sign Up</a>
+      <a class="button-primary" href="login.html" style="text-decoration:none;color:#fff">Login</a>
+    </div>
+  </div>
+
+  <!-- HERO / SEARCH -->
+  <section class="agent-hero">
+    <div class="agent-hero-inner">
+      <div class="agent-hero-left">
+        <h1 class="agent-title">Search and compare real<br/>estate agents</h1>
+        <p class="agent-subtitle">
+          Whether you're starting your search or already have someone in mind,
+          you can compare sales agents, property managers or agencies before making your decision.
+        </p>
+
+        <div class="agent-search">
+          <div class="search-input-wrap">
+            <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M10 18a8 8 0 1 1 5.293-14.003A8 8 0 0 1 10 18Zm11 3-6.001-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <input id="agentSearch" class="agent-search-input" placeholder="Search by region, suburb or postcode" autocomplete="off" />
+          </div>
+          <ul id="agentSuggest" class="agent-suggest"></ul>
+          <button id="agentSearchBtn" class="agent-search-btn">Search</button>
+        </div>
+      </div>
+
+      <div class="agent-hero-right">
+        <img src="/Assets/berita3.png" class="agent-hero-img" alt="People discussing with agent"/>
+      </div>
+    </div>
+  </section>
+
+  <!-- “Selling your place?” HOW-IT-WORKS -->
+  <section class="agent-steps">
+    <h2 class="steps-title">Selling your place?</h2>
+    <p class="steps-subtitle">Compare real estate agents before you’re sold on one.</p>
+
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-badge">1</div>
+        <h3>Search for an agent</h3>
+        <p>Enter your suburb to find agents specialised in your area.</p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-badge">2</div>
+        <h3>Compare their stats</h3>
+        <p>Compare agent stats and their reviews to see who might be right for you.</p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-badge">3</div>
+        <h3>Connect with the best</h3>
+        <p>Get a free market appraisal from agents before making your decision.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTS BAR + FILTERS (simple) -->
+  <section class="agent-results-wrap">
+    <div class="results-header">
+      <div class="results-path" id="resultsPath">Real Estate Agents</div>
+      <div class="filters-row">
+        <button class="chip active">Agent</button>
+        <button class="chip">Agency</button>
+        <div class="chip dropdown-chip" id="sortChip">Suburb sales &amp; performance ▾</div>
+        <div class="chip dropdown-chip">12 months ▾</div>
+        <div class="chip dropdown-chip">All property types ▾</div>
+      </div>
+    </div>
+
+    <!-- AGENT CARDS -->
+    <div id="agentList" class="agent-list"></div>
+  </section>
+
+  <!-- FOOTER SPACE -->
+  <div style="height:60px"></div>
+
+  <script>
+    /* -------------------------------
+       Tiny data + search behaviour
+       (replace with API later if you want)
+       ------------------------------- */
+    const SUBURBS = [
+      { name: "Canterbury, NSW", postcode: "2193" },
+      { name: "Ashbury, NSW", postcode: "2193" },
+      { name: "Hurlstone Park, NSW", postcode: "2193" },
+      { name: "Newtown, NSW", postcode: "2042" },
+      { name: "Marrickville, NSW", postcode: "2204" },
+      { name: "Zetland, NSW", postcode: "2017" },
+    ];
+
+    const AGENTS = [
+      {
+        id: 1,
+        name: "Adrian William",
+        role: "Director",
+        agency: "Adrian William",
+        suburb: "Newtown, NSW 2042",
+        stats: { sold_suburb: 20, median_price: "$1.07M", median_days: 23, sold_all: 38 },
+        reviews: { score: 5.0, count: 1093, last12: 324 },
+        tags: ["Professional (791)", "Great communicator (703)", "Genuine (622)"],
+        photos: ["/Assets/berita2.png", "/Assets/berita3.png", "/Assets/berita4.png", "/Assets/berita1.png"],
+        headshot: "/Assets/berita4.png",
+        agencyVideo: "/Assets/berita2.png"
+      },
+      {
+        id: 2,
+        name: "Manuel Roussakis",
+        role: "Director",
+        agency: "Ray White - Canterbury",
+        suburb: "Canterbury, NSW 2193",
+        stats: { sold_suburb: 20, median_price: "$803k", median_days: 27, sold_all: 37 },
+        reviews: { score: 5.0, count: 34, last12: 13 },
+        tags: ["Responsive", "Honest", "Local expert"],
+        photos: ["/Assets/berita1.png", "/Assets/berita2.png", "/Assets/berita3.png", "/Assets/berita4.png"],
+        headshot: "/Assets/berita1.png",
+        agencyVideo: "/Assets/news1.png"
+      },
+      {
+        id: 3,
+        name: "Denny Barros",
+        role: "Licensed Real Estate Agent",
+        agency: "Adrian William",
+        suburb: "Canterbury, NSW 2193",
+        stats: { sold_suburb: 17, median_price: "$1.07M", median_days: 23, sold_all: 38 },
+        reviews: { score: 5.0, count: 48, last12: 17 },
+        tags: ["Knowledgeable", "Great communicator"],
+        photos: ["/Assets/berita3.png", "/Assets/berita2.png", "/Assets/berita4.png", "/Assets/berita1.png"],
+        headshot: "/Assets/berita2.png",
+        agencyVideo: "/Assets/news2.png"
+      }
+    ];
+
+    const qs = sel => document.querySelector(sel);
+    const agentListEl = qs("#agentList");
+    const input = qs("#agentSearch");
+    const suggest = qs("#agentSuggest");
+    const searchBtn = qs("#agentSearchBtn");
+    const pathEl = qs("#resultsPath");
+
+    function renderAgents(list, label = "Real Estate Agents") {
+      pathEl.textContent = label;
+      agentListEl.innerHTML = list.map(a => `
+        <article class="agent-card">
+          <div class="agency-banner ${a.agency.toLowerCase().includes('ray white') ? 'agency-raywhite' : ''}">
+            ${a.agency.toLowerCase().includes('ray white') ? 'RayWhite.' : a.agency}
+          </div>
+
+          <div class="agent-card-body">
+            <div class="agent-left">
+              <img class="agent-avatar" src="${a.headshot}" alt="${a.name}">
+              <div class="agent-ident">
+                <h3 class="agent-name">${a.name}</h3>
+                <div class="agent-role">${a.role}</div>
+                <div class="agent-agency">at ${a.agency}</div>
+                <div class="agent-reviews">⭐ ${a.reviews.score} (${a.reviews.count} reviews)</div>
+                <div class="agent-reviews-sub">${a.reviews.last12} reviews in last 12 months</div>
+              </div>
+            </div>
+
+            <div class="agent-middle">
+              <div class="stat">
+                <div class="stat-label">Canterbury</div>
+                <div class="stat-value">${a.stats.sold_suburb}</div>
+                <div class="stat-sub">Properties sold (as lead agent)</div>
+              </div>
+              <div class="stat">
+                <div class="stat-label">Median sold price</div>
+                <div class="stat-value">${a.stats.median_price}</div>
+                <div class="stat-sub">Median sold price</div>
+              </div>
+              <div class="stat">
+                <div class="stat-label">Median days advertised</div>
+                <div class="stat-value">${a.stats.median_days}</div>
+                <div class="stat-sub">Median days advertised</div>
+              </div>
+              <div class="stat">
+                <div class="stat-label">All suburbs</div>
+                <div class="stat-value">${a.stats.sold_all}</div>
+                <div class="stat-sub">Properties sold</div>
+              </div>
+
+              <div class="agent-quote">
+                <span>★ 5/5 • Rating from a seller</span>
+                <span class="muted">• Verified review</span>
+                <p>“Great communication, very professional. The process was smooth from start to finish.”</p>
+              </div>
+
+              <div class="thumbs-row">
+                <img src="${a.agencyVideo}" alt="agency video">
+                ${a.photos.map(p => `<img src="${p}" alt="recently sold">`).join('')}
+              </div>
+            </div>
+
+            <div class="agent-right">
+              <button class="btn-ghost-full">Enquire</button>
+              <button class="btn-primary-full">Request a free appraisal</button>
+              <div class="agent-tags">
+                ${a.tags.map(t => `<span class="tag">${t}</span>`).join('')}
+              </div>
+            </div>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    // suggestions
+    function showSuggestions(val) {
+      const v = val.trim().toLowerCase();
+      if (!v) { suggest.innerHTML = ""; suggest.classList.remove("open"); return; }
+      const hits = SUBURBS.filter(s => s.name.toLowerCase().includes(v) || s.postcode.includes(v)).slice(0,5);
+      suggest.innerHTML = hits.map(h => `
+        <li class="suggest-item" data-name="${h.name} ${h.postcode}">
+          <span class="suggest-icon">📍</span>
+          <span>${h.name} <strong>${h.postcode}</strong></span>
+        </li>`).join("");
+      suggest.classList.toggle("open", hits.length > 0);
+    }
+
+    input.addEventListener("input", e => showSuggestions(e.target.value));
+    suggest.addEventListener("click", (e) => {
+      const li = e.target.closest(".suggest-item");
+      if (!li) return;
+      input.value = li.dataset.name;
+      suggest.classList.remove("open");
+      doSearch();
+    });
+    document.addEventListener('click', (e)=>{ if(!e.target.closest('.agent-search')) suggest.classList.remove('open'); });
+
+    function doSearch() {
+      const q = input.value.trim().toLowerCase();
+      const filtered = AGENTS.filter(a => a.suburb.toLowerCase().includes(q) || a.agency.toLowerCase().includes(q) || a.name.toLowerCase().includes(q));
+      renderAgents(filtered.length ? filtered : AGENTS, filtered.length ? `Real Estate Agents in ${input.value}` : "Real Estate Agents");
+    }
+    searchBtn.addEventListener("click", doSearch);
+    input.addEventListener("keydown", (e)=>{ if(e.key==='Enter'){ e.preventDefault(); doSearch(); }});
+
+    // initial
+    renderAgents(AGENTS);
+  </script>
+</body>
+</html>
