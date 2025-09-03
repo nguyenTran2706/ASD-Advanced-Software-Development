@@ -17,5 +17,5 @@ steps:
 
 - script: |
     npm install
-    node app.js
-  displayName: 'npm install and build'
+    npm test  # Use a test or build script instead of starting the server
+  displayName: 'npm install and test'
