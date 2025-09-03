@@ -77,6 +77,21 @@
         msg.classList.add('error'); msg.textContent = err.message;
       }
     });
+
+    (function () {
+      const path = location.pathname.replace(/\/+$/, ''); 
+      const links = document.querySelectorAll('#navbar .navbar-selector a[href]');
+      links.forEach(a => {
+        const href = a.getAttribute('href') || '';
+        const isHome = (path === '' || path === '/') && (href === 'index.html' || href === '/index.html');
+        const matches =
+          isHome ||
+          path.endsWith(href) ||
+          (href.startsWith('/') && path === href);
+
+        if (matches) a.classList.add('nav-active');
+      });
+    })();
   </script>
 </body>
 </html>
