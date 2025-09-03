@@ -419,3 +419,206 @@ form button {
   line-height: normal;
   margin: 0px;
 }
+
+/* =========================================
+   AUTH PAGES (login & signup) – scoped styles
+   ========================================= */
+:root {
+  --brand: #047857;           /* your green */
+  --card-bg: #ffffff;
+  --page-bg: #f4f5f7;         /* light grey background, like the screenshot */
+  --text-900: #111827;
+  --text-600: #64748b;
+  --border: #d1d5db;
+  --shadow: 0 10px 30px rgba(0,0,0,.08);
+}
+
+/* Page shell */
+#login-page .auth-shell,
+#signup-page .auth-shell {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: var(--page-bg);
+  padding: 24px;
+}
+
+/* Card */
+.auth-card-lg {
+  width: 100%;
+  max-width: 480px;
+  background: var(--card-bg);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  padding: 28px;
+}
+
+/* Brand header */
+.brand-row {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.brand-logo {
+  height: 40px;
+  width: auto;
+}
+.brand-name {
+  font-weight: 600;
+  color: var(--text-900);
+  font-size: 20px;
+}
+
+/* Titles */
+.auth-title {
+  margin: 6px 0 0 0;
+  font-size: 28px;
+  font-weight: 600;
+  text-align: center;
+  color: var(--text-900);
+}
+.auth-subtitle {
+  margin: 6px 0 16px 0;
+  text-align: center;
+  color: var(--text-600);
+  font-size: 14px;
+}
+
+/* Field block */
+.form-stack {
+  display: grid;
+  gap: 14px;
+  margin-top: 10px;
+}
+.field {
+  display: grid;
+  gap: 6px;
+}
+.field label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+}
+.input-lg {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 14px;
+  font-size: 15px;
+  outline: none;
+  background: #fff;
+}
+.input-lg:focus {
+  border-color: var(--brand);
+}
+
+/* Primary button */
+.btn-primary-full {
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-weight: 600;
+  font-size: 16px;
+  color: #fff;
+  background: var(--brand);
+  cursor: pointer;
+}
+
+/* Links row under button */
+.auth-links {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 12px;
+  font-size: 14px;
+}
+.auth-links a {
+  color: var(--brand);
+  text-decoration: none;
+}
+.auth-links a:hover { text-decoration: underline; }
+
+/* Messages */
+.helper { font-size: 13px; text-align: center; margin-top: 12px; }
+.error   { color: #dc2626; }
+.success { color: #047857; }
+
+/* Accessibility helper */
+.sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0);
+  white-space: nowrap; border: 0;
+}
+
+/* Responsive */
+@media (max-width: 520px) {
+  .auth-card-lg { padding: 22px; border-radius: 14px; }
+}
+
+/* === Auth polish & fixes === */
+
+/* Make inputs and buttons size properly inside the card */
+.auth-card-lg, .auth-card-lg * {
+  box-sizing: border-box;
+}
+
+/* Ensure input doesn't overflow the card */
+.input-lg {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 14px;
+  font-size: 15px;
+  outline: none;
+  background: #fff;
+  display: block;          /* prevents inline quirks */
+}
+
+/* Full-width primary CTA */
+.btn-primary-full {
+  display: block;
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  padding: 16px 20px;
+  font-weight: 600;
+  font-size: 18px;
+  color: #fff;
+  background: var(--brand);
+  cursor: pointer;
+  transition: background .2s ease, transform .1s ease;
+}
+.btn-primary-full:hover { background: #036749; transform: scale(1.01); }
+
+/* Ghost/secondary full-width button (for Back to Home) */
+.btn-ghost-full {
+  display: block;
+  width: 100%;
+  text-align: center;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--brand);
+  background: transparent;
+  text-decoration: none;
+  margin-top: 10px;
+  transition: background .15s ease, border-color .15s ease;
+}
+.btn-ghost-full:hover { background: #f2f6f4; border-color: #bcd6c9; }
+
+/* Tidy link rows */
+.auth-links {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 16px;
+  font-size: 14px;
+}
+.auth-links a { color: var(--brand); text-decoration: none; }
+.auth-links a:hover { text-decoration: underline; }

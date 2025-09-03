@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Create account</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+
+<body id="signup-page">
+  <div class="auth-shell">
+    <div class="auth-card-lg" role="region" aria-labelledby="signup-title">
+      <div class="brand-row">
+        <img src="../Assets/Logo.png" alt="Site logo" class="brand-logo" />
+        <div class="brand-name">myHome</div>
+      </div>
+
+      <h1 id="signup-title" class="auth-title">Create your account</h1>
+      <p class="auth-subtitle">Join and unlock personalised property alerts</p>
+
+      <form id="signupForm" novalidate>
+        <div class="form-stack">
+          <div class="field">
+            <label for="firstName">First name</label>
+            <input id="firstName" name="firstName" class="input-lg" required />
+          </div>
+
+          <div class="field">
+            <label for="lastName">Last name</label>
+            <input id="lastName" name="lastName" class="input-lg" required />
+          </div>
+
+          <div class="field">
+            <label for="phone">Phone number</label>
+            <input id="phone" name="phone" class="input-lg" placeholder="04xx xxx xxx" />
+          </div>
+
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" class="input-lg" required />
+          </div>
+
+          <div class="field">
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" minlength="6" class="input-lg" required />
+            <div id="strength" class="helper">Strength: —</div>
+          </div>
+
+          <div class="field">
+            <label for="password2">Re-enter password</label>
+            <input id="password2" name="password2" type="password" minlength="6" class="input-lg" required />
+          </div>
+
+          <button class="btn-primary-full" type="submit">Create account</button>
+          <a href="/index.html" class="btn-ghost-full">Back to Home</a>
+
+          <div class="auth-links">
+            <a href="/login.html">Already have an account? Sign in</a>
+          </div>
+
+          <p id="formMsg" class="helper" role="status" aria-live="polite"></p>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('signupForm');
+    const msg  = document.getElementById('formMsg');
+    const pass = document.getElementById('password');
+    const pass2= document.getElementById('password2');
+    const phone= document.getElementById('phone');
+    const strength = document.getElementById('strength');
+
+    function evalStrength(pw) {
+      let s = 0;
+      if (pw.length >= 6) s++;
+      if (/[A-Z]/.test(pw)) s++;
+      if (/[a-z]/.test(pw)) s++;
+      if (/[0-9]/.test(pw)) s++;
+      if (/[^A-Za-z0-9]/.test(pw)) s++;
+      return s;
+    }
+    function strengthLabel(s){ return ['—','Weak','Okay','Good','Strong','Very strong'][s] || '—'; }
+
+    pass.addEventListener('input', () => {
+      strength.textContent = 'Strength: ' + strengthLabel(evalStrength(pass.value));
+    });
+    phone.addEventListener('input', () => {
+      phone.value = phone.value.replace(/[^0-9 +()\-]/g,'');
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      msg.classList.remove('error','success');
+      msg.textContent = '';
+
+      const data = Object.fromEntries(new FormData(form).entries());
+      if (!data.firstName?.trim() || !data.lastName?.trim()) {
+        msg.classList.add('error'); msg.textContent = 'Please enter your first and last name.'; return;
+      }
+      if (!data.email?.trim()) {
+        msg.classList.add('error'); msg.textContent = 'Please enter a valid email.'; return;
+      }
+      if ((data.password || '').length < 6) {
+        msg.classList.add('error'); msg.textContent = 'Password must be at least 6 characters.'; return;
+      }
+      if (data.password !== data.password2) {
+        msg.classList.add('error'); msg.textContent = 'Passwords do not match.'; return;
+      }
+
+      try {
+        const res = await fetch('/api/properties/auth/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            firstName: data.firstName.trim(),
+            lastName:  data.lastName.trim(),
+            phone:     (data.phone || '').trim(),
+            email:     data.email.trim(),
+            password:  data.password
+          })
+        });
+        const text = await res.text();
+        let out = {}; try { out = JSON.parse(text); } catch { out = { error: text }; }
+        if (!res.ok) throw new Error(out.error || 'Sign up failed');
+
+        form.reset();
+        strength.textContent = 'Strength: —';
+        msg.classList.add('success');
+        msg.textContent = 'Account created ✔';
+      } catch (err) {
+        msg.classList.add('error');
+        msg.textContent = err.message;
+      }
+    });
+  </script>
+</body>
+</html>
