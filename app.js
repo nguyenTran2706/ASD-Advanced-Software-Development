@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 // Serve static frontend and css
 app.use(express.static(path.join(__dirname, "frontend")));
 app.use("/css", express.static(path.join(__dirname, "css")));
-app.use( express.static( "public" ) );
+app.use(express.static("public"));
 
 // Add this line to serve Assets folder
 app.use("/Assets", express.static(path.join(__dirname, "Assets")));
