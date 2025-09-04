@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Sold Properties</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="/css/style.css" />
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="nav-shell">
+        <div class="nav-top">
+            <button id="menuToggle" class="menu-btn" aria-expanded="false" aria-controls="navLinks">
+                <span class="menu-icon"></span><span class="menu-text">Menu</span>
+            </button>
+            <a href="index.html" class="brand"><img src="/Assets/Logo.png" alt="logo" style="height:40px" /></a>
+            <div class="navbar-buttons" id="navbarUser">
+                <a class="button-primary" href="signUp.html" style="text-decoration:none;color:#fff">Sign Up</a>
+                <a class="button-primary" href="login.html" style="text-decoration:none;color:#fff">Login</a>
+            </div>
+        </div>
+        <div id="navLinks" class="nav-links">
+            <nav id="navbar" class="navbar-selector">
+                <a href="buyResults.html">Buy</a>
+                <a href="rentResults.html">Rent</a>
+                <a href="soldResults.html" class="nav-active">Sold</a>
+                <a href="findAgent.html">Find Agent</a>
+                <a href="news.html">News</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Top search strip -->
+    <section class="prop-hero">
+        <div class="prop-hero-inner">
+            <div class="prop-search">
+                <div class="search-input-wrap">
+                    <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M10 18a8 8 0 1 1 5.293-14.003A8 8 0 0 1 10 18Zm11 3-6.001-6" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                    <input id="propQuery" class="agent-search-input" placeholder="Search suburb or postcode"
+                        autocomplete="off" />
+                </div>
+                <button id="propGo" class="agent-search-btn">Search</button>
+            </div>
+
+            <div class="prop-chips">
+                <button class="chip" data-mode="buy" onclick="location.href='buyResults.html'">Buy</button>
+                <button class="chip" data-mode="rent" onclick="location.href='rentResults.html'">Rent</button>
+                <button class="chip active" data-mode="sold">Sold</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filters + results -->
+    <section class="agent-results-wrap">
+        <div class="results-header">
+            <div id="resultsPath" class="results-path">Recently sold</div>
+            <div class="filters-row">
+                <div class="chip dropdown-chip">
+                    <label for="typeSel">Type</label>
+                    <select id="typeSel">
+                        <option value="">Any</option>
+                        <option>House</option>
+                        <option>Apartment</option>
+                        <option>Townhouse</option>
+                    </select>
+                </div>
+                <div class="chip dropdown-chip">
+                    <label for="bedSel">Beds</label>
+                    <select id="bedSel">
+                        <option value="">Any</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                    </select>
+                </div>
+                <div class="chip dropdown-chip">
+                    <label for="priceSel">Price</label>
+                    <select id="priceSel">
+                        <option value="">Any</option>
+                        <option value="0-600000">Up to $600k</option>
+                        <option value="600000-900000">$600k–$900k</option>
+                        <option value="900000-1500000">$900k–$1.5M</option>
+                        <option value="1500000-99999999">$1.5M+</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div id="propList" class="prop-grid"></div>
+    </section>
+
+    <div class="site-footer-spacer"></div>
+
+    <script>
+        /* user menu */
+        (function () {
+            const el = document.getElementById('navbarUser'); try {
+                const u = JSON.parse(localStorage.getItem('user') || 'null'); if (!u) return;
+                const name = u.first_name?.trim() || u.email;
+                el.innerHTML = `<span style="margin-right:10px;color:#047857;font-weight:600;">Welcome, ${name}</span>
+        <button class="button-secondary" id="logoutBtn">Logout</button>`;
+                document.getElementById('logoutBtn').onclick = () => { localStorage.removeItem('user'); location.reload(); };
+            } catch (_) { }
+        })();
+
+        /* demo data */
+        const SOLD = [
+            { id: 1, suburb: "Campsie", postcode: "2194", state: "NSW", type: "Apartment", beds: 2, baths: 1, cars: 1, price: 520000, label: "Sold $520,000", address: "8/4 Loftus Ave, Campsie", photo: "/Assets/berita1.png" },
+            { id: 2, suburb: "Canterbury", postcode: "2196", state: "NSW", type: "House", beds: 3, baths: 2, cars: 2, price: 760000, label: "Sold $760,000", address: "3 Garden Ln, Canterbury", photo: "/Assets/berita2.png" },
+            { id: 3, suburb: "Canberra", postcode: "2600", state: "ACT", type: "House", beds: 4, baths: 3, cars: 2, price: 1220000, label: "Sold $1,220,000", address: "101 Beach Rd, Canberra", photo: "/Assets/berita4.png" }
+        ];
+
+        const $ = s => document.querySelector(s);
+        const listEl = $('#propList'), pathEl = $('#resultsPath'), qEl = $('#propQuery');
+
+        function params() {
+            const u = new URL(location.href);
+            return { q: (u.searchParams.get('q') || '').trim(), type: u.searchParams.get('type') || '', beds: u.searchParams.get('beds') || '', price: u.searchParams.get('price') || '' };
+        }
+        function setControls(p) { qEl.value = p.q || ''; $('#typeSel').value = p.type || ''; $('#bedSel').value = p.beds || ''; $('#priceSel').value = p.price || ''; }
+        function inRange(n, r) { if (!r) return true; const [a, b] = r.split('-').map(Number); return n >= a && n <= b; }
+
+        function card(p) {
+            return `
+      <article class="property-card">
+        <div class="prop-photo-wrap">
+          <img class="prop-photo" src="${p.photo}" alt="${p.address}">
+          <span class="prop-badge">${p.type}</span>
+        </div>
+        <div class="prop-body">
+          <div class="prop-price">${p.label}</div>
+          <div class="prop-address">${p.address}</div>
+          <div class="prop-sub">${p.suburb}, ${p.state} ${p.postcode}</div>
+          <div class="prop-meta"><span>🛏 ${p.beds}</span><span>🛁 ${p.baths}</span><span>🚗 ${p.cars}</span></div>
+          <div class="prop-actions">
+            <button class="btn-ghost-full">View history</button>
+            <button class="btn-primary-full">Contact agent</button>
+          </div>
+        </div>
+      </article>`;
+        }
+
+        function pushState() {
+            const q = qEl.value.trim(), type = $('#typeSel').value, beds = $('#bedSel').value, price = $('#priceSel').value;
+            const qs = new URLSearchParams({ q, type, beds, price }); history.replaceState(null, '', '?' + qs.toString());
+        }
+
+        function render() {
+            const p = params(); setControls(p);
+            let data = SOLD.filter(x => !p.q || x.suburb.toLowerCase().includes(p.q.toLowerCase()) || x.postcode.includes(p.q));
+            if (p.type) data = data.filter(x => x.type === p.type);
+            if (p.beds) data = data.filter(x => x.beds >= Number(p.beds));
+            if (p.price) data = data.filter(x => inRange(x.price, p.price));
+            pathEl.textContent = `Recently sold${p.q ? ' in ' + p.q : ''} • ${data.length} found`;
+            listEl.innerHTML = data.length ? data.map(card).join('') : '<p class="helper">No properties found.</p>';
+        }
+
+        $('#propGo').onclick = () => { pushState(); render(); };
+        qEl.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); pushState(); render(); } };
+        $('#typeSel').onchange = $('#bedSel').onchange = $('#priceSel').onchange = () => { pushState(); render(); };
+
+        /* mobile menu */
+        (function () {
+            const shell = document.querySelector('.nav-shell'), btn = document.getElementById('menuToggle');
+            if (btn && shell) btn.addEventListener('click', () => { const open = shell.classList.toggle('open'); btn.setAttribute('aria-expanded', String(open)); });
+        })();
+
+        render();
+    </script>
+</body>
+
+</html>
