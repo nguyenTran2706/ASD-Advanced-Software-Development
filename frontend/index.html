@@ -1,412 +1,510 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Real Estate Listings</title>
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Real Estate Listings</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/css/style.css" />
-</head>
+  <body>
+    <header class="nav-shell">
+      <div class="nav-top">
+        <button
+          id="menuToggle"
+          class="menu-btn"
+          aria-expanded="false"
+          aria-controls="navLinks"
+        >
+          <span class="menu-icon"></span>
+          <span class="menu-text">Menu</span>
+        </button>
 
-<body>
-  <header class="nav-shell">
-    <div class="nav-top">
-      <button id="menuToggle" class="menu-btn" aria-expanded="false" aria-controls="navLinks">
-        <span class="menu-icon"></span>
-        <span class="menu-text">Menu</span>
-      </button>
+        <a href="index.html" class="brand">
+          <img src="/Assets/Logo.png" alt="logo" style="height: 40px" />
+        </a>
 
-      <a href="index.html" class="brand">
-        <img src="/Assets/Logo.png" alt="logo" style="height:40px" />
-      </a>
+        <div class="navbar-buttons" id="navbarUser">
+          <a
+            class="button-primary"
+            href="signUp.html"
+            style="text-decoration: none; color: #fff"
+            >Sign Up</a
+          >
+          <a
+            class="button-primary"
+            href="login.html"
+            style="text-decoration: none; color: #fff"
+            >Login</a
+          >
+        </div>
+      </div>
 
-      <div class="navbar-buttons" id="navbarUser">
-        <a class="button-primary" href="signUp.html" style="text-decoration:none;color:#fff">Sign Up</a>
-        <a class="button-primary" href="login.html" style="text-decoration:none;color:#fff">Login</a>
+      <div id="navLinks" class="nav-links">
+        <nav id="navbar" class="navbar-selector">
+          <a href="buy.html">Buy</a>
+          <a href="rent.html">Rent</a>
+          <a href="sold.html">Sold</a>
+          <a href="findAgent.html">Find Agent</a>
+          <a href="news.html">News</a>
+        </nav>
+      </div>
+    </header>
+
+    <div id="hero-section">
+      <div class="hero-section-center">
+        <div class="hero-text">
+          <p class="h1">The Breakthrough Platform for Smarter Home Finding</p>
+          <p class="sub-header">
+            Streamline planning management, enhance collaboration, and deliver
+            results with MyHome
+          </p>
+        </div>
+
+        <div class="search-section">
+          <div class="search-navbar">
+            <div class="search-navbar-texts">
+              <p style="color: black">Rent</p>
+              <p>Sold</p>
+              <p>Address</p>
+              <p>Agent</p>
+              <p>Coming Soon</p>
+            </div>
+
+            <div class="line"></div>
+            <div class="line-choosed"></div>
+          </div>
+
+          <div class="search-box">
+            <div class="search-placeholder">
+              <img src="../Assets/search.png" alt="searchicon" />
+              <input
+                type="text"
+                id="searchInput"
+                placeholder="Search suburb, postcode or state"
+                style="
+                  border: none;
+                  outline: none;
+                  width: 250px;
+                  font-size: 16px;
+                "
+              />
+            </div>
+            <div style="border-radius: 40px" class="button-secondary-round">
+              <img src="../Assets/filter.png" alt="filtericon" /> Filters
+            </div>
+            <div
+              style="border-radius: 40px"
+              class="button-primary-round"
+              id="searchBtn"
+            >
+              Search
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div id="navLinks" class="nav-links">
-      <nav id="navbar" class="navbar-selector">
-        <a href="buy.html">Buy</a>
-        <a href="rent.html">Rent</a>
-        <a href="sold.html">Sold</a>
-        <a href="findAgent.html">Find Agent</a>
-        <a href="news.html">News</a>
-      </nav>
-    </div>
-  </header>
-
-
-  <div id="hero-section">
-    <div class="hero-section-center">
-      <div class="hero-text">
-        <p class="h1">The Breakthrough Platform for Smarter Home Finding</p>
-        <p class="sub-header">
+    <div id="optimization">
+      <div class="optimization-text">
+        <p class="optimization-h1">
+          Best optimization based on your credentials
+        </p>
+        <p class="optimization-subheader">
           Streamline planning management, enhance collaboration, and deliver
-          results with MyHome
+          results with Central Quita
         </p>
       </div>
 
-      <div class="search-section">
-        <div class="search-navbar">
-          <div class="search-navbar-texts">
-            <p style="color: black">Rent</p>
-            <p>Sold</p>
-            <p>Address</p>
-            <p>Agent</p>
-            <p>Coming Soon</p>
-          </div>
-
-          <div class="line"></div>
-          <div class="line-choosed"></div>
-        </div>
-
-        <div class="search-box">
-          <div class="search-placeholder">
-            <img src="../Assets/search.png" alt="searchicon" />
-            <p>Search suburb, postcode or state</p>
-          </div>
-          <div style="border-radius: 40px" class="button-secondary-round">
-            <img src="../Assets/filter.png" alt="filtericon" /> Filters
-          </div>
-          <div style="border-radius: 40px" class="button-primary-round">
-            Search
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="optimization">
-    <div class="optimization-text">
-      <p class="optimization-h1">Best optimization based on your credentials</p>
-      <p class="optimization-subheader">
-        Streamline planning management, enhance collaboration, and deliver
-        results with Central Quita
-      </p>
-    </div>
-
-    <div class="container-layout">
-      <div class="container">
-        <img src="../Assets/unit2.png" alt="unit-image" />
-        <div class="love">
-          <div class="text-love">
-            <p>312 Zetland, NSW</p>
-            <div class="unit-tag">
-              <img src="../Assets/dot-grey.png" alt="dot" />
-              <p>Apartment</p>
+      <div class="container-layout">
+        <div class="container">
+          <img src="../Assets/unit2.png" alt="unit-image" />
+          <div class="love">
+            <div class="text-love">
+              <p>312 Zetland, NSW</p>
+              <div class="unit-tag">
+                <img src="../Assets/dot-grey.png" alt="dot" />
+                <p>Apartment</p>
+              </div>
             </div>
+            <img src="../Assets/love-icon.png" alt="Love-icon" />
           </div>
-          <img src="../Assets/love-icon.png" alt="Love-icon" />
         </div>
-      </div>
 
-      <div class="container">
-        <img src="../Assets/unit2.png" alt="unit-image" />
-        <div class="love">
-          <div class="text-love">
-            <p>312 Zetland, NSW</p>
-            <div class="unit-tag">
-              <img src="../Assets/dot-grey.png" alt="dot" />
-              <p>Apartment</p>
+        <div class="container">
+          <img src="../Assets/unit2.png" alt="unit-image" />
+          <div class="love">
+            <div class="text-love">
+              <p>312 Zetland, NSW</p>
+              <div class="unit-tag">
+                <img src="../Assets/dot-grey.png" alt="dot" />
+                <p>Apartment</p>
+              </div>
             </div>
+            <img src="../Assets/love-icon.png" alt="Love-icon" />
           </div>
-          <img src="../Assets/love-icon.png" alt="Love-icon" />
         </div>
-      </div>
 
-      <div class="container">
-        <img src="../Assets/unit2.png" alt="unit-image" />
-        <div class="love">
-          <div class="text-love">
-            <p>312 Zetland, NSW</p>
-            <div class="unit-tag">
-              <img src="../Assets/dot-grey.png" alt="dot" />
-              <p>Apartment</p>
+        <div class="container">
+          <img src="../Assets/unit2.png" alt="unit-image" />
+          <div class="love">
+            <div class="text-love">
+              <p>312 Zetland, NSW</p>
+              <div class="unit-tag">
+                <img src="../Assets/dot-grey.png" alt="dot" />
+                <p>Apartment</p>
+              </div>
             </div>
+            <img src="../Assets/love-icon.png" alt="Love-icon" />
           </div>
-          <img src="../Assets/love-icon.png" alt="Love-icon" />
         </div>
-      </div>
 
-      <div class="container">
-        <img src="../Assets/unit2.png" alt="unit-image" />
-        <div class="love">
-          <div class="text-love">
-            <p>312 Zetland, NSW</p>
-            <div class="unit-tag">
-              <img src="../Assets/dot-grey.png" alt="dot" />
-              <p>Apartment</p>
+        <div class="container">
+          <img src="../Assets/unit2.png" alt="unit-image" />
+          <div class="love">
+            <div class="text-love">
+              <p>312 Zetland, NSW</p>
+              <div class="unit-tag">
+                <img src="../Assets/dot-grey.png" alt="dot" />
+                <p>Apartment</p>
+              </div>
             </div>
+            <img src="../Assets/love-icon.png" alt="Love-icon" />
           </div>
-          <img src="../Assets/love-icon.png" alt="Love-icon" />
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="newest-development">
-    <div class="optimization-text">
-      <p class="optimization-h1">Newest Developments</p>
-      <p class="optimization-subheader">
-        Streamline planning management, enhance collaboration, and deliver
-        results with Central Quita
-      </p>
-    </div>
-
-    <div class="news-layout">
-      <img src="../Assets/news1.png" alt="news" />
-      <img src="../Assets/news2.png" alt="news" />
-      <img src="../Assets/news3.png" alt="news" />
-      <img src="../Assets/news3.png" alt="news" />
-    </div>
-
-    <div class="controller">
-      <img src="../Assets/left-arrow.png" alt="left" />
-      <div class="dots-layout">
-        <img src="../Assets/choosen-dot.png" alt="dot" />
-        <img src="../Assets/unchoosen-dot.png" alt="dot" />
-        <img src="../Assets/unchoosen-dot.png" alt="dot" />
-        <img src="../Assets/unchoosen-dot.png" alt="dot" />
-        <img src="../Assets/unchoosen-dot.png" alt="dot" />
-      </div>
-      <img src="../Assets/right-arrow.png" alt="right" />
-    </div>
-  </div>
-
-  <div id="latest-news">
-    <div class="optimization-text">
-      <p class="optimization-h1">Latest News</p>
-      <p class="optimization-subheader">
-        Streamline planning management, enhance collaboration, and deliver
-        results with Central Quita
-      </p>
-    </div>
-
-    <div class="berita-layout">
-      <div class="berita">
-        <img src="../Assets/berita1.png" alt="" />
-        <div class="berita-text">
-          <p>
-            Prince Hill period home sells for $2.9m after rate cut sales. this
-            lead to rising number of homeless people in Sydney
-          </p>
-          <p class="duration-text">3 days ago</p>
-        </div>
-      </div>
-
-      <div class="berita">
-        <img src="../Assets/berita4.png" alt="" />
-        <div class="berita-text">
-          <p>
-            Prince Hill period home sells for $2.9m after rate cut sales. this
-            lead to rising number of homeless people in Sydney
-          </p>
-          <p class="duration-text">3 days ago</p>
-        </div>
-      </div>
-
-      <div class="berita">
-        <img src="../Assets/berita2.png" alt="" />
-        <div class="berita-text">
-          <p>
-            Prince Hill period home sells for $2.9m after rate cut sales. this
-            lead to rising number of homeless people in Sydney
-          </p>
-          <p class="duration-text">3 days ago</p>
-        </div>
-      </div>
-
-      <div class="berita">
-        <img src="../Assets/berita3.png" alt="" />
-        <div class="berita-text">
-          <p>
-            Prince Hill period home sells for $2.9m after rate cut sales. this
-            lead to rising number of homeless people in Sydney
-          </p>
-          <p class="duration-text">3 days ago</p>
-        </div>
-      </div>
-
-      <div class="berita">
-        <img src="../Assets/berita1.png" alt="" />
-        <div class="berita-text">
-          <p>
-            Prince Hill period home sells for $2.9m after rate cut sales. this
-            lead to rising number of homeless people in Sydney
-          </p>
-          <p class="duration-text">3 days ago</p>
         </div>
       </div>
     </div>
 
-    <div class="controller">
-      <img src="/Assets/left-arrow.png" alt="" />
-      <div class="dots-layout">
-        <img src="../Assets/choosen-dot.png" alt="" />
-        <img src="../Assets/unchoosen-dot.png" alt="" />
-        <img src="../Assets/unchoosen-dot.png" alt="" />
-        <img src="../Assets/unchoosen-dot.png" alt="" />
-        <img src="../Assets/unchoosen-dot.png" alt="" />
+    <div id="newest-development">
+      <div class="optimization-text">
+        <p class="optimization-h1">Newest Developments</p>
+        <p class="optimization-subheader">
+          Streamline planning management, enhance collaboration, and deliver
+          results with Central Quita
+        </p>
       </div>
-      <img src="../Assets/right-arrow.png" alt="" />
+
+      <div class="news-layout">
+        <img src="../Assets/news1.png" alt="news" />
+        <img src="../Assets/news2.png" alt="news" />
+        <img src="../Assets/news3.png" alt="news" />
+        <img src="../Assets/news3.png" alt="news" />
+      </div>
+
+      <div class="controller">
+        <img src="../Assets/left-arrow.png" alt="left" />
+        <div class="dots-layout">
+          <img src="../Assets/choosen-dot.png" alt="dot" />
+          <img src="../Assets/unchoosen-dot.png" alt="dot" />
+          <img src="../Assets/unchoosen-dot.png" alt="dot" />
+          <img src="../Assets/unchoosen-dot.png" alt="dot" />
+          <img src="../Assets/unchoosen-dot.png" alt="dot" />
+        </div>
+        <img src="../Assets/right-arrow.png" alt="right" />
+      </div>
     </div>
-  </div>
 
-  <script>
-    (function () {
-      const navbarUser = document.getElementById("navbarUser");
-      try {
-        const user = JSON.parse(localStorage.getItem("user") || "null");
-        if (!user) return;
+    <div id="latest-news">
+      <div class="optimization-text">
+        <p class="optimization-h1">Latest News</p>
+        <p class="optimization-subheader">
+          Streamline planning management, enhance collaboration, and deliver
+          results with Central Quita
+        </p>
+      </div>
 
-        const displayName = user.first_name?.trim() || user.email;
-        navbarUser.innerHTML = `
+      <div class="berita-layout">
+        <div class="berita">
+          <img src="../Assets/berita1.png" alt="" />
+          <div class="berita-text">
+            <p>
+              Prince Hill period home sells for $2.9m after rate cut sales. this
+              lead to rising number of homeless people in Sydney
+            </p>
+            <p class="duration-text">3 days ago</p>
+          </div>
+        </div>
+
+        <div class="berita">
+          <img src="../Assets/berita4.png" alt="" />
+          <div class="berita-text">
+            <p>
+              Prince Hill period home sells for $2.9m after rate cut sales. this
+              lead to rising number of homeless people in Sydney
+            </p>
+            <p class="duration-text">3 days ago</p>
+          </div>
+        </div>
+
+        <div class="berita">
+          <img src="../Assets/berita2.png" alt="" />
+          <div class="berita-text">
+            <p>
+              Prince Hill period home sells for $2.9m after rate cut sales. this
+              lead to rising number of homeless people in Sydney
+            </p>
+            <p class="duration-text">3 days ago</p>
+          </div>
+        </div>
+
+        <div class="berita">
+          <img src="../Assets/berita3.png" alt="" />
+          <div class="berita-text">
+            <p>
+              Prince Hill period home sells for $2.9m after rate cut sales. this
+              lead to rising number of homeless people in Sydney
+            </p>
+            <p class="duration-text">3 days ago</p>
+          </div>
+        </div>
+
+        <div class="berita">
+          <img src="../Assets/berita1.png" alt="" />
+          <div class="berita-text">
+            <p>
+              Prince Hill period home sells for $2.9m after rate cut sales. this
+              lead to rising number of homeless people in Sydney
+            </p>
+            <p class="duration-text">3 days ago</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="controller">
+        <img src="/Assets/left-arrow.png" alt="" />
+        <div class="dots-layout">
+          <img src="../Assets/choosen-dot.png" alt="" />
+          <img src="../Assets/unchoosen-dot.png" alt="" />
+          <img src="../Assets/unchoosen-dot.png" alt="" />
+          <img src="../Assets/unchoosen-dot.png" alt="" />
+          <img src="../Assets/unchoosen-dot.png" alt="" />
+        </div>
+        <img src="../Assets/right-arrow.png" alt="" />
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        const navbarUser = document.getElementById("navbarUser");
+        try {
+          const user = JSON.parse(localStorage.getItem("user") || "null");
+          if (!user) return;
+
+          const displayName = user.first_name?.trim() || user.email;
+          navbarUser.innerHTML = `
           <span style="margin-right:10px; color:#047857; font-weight:600;">
             Welcome, ${displayName}
           </span>
           <button class="button-secondary" id="logoutBtn">Logout</button>
         `;
 
-        document.getElementById("logoutBtn").addEventListener("click", () => {
-          localStorage.removeItem("user");
-          window.location.reload();
+          document.getElementById("logoutBtn").addEventListener("click", () => {
+            localStorage.removeItem("user");
+            window.location.reload();
+          });
+        } catch (_) {}
+      })();
+
+      (function () {
+        const path = location.pathname.replace(/\/+$/, "");
+        const links = document.querySelectorAll(
+          "#navbar .navbar-selector a[href]"
+        );
+        links.forEach((a) => {
+          const href = a.getAttribute("href") || "";
+          const isHome =
+            (path === "" || path === "/") &&
+            (href === "index.html" || href === "/index.html");
+          const matches =
+            isHome ||
+            path.endsWith(href) ||
+            (href.startsWith("/") && path === href);
+
+          if (matches) a.classList.add("nav-active");
         });
-      } catch (_) { }
-    })();
+      })();
 
-    (function () {
-      const path = location.pathname.replace(/\/+$/, '');
-      const links = document.querySelectorAll('#navbar .navbar-selector a[href]');
-      links.forEach(a => {
-        const href = a.getAttribute('href') || '';
-        const isHome = (path === '' || path === '/') && (href === 'index.html' || href === '/index.html');
-        const matches =
-          isHome ||
-          path.endsWith(href) ||
-          (href.startsWith('/') && path === href);
-
-        if (matches) a.classList.add('nav-active');
-      });
-    })();
-
-    (function () {
-      const shell = document.querySelector('.nav-shell');
-      const btn = document.getElementById('menuToggle');
-      if (btn && shell) {
-        btn.addEventListener('click', () => {
-          const isOpen = shell.classList.toggle('open');
-          btn.setAttribute('aria-expanded', String(isOpen));
-        });
-      }
-
-      const path = location.pathname.replace(/\/+$/, '');
-      document.querySelectorAll('#navbar a[href]').forEach(a => {
-        const href = a.getAttribute('href') || '';
-        const isHome = (path === '' || path === '/') && (href === 'index.html' || href === '/index.html');
-        if (isHome || path.endsWith(href) || (href.startsWith('/') && path === href)) {
-          a.classList.add('nav-active');
+      (function () {
+        const shell = document.querySelector(".nav-shell");
+        const btn = document.getElementById("menuToggle");
+        if (btn && shell) {
+          btn.addEventListener("click", () => {
+            const isOpen = shell.classList.toggle("open");
+            btn.setAttribute("aria-expanded", String(isOpen));
+          });
         }
-      });
-    })();
-  </script>
 
-  <script>
-    (function () {
-      // Update these selectors to match your input/button if different
-      const input = document.querySelector('#mainQuery') || document.querySelector('.search-placeholder input');
-      const button = document.querySelector('#goBtn') || document.querySelector('.button-primary-round');
+        const path = location.pathname.replace(/\/+$/, "");
+        document.querySelectorAll("#navbar a[href]").forEach((a) => {
+          const href = a.getAttribute("href") || "";
+          const isHome =
+            (path === "" || path === "/") &&
+            (href === "index.html" || href === "/index.html");
+          if (
+            isHome ||
+            path.endsWith(href) ||
+            (href.startsWith("/") && path === href)
+          ) {
+            a.classList.add("nav-active");
+          }
+        });
+      })();
 
-      function go() {
-        const q = (input && input.value || '').trim();
-        // Go to the Buy results page we created
-        location.href = 'buyResults.html' + (q ? ('?q=' + encodeURIComponent(q)) : '');
-      }
+      // Search functionality
+      (function () {
+        const searchBtn = document.getElementById("searchBtn");
+        const searchInput = document.getElementById("searchInput");
 
-      if (button) button.addEventListener('click', go);
-      if (input) input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); go(); } });
-    })();
-  </script>
+        if (searchBtn && searchInput) {
+          searchBtn.addEventListener("click", () => {
+            const query = searchInput.value.trim();
 
+            if (query === "") {
+              alert("Please enter a suburb, postcode, or state.");
+            } else {
+              alert(`Searching for: ${query}`);
+              console.log("User search query:", query);
 
+              // Simulate redirect to a results page
+              // In the future, this could call an API
+              // window.location.href = `results.html?search=${encodeURIComponent(query)}`;
+            }
+          });
 
-</body>
+          // Trigger search on Enter key
+          searchInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+              searchBtn.click();
+            }
+          });
+        }
+      })();
+    </script>
 
-<footer class="site-footer">
-  <div class="footer-inner">
-    <div class="footer-cols">
-      <div class="footer-col footer-brand">
-        <div class="brand">
-          <img src="/Assets/Logo.png" alt="MyHome logo" class="footer-logo" />
-          <span class="brand-text">MyHome</span>
+    <script>
+      (function () {
+        // Update these selectors to match your input/button if different
+        const input =
+          document.querySelector("#mainQuery") ||
+          document.querySelector(".search-placeholder input");
+        const button =
+          document.querySelector("#goBtn") ||
+          document.querySelector(".button-primary-round");
+
+        function go() {
+          const q = ((input && input.value) || "").trim();
+          // Go to the Buy results page we created
+          location.href =
+            "buyResults.html" + (q ? "?q=" + encodeURIComponent(q) : "");
+        }
+
+        if (button) button.addEventListener("click", go);
+        if (input)
+          input.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              go();
+            }
+          });
+      })();
+    </script>
+  </body>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-cols">
+        <div class="footer-col footer-brand">
+          <div class="brand">
+            <img src="/Assets/Logo.png" alt="MyHome logo" class="footer-logo" />
+            <span class="brand-text">MyHome</span>
+          </div>
+          <p class="footer-desc">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Lorem
+            ipsum lorem lorem ipsums sum sum sum
+          </p>
         </div>
-        <p class="footer-desc">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Lorem ipsum
-          lorem lorem ipsums sum sum sum
-        </p>
+
+        <div class="footer-col">
+          <h4 class="footer-title">Product</h4>
+          <a href="#">How it works</a>
+          <a href="#">Who we help</a>
+          <a href="#">Features</a>
+          <a href="#">Pricing</a>
+        </div>
+
+        <div class="footer-col">
+          <h4 class="footer-title">Resources</h4>
+          <a href="#">Get Help</a>
+          <a href="#">Partnership</a>
+          <a href="#">Blog</a>
+          <a href="#">Legal</a>
+        </div>
+
+        <div class="footer-col">
+          <h4 class="footer-title">About</h4>
+          <a href="#">About</a>
+          <a href="#">Sponsorship</a>
+          <a href="#">Hardship</a>
+          <a href="#">Contact</a>
+        </div>
+
+        <div class="footer-col footer-connect">
+          <h4 class="footer-title">Connect with us</h4>
+          <div class="footer-socials">
+            <a href="#" aria-label="Facebook" class="icon">
+              <svg
+                viewBox="0 0 24 24"
+                width="22"
+                height="22"
+                fill="currentColor"
+              >
+                <path
+                  d="M13.5 9H16V6h-2.5C11.57 6 11 7.57 11 9v2H9v3h2v7h3v-7h2.1l.4-3H14v-1c0-.55.45-1 1-1Z"
+                />
+              </svg>
+            </a>
+            <a href="#" aria-label="YouTube" class="icon">
+              <svg
+                viewBox="0 0 24 24"
+                width="22"
+                height="22"
+                fill="currentColor"
+              >
+                <path
+                  d="M21.6 7.2a3 3 0 0 0-2.1-2.1C17.9 4.7 12 4.7 12 4.7s-5.9 0-7.5.4A3 3 0 0 0 2.4 7.2 31 31 0 0 0 2 12a31 31 0 0 0 .4 4.8 3 3 0 0 0 2.1 2.1c1.6.4 7.5.4 7.5.4s5.9 0 7.5-.4a3 3 0 0 0 2.1-2.1A31 31 0 0 0 22 12a31 31 0 0 0-.4-4.8ZM10 15.5v-7l6 3.5-6 3.5Z"
+                />
+              </svg>
+            </a>
+            <a href="#" aria-label="Twitter" class="icon">
+              <svg
+                viewBox="0 0 24 24"
+                width="22"
+                height="22"
+                fill="currentColor"
+              >
+                <path
+                  d="M21 7.5c-.6.3-1.2.5-1.9.6.7-.4 1.2-1 1.5-1.8-.6.4-1.4.7-2.1.9a3.3 3.3 0 0 0-5.7 3c-2.7-.1-5.1-1.4-6.7-3.4a3.3 3.3 0 0 0 1 4.4c-.5 0-1-.1-1.4-.4v.1a3.3 3.3 0 0 0 2.6 3.2c-.4.1-.8.1-1.3 0 .4 1.2 1.6 2.1 3 2.1A6.6 6.6 0 0 1 3 18.6 9.3 9.3 0 0 0 8 20c5.7 0 8.9-4.8 8.9-8.9v-.4c.6-.4 1.2-1 1.6-1.7Z"
+                />
+              </svg>
+            </a>
+          </div>
+        </div>
       </div>
 
-      <div class="footer-col">
-        <h4 class="footer-title">Product</h4>
-        <a href="#">How it works</a>
-        <a href="#">Who we help</a>
-        <a href="#">Features</a>
-        <a href="#">Pricing</a>
-      </div>
+      <hr class="footer-divider" />
 
-      <div class="footer-col">
-        <h4 class="footer-title">Resources</h4>
-        <a href="#">Get Help</a>
-        <a href="#">Partnership</a>
-        <a href="#">Blog</a>
-        <a href="#">Legal</a>
-      </div>
-
-      <div class="footer-col">
-        <h4 class="footer-title">About</h4>
-        <a href="#">About</a>
-        <a href="#">Sponsorship</a>
-        <a href="#">Hardship</a>
-        <a href="#">Contact</a>
-      </div>
-
-      <div class="footer-col footer-connect">
-        <h4 class="footer-title">Connect with us</h4>
-        <div class="footer-socials">
-          <a href="#" aria-label="Facebook" class="icon">
-            <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
-              <path d="M13.5 9H16V6h-2.5C11.57 6 11 7.57 11 9v2H9v3h2v7h3v-7h2.1l.4-3H14v-1c0-.55.45-1 1-1Z" />
-            </svg>
-          </a>
-          <a href="#" aria-label="YouTube" class="icon">
-            <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
-              <path
-                d="M21.6 7.2a3 3 0 0 0-2.1-2.1C17.9 4.7 12 4.7 12 4.7s-5.9 0-7.5.4A3 3 0 0 0 2.4 7.2 31 31 0 0 0 2 12a31 31 0 0 0 .4 4.8 3 3 0 0 0 2.1 2.1c1.6.4 7.5.4 7.5.4s5.9 0 7.5-.4a3 3 0 0 0 2.1-2.1A31 31 0 0 0 22 12a31 31 0 0 0-.4-4.8ZM10 15.5v-7l6 3.5-6 3.5Z" />
-            </svg>
-          </a>
-          <a href="#" aria-label="Twitter" class="icon">
-            <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
-              <path
-                d="M21 7.5c-.6.3-1.2.5-1.9.6.7-.4 1.2-1 1.5-1.8-.6.4-1.4.7-2.1.9a3.3 3.3 0 0 0-5.7 3c-2.7-.1-5.1-1.4-6.7-3.4a3.3 3.3 0 0 0 1 4.4c-.5 0-1-.1-1.4-.4v.1a3.3 3.3 0 0 0 2.6 3.2c-.4.1-.8.1-1.3 0 .4 1.2 1.6 2.1 3 2.1A6.6 6.6 0 0 1 3 18.6 9.3 9.3 0 0 0 8 20c5.7 0 8.9-4.8 8.9-8.9v-.4c.6-.4 1.2-1 1.6-1.7Z" />
-            </svg>
-          </a>
+      <div class="footer-bottom">
+        <div>Copyright 2025 · MyHome</div>
+        <div class="footer-legal">
+          <a href="#">Terms of Service</a>
+          <a href="#">Privacy Policy</a>
         </div>
       </div>
     </div>
-
-    <hr class="footer-divider" />
-
-    <div class="footer-bottom">
-      <div>Copyright 2025 · MyHome</div>
-      <div class="footer-legal">
-        <a href="#">Terms of Service</a>
-        <a href="#">Privacy Policy</a>
-      </div>
-    </div>
-  </div>
-</footer>
-
+  </footer>
 </html>
