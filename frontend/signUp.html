@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -13,7 +14,6 @@
     <div class="auth-card-lg" role="region" aria-labelledby="signup-title">
       <div class="brand-row">
         <img src="../Assets/Logo.png" alt="Site logo" class="brand-logo" />
-        <div class="brand-name">myHome</div>
       </div>
 
       <h1 id="signup-title" class="auth-title">Create your account</h1>
@@ -67,10 +67,10 @@
 
   <script>
     const form = document.getElementById('signupForm');
-    const msg  = document.getElementById('formMsg');
+    const msg = document.getElementById('formMsg');
     const pass = document.getElementById('password');
-    const pass2= document.getElementById('password2');
-    const phone= document.getElementById('phone');
+    const pass2 = document.getElementById('password2');
+    const phone = document.getElementById('phone');
     const strength = document.getElementById('strength');
 
     function evalStrength(pw) {
@@ -82,18 +82,18 @@
       if (/[^A-Za-z0-9]/.test(pw)) s++;
       return s;
     }
-    function strengthLabel(s){ return ['—','Weak','Okay','Good','Strong','Very strong'][s] || '—'; }
+    function strengthLabel(s) { return ['—', 'Weak', 'Okay', 'Good', 'Strong', 'Very strong'][s] || '—'; }
 
     pass.addEventListener('input', () => {
       strength.textContent = 'Strength: ' + strengthLabel(evalStrength(pass.value));
     });
     phone.addEventListener('input', () => {
-      phone.value = phone.value.replace(/[^0-9 +()\-]/g,'');
+      phone.value = phone.value.replace(/[^0-9 +()\-]/g, '');
     });
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      msg.classList.remove('error','success');
+      msg.classList.remove('error', 'success');
       msg.textContent = '';
 
       const data = Object.fromEntries(new FormData(form).entries());
@@ -116,10 +116,10 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             firstName: data.firstName.trim(),
-            lastName:  data.lastName.trim(),
-            phone:     (data.phone || '').trim(),
-            email:     data.email.trim(),
-            password:  data.password
+            lastName: data.lastName.trim(),
+            phone: (data.phone || '').trim(),
+            email: data.email.trim(),
+            password: data.password
           })
         });
         const text = await res.text();
@@ -153,4 +153,5 @@
     })();
   </script>
 </body>
+
 </html>

@@ -24,11 +24,11 @@ app.use("/api/properties", propertiesRoute);
 
 // Serve frontend index.html on root
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "frontend", "index.html"));
+    res.sendFile(path.join(__dirname, "frontend", "index.html"));
 });
 
 // Start server
 const PORT = 3000;
 app.listen(PORT, () =>
-  console.log(`🚀 Server running at http://localhost:${PORT}`)
+    console.log(`🚀 Server running at http://localhost:${PORT}`)
 );
