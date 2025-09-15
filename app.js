@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 
 // Import routes
 const propertiesRoute = require("./backend/properties");
+const listingRoute = require("./backend/listings")
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use("/Assets", express.static(path.join(__dirname, "Assets")));
 
 // API routes
 app.use("/api/properties", propertiesRoute);
+app.use("/api/listings", listingsRoute);
 
 // Serve frontend index.html on root
 app.get("/", (req, res) => {

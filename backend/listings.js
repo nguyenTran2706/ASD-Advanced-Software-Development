@@ -1,0 +1,115 @@
+// backend/listings.js
+const express = require("express");
+const db = require("../database");
+
+const router = express.Router();
+
+/**
+ * GET /api/listings
+ * Query params (all optional):
+ *   status=rent|buy|sold
+ *   q=search text (suburb or postcode)
+ *   minBeds=
+ *   type=
+ *   limit=, offset=
+ */
+router.get("/", (req, res) => {
+  let {
+    status = "",
+    q = "",
+    minBeds = "",
+    type = "",
+    limit = "12",
+    offset = "0",
+  } = req.query || {};
+
+  status = String(status).toLowerCase().trim();
+  q = String(q).trim().toLowerCase();
+  type = String(type).trim();
+  const params = [];
+  let where = "WHERE 1=1";
+
+  if (status && ["buy", "rent", "sold"].includes(status)) {
+    where += " AND status = ?";
+    params.push(status);
+  }
+  if (q) {
+    where += " AND (LOWER(suburb) LIKE ? OR postcode LIKE ?)";
+    params.push(`%${q}%`, `%${q}%`);
+  }
+  if (minBeds) {
+    where += " AND bedrooms >= ?";
+    params.push(parseInt(minBeds, 10) || 0);
+  }
+  if (type) {
+    where += " AND type = ?";
+    params.push(type);
+  }
+
+  const sql = `
+    SELECT *
+    FROM listings
+    ${where}
+    ORDER BY datetime(createdAt) DESC, id DESC
+    LIMIT ? OFFSET ?
+  `;
+  params.push(parseInt(limit, 10) || 12, parseInt(offset, 10) || 0);
+
+  db.all(sql, params, (err, rows) => {
+    if (err) return res.status(500).json({ error: err.message });
+
+    // Parse images JSON column into an array
+    const out = rows.map(r => {
+      let images = [];
+      try { images = r.images ? JSON.parse(r.images) : []; } catch (_) {}
+      return {
+        ...r,
+        images,
+        cover: r.image || images[0] || "/Assets/placeholder.png",
+      };
+    });
+
+    res.json({ results: out, count: out.length });
+  });
+});
+
+/**
+ * POST /api/listings
+ * Body:
+ *  {
+ *    status, address, suburb, postcode, state, price,
+ *    bedrooms, bathrooms, carspaces, type,
+ *    image, images:[...]   // image = cover, images = array of extra
+ *  }
+ */
+router.post("/", (req, res) => {
+  const {
+    status, address, suburb, postcode, state, price,
+    bedrooms, bathrooms, carspaces, type,
+    image, images = []
+  } = req.body || {};
+
+  if (!status || !["buy","rent","sold"].includes(String(status).toLowerCase())) {
+    return res.status(400).json({ error: "status must be 'buy' | 'rent' | 'sold'" });
+  }
+
+  const imagesJson = Array.isArray(images) && images.length ? JSON.stringify(images) : null;
+
+  const sql = `
+    INSERT INTO listings
+      (status,address,suburb,postcode,state,price,bedrooms,bathrooms,carspaces,type,image,images)
+    VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
+  `;
+  const params = [
+    status, address || null, suburb || null, postcode || null, state || null,
+    price || null, bedrooms || null, bathrooms || null, carspaces || null,
+    type || null, image || null, imagesJson
+  ];
+
+  db.run(sql, params, function (err) {
+    if (err) return res.status(500).json({ error: err.message });
+    res.status(201).json({ id: this.lastID });
+  });
+});
+
+module.exports = router;
