@@ -120,7 +120,8 @@
         </p>
       </div>
 
-      <div class="container-layout">
+      <div class="container-layout" id="listingContainer">
+        <!--
         <div class="container">
           <div class="property-image">
             <div class="property-pill">
@@ -283,7 +284,8 @@
               alt="Love-icon"
             />
           </div>
-        </div>
+        </div> 
+        -->
       </div>
     </div>
 
@@ -396,6 +398,90 @@
     </div>
 
     <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const container = document.getElementById("listingContainer");
+        if (!container) return;
+
+        //helper to escape HTML (avoid cross-site scripting from DB strings)
+        function escapeHtml(str = "") {
+          return String(str).replace(/[&<>"']/g, (s) => {
+            return {
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            }[s];
+          });
+        }
+
+        async function loadListings() {
+          try {
+            const res = await fetch("/api/listings");
+            if (!res.ok) throw new Error("Failed to load listings");
+            const listings = await res.json();
+
+            const visible = listings.results.slice(0, 4);
+
+            container.innerHTML = visible
+              .map((l) => {
+                const cover =
+                  l.image ||
+                  (l.images && l.images[0]) ||
+                  "/Assets/placeholder.png";
+                const statusTag =
+                  l.status === "rent"
+                    ? "For Rent"
+                    : l.status === "buy"
+                    ? "For Sale"
+                    : l.status || "";
+
+                return `
+      <div class="container">
+        <div class="property-image">
+          <div class="property-pill"><p>${escapeHtml(statusTag)}</p></div>
+          <div class="property-details">
+            <p>${escapeHtml(l.suburb || "")}, ${escapeHtml(l.state || "")}</p>
+            <div class="property-details-icons">
+              <div class="icon-text">
+                <p>${escapeHtml(l.bedrooms ?? 0)}</p>
+                <img src="/Assets/bed.png" alt="bed" />
+              </div>
+              <div class="icon-text">
+                <p>${escapeHtml(l.bathrooms ?? 0)}</p>
+                <img src="/Assets/shower.png" alt="bath" />
+              </div>
+              <div class="icon-text">
+                <p>${escapeHtml(l.carspaces ?? 0)}</p>
+                <img src="/Assets/car.png" alt="car" />
+              </div>
+            </div>
+          </div>
+          <img src="${escapeHtml(cover)}" alt="property" />
+        </div>
+        <div class="love">
+          <div class="text-love">
+            <p>${escapeHtml(l.address || "")}</p>
+            <div class="unit-tag">
+              <img src="/Assets/dot-grey.png" alt="dot" />
+              <p>${escapeHtml(l.type || "")}</p>
+            </div>
+          </div>
+          <img class="love-icon" src="/Assets/love-icon.png" alt="Love-icon" />
+        </div>
+      </div>
+    `;
+              })
+              .join("");
+          } catch (err) {
+            console.error(err);
+            container.innerHTML = "<p>Could not load listings.</p>";
+          }
+        }
+
+        loadListings();
+      });
+
       (function () {
         const navbarUser = document.getElementById("navbarUser");
         try {

@@ -1,16 +1,16 @@
 // app.js
 const express = require("express");
 const path = require("path");
-const bodyParser = require("body-parser");
+const app = express();
 
 // Import routes
 const propertiesRoute = require("./backend/properties");
-const listingRoute = require("./backend/listings")
+const listingsRoute = require("./backend/listings");
 
-const app = express();
 
 // Middleware
-app.use(bodyParser.json());
+app.use(express.json());
+app.use(express.static(path.join(__dirname)));
 
 // Serve static frontend and css
 app.use(express.static(path.join(__dirname, "frontend")));

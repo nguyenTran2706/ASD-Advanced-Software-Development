@@ -13,6 +13,35 @@ const router = express.Router();
  *   type=
  *   limit=, offset=
  */
+
+
+const listings = [
+  {
+    address: "123 Main St",
+    suburb: "Sydney",
+    state: "NSW",
+    type: "Apartment",
+    status: "rent",
+    bedrooms: 2,
+    bathrooms: 1,
+    carspaces: 1,
+    image: "/Assets/cream/cream1.png",
+    images: []
+  },
+  {
+    address: "456 Park Ave",
+    suburb: "Bondi",
+    state: "NSW",
+    type: "House",
+    status: "buy",
+    bedrooms: 3,
+    bathrooms: 2,
+    carspaces: 2,
+    image: "/Assets/cream/cream2.png",
+    images: []
+  }
+];
+
 router.get("/", (req, res) => {
   let {
     status = "",
