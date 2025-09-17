@@ -14,7 +14,6 @@ const router = express.Router();
  *   limit=, offset=
  */
 
-
 const listings = [
   {
     address: "123 Main St",
@@ -26,7 +25,7 @@ const listings = [
     bathrooms: 1,
     carspaces: 1,
     image: "/Assets/cream/cream1.png",
-    images: []
+    images: [],
   },
   {
     address: "456 Park Ave",
@@ -38,8 +37,8 @@ const listings = [
     bathrooms: 2,
     carspaces: 2,
     image: "/Assets/cream/cream2.png",
-    images: []
-  }
+    images: [],
+  },
 ];
 
 router.get("/", (req, res) => {
@@ -88,9 +87,11 @@ router.get("/", (req, res) => {
     if (err) return res.status(500).json({ error: err.message });
 
     // Parse images JSON column into an array
-    const out = rows.map(r => {
+    const out = rows.map((r) => {
       let images = [];
-      try { images = r.images ? JSON.parse(r.images) : []; } catch (_) {}
+      try {
+        images = r.images ? JSON.parse(r.images) : [];
+      } catch (_) {}
       return {
         ...r,
         images,
@@ -113,16 +114,31 @@ router.get("/", (req, res) => {
  */
 router.post("/", (req, res) => {
   const {
-    status, address, suburb, postcode, state, price,
-    bedrooms, bathrooms, carspaces, type,
-    image, images = []
+    status,
+    address,
+    suburb,
+    postcode,
+    state,
+    price,
+    bedrooms,
+    bathrooms,
+    carspaces,
+    type,
+    image,
+    images = [],
   } = req.body || {};
 
-  if (!status || !["buy","rent","sold"].includes(String(status).toLowerCase())) {
-    return res.status(400).json({ error: "status must be 'buy' | 'rent' | 'sold'" });
+  if (
+    !status ||
+    !["buy", "rent", "sold"].includes(String(status).toLowerCase())
+  ) {
+    return res
+      .status(400)
+      .json({ error: "status must be 'buy' | 'rent' | 'sold'" });
   }
 
-  const imagesJson = Array.isArray(images) && images.length ? JSON.stringify(images) : null;
+  const imagesJson =
+    Array.isArray(images) && images.length ? JSON.stringify(images) : null;
 
   const sql = `
     INSERT INTO listings
@@ -130,9 +146,18 @@ router.post("/", (req, res) => {
     VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
   `;
   const params = [
-    status, address || null, suburb || null, postcode || null, state || null,
-    price || null, bedrooms || null, bathrooms || null, carspaces || null,
-    type || null, image || null, imagesJson
+    status,
+    address || null,
+    suburb || null,
+    postcode || null,
+    state || null,
+    price || null,
+    bedrooms || null,
+    bathrooms || null,
+    carspaces || null,
+    type || null,
+    image || null,
+    imagesJson,
   ];
 
   db.run(sql, params, function (err) {
