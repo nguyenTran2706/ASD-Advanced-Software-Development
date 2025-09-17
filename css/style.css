@@ -1665,3 +1665,19 @@ form button {
 .love-icon:hover {
   transform: scale(1.1);
 }
+.search-tab {
+  cursor: pointer;
+  font-weight: 400;
+  color: #333;
+  transition: all 0.2s ease;
+}
+
+.search-tab.active {
+  color: #047857; 
+  font-weight: bold;
+}
+
+.search-tab.comingsoon {
+  opacity: 0.5;
+  pointer-events: none; 
+}

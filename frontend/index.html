@@ -69,11 +69,11 @@
         <div class="search-section">
           <div class="search-navbar">
             <div class="search-navbar-texts">
-              <p style="color: #047857; font-weight: bold">Rent</p>
-              <p>Sold</p>
-              <p>Address</p>
-              <p>Agent</p>
-              <p>Coming Soon</p>
+              <p class="search-tab active" data-type="rent">Rent</p>
+              <p class="search-tab" data-type="sold">Sold</p>
+              <p class="search-tab" data-type="address">Address</p>
+              <p class="search-tab" data-type="agent">Agent</p>
+              <p class="search-tab comingsoon">Coming Soon</p>
             </div>
 
             <div class="line"></div>
@@ -607,18 +607,32 @@
       })();
 
       document.addEventListener("DOMContentLoaded", function () {
-        const loveIcons = document.querySelectorAll(".love-icon");
+        const container = document.getElementById("listingContainer");
 
-        loveIcons.forEach((icon) => {
-          icon.addEventListener("click", function () {
-            const emptyHeart = "../Assets/love-icon.png";
-            const filledHeart = "../Assets/ri_heart-fill.png";
+        container.addEventListener("click", function (e) {
+          if (e.target.classList.contains("love-icon")) {
+            const emptyHeart = "/Assets/love-icon.png";
+            const filledHeart = "/Assets/ri_heart-fill.png";
 
-            if (this.src.includes("love-icon.png")) {
-              this.src = filledHeart;
+            if (e.target.src.includes("love-icon.png")) {
+              e.target.src = filledHeart;
             } else {
-              this.src = emptyHeart;
+              e.target.src = emptyHeart;
             }
+          }
+        });
+      });
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const tabs = document.querySelectorAll(".search-tab:not(comingsoon)");
+
+        tabs.forEach((tab) => {
+          tab.addEventListener("click", () => {
+            tabs.forEach((t) => t.classList.remove("active"));
+
+            tab.classList.add("active");
+
+            console.log("you selected: ", tab.dataset.type);
           });
         });
       });
