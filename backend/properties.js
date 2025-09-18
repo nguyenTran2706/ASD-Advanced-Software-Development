@@ -37,6 +37,9 @@ router.post("/", (req, res) => {
   );
 });
 
+/* =========
+   AUTH
+   ========= */
 function isEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email).toLowerCase());
 }
@@ -171,6 +174,87 @@ router.get("/browse", (req, res) => {
 
   res.json({ results: out, count: out.length, mode, q, beds: minBeds, type });
 });
+
+// GET /api/properties/listings?status=rent|buy|sold
+router.get("/listings", (req, res) => {
+  let {
+    status,
+    limit = 24,
+    offset = 0,
+    q,
+    type,
+    beds,
+    priceMin,
+    priceMax
+  } = req.query || {};
+
+  const where = [];
+  const params = [];
+
+  if (status) {
+    where.push("status = ?");
+    params.push(String(status).toLowerCase());
+  }
+  if (q && String(q).trim() !== "") {
+    const like = `%${String(q).trim()}%`;
+    where.push("(suburb LIKE ? OR address LIKE ? OR postcode LIKE ?)");
+    params.push(like, like, like);
+  }
+  if (type && String(type).trim() !== "") {
+    where.push("type = ?");
+    params.push(String(type).trim());
+  }
+  if (beds && Number(beds) > 0) {
+    where.push("bedrooms >= ?");
+    params.push(Number(beds));
+  }
+  if (priceMin && !isNaN(Number(priceMin))) {
+    where.push("price >= ?");
+    params.push(Number(priceMin));
+  }
+  if (priceMax && !isNaN(Number(priceMax))) {
+    where.push("price <= ?");
+    params.push(Number(priceMax));
+  }
+
+  const whereSql = where.length ? `WHERE ${where.join(" AND ")}` : "";
+
+  const countSql = `SELECT COUNT(*) AS total FROM listings ${whereSql}`;
+  const dataSql = `
+    SELECT id, status, address, suburb, postcode, state, price,
+           bedrooms, bathrooms, carspaces, type, image, images
+    FROM listings
+    ${whereSql}
+    ORDER BY id DESC
+    LIMIT ? OFFSET ?
+  `;
+
+  db.get(countSql, params, (err, row) => {
+    if (err) return res.status(500).json({ error: err.message });
+
+    db.all(dataSql, [...params, Number(limit), Number(offset)], (err2, rows) => {
+      if (err2) return res.status(500).json({ error: err2.message });
+
+      const results = (rows || []).map(r => {
+        try { r.images = r.images ? JSON.parse(r.images) : []; } catch { r.images = []; }
+        return r;
+      });
+
+      res.json({ total: row?.total || 0, results });
+    });
+  });
+});
+
+// GET /api/properties/listings/:id
+router.get("/listings/:id", (req, res) => {
+  db.get(`SELECT * FROM listings WHERE id = ?`, [req.params.id], (err, row) => {
+    if (err) return res.status(500).json({ error: err.message });
+    if (!row) return res.status(404).json({ error: "not found" });
+    try { row.images = row.images ? JSON.parse(row.images) : []; } catch { row.images = []; }
+    res.json(row);
+  });
+});
+
 /* ------------------------------- END /browse ------------------------------- */
 
 module.exports = router;
