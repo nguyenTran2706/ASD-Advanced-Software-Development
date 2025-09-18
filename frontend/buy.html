@@ -151,9 +151,9 @@
       const label = money(Number(p.price || 0));
       const cover = p.image || '/Assets/placeholder.png';
       return `
-        <article class="property-card">
+        <article class="property-card" onclick="location.href='property.html?id=${p.id}&status=buy'" style="cursor:pointer">
           <div class="prop-photo-wrap">
-            <img class="prop-photo" src="${cover}" alt="${p.address || ''}">
+            <img class="prop-photo" src="${cover}" alt="${p.address||''}">
             <span class="prop-badge">${p.type || 'Property'}</span>
           </div>
           <div class="prop-body">

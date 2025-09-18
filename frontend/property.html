@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Property details</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+
+<body>
+  <!-- Header (same pattern as other pages) -->
+  <header class="nav-shell">
+    <div class="nav-top">
+      <button id="menuToggle" class="menu-btn" aria-expanded="false" aria-controls="navLinks">
+        <span class="menu-icon"></span><span class="menu-text">Menu</span>
+      </button>
+      <a href="index.html" class="brand"><img src="/Assets/Logo.png" alt="logo" style="height:40px" /></a>
+      <div class="navbar-buttons" id="navbarUser">
+        <a class="button-primary" href="signUp.html" style="text-decoration:none;color:#fff">Sign Up</a>
+        <a class="button-primary" href="login.html" style="text-decoration:none;color:#fff">Login</a>
+      </div>
+    </div>
+    <div id="navLinks" class="nav-links">
+      <nav id="navbar" class="navbar-selector">
+        <a href="buy.html">Buy</a>
+        <a href="rent.html">Rent</a>
+        <a href="sold.html">Sold</a>
+        <a href="findAgent.html">Find Agent</a>
+        <a href="news.html">News</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="prop-detail-wrap">
+    <div class="results-header">
+      <div id="resultsPath" class="results-path">Property</div>
+      <div class="filters-row">
+        <a id="backBtn" class="chip" href="javascript:void(0)">← Back</a>
+      </div>
+    </div>
+
+    <div id="errorBox" class="helper error" hidden></div>
+
+    <div id="detail" class="prop-detail" aria-live="polite">
+      <!-- filled by script -->
+    </div>
+  </section>
+
+  <div class="site-footer-spacer"></div>
+
+  <script>
+    /* Logged-in banner */
+    (function () {
+      const el = document.getElementById('navbarUser'); try {
+        const u = JSON.parse(localStorage.getItem('user') || 'null'); if (!u) return;
+        const name = u.first_name?.trim() || u.email;
+        el.innerHTML = `<span style="margin-right:10px;color:#047857;font-weight:600;">Welcome, ${name}</span>
+        <button class="button-secondary" id="logoutBtn">Logout</button>`;
+        document.getElementById('logoutBtn').onclick = () => { localStorage.removeItem('user'); location.reload(); };
+      } catch (_) {}
+    })();
+
+    /* Active nav highlighting */
+    (function () {
+      const path = location.pathname.replace(/\/+$/, '');
+      document.querySelectorAll('#navbar .navbar-selector a[href], #navbar a[href]').forEach(a => {
+        const href = a.getAttribute('href') || '';
+        const isHome = (path === '' || path === '/') && (href === 'index.html' || href === '/index.html');
+        if (isHome || path.endsWith(href) || (href.startsWith('/') && path === href)) a.classList.add('nav-active');
+      });
+    })();
+
+    const qs = new URLSearchParams(location.search);
+    const id = qs.get('id');
+    const status = (qs.get('status') || '').toLowerCase();
+
+    const resultsPath = document.getElementById('resultsPath');
+    resultsPath.textContent =
+      status === 'buy'  ? 'For sale' :
+      status === 'rent' ? 'For rent' :
+      status === 'sold' ? 'Recently sold' : 'Property';
+
+    // Back button
+    document.getElementById('backBtn').onclick = () => {
+      if (history.length > 1) history.back();
+      else {
+        const fallback = status === 'rent' ? 'rent.html' : status === 'sold' ? 'sold.html' : 'buy.html';
+        location.href = fallback;
+      }
+    };
+
+    function money(n) {
+      if (typeof n !== 'number' || isNaN(n)) return '';
+      return n.toLocaleString('en-AU', { style: 'currency', currency: 'AUD', maximumFractionDigits: 0 });
+    }
+
+    function priceLabel(p) {
+      const n = Number(p.price);
+      if (p.status === 'rent') return `${money(n)} / wk`;
+      if (p.status === 'sold') return `Sold ${money(n)}`;
+      return money(n);
+    }
+
+    function galleryHTML(p) {
+      const imgs = (Array.isArray(p.images) && p.images.length ? p.images : []).filter(Boolean);
+      const cover = p.image || p.cover || imgs[0] || '/Assets/placeholder.png';
+      const all = [cover, ...imgs.filter(src => src !== cover)];
+      const main = `<img id="mainImg" src="${all[0]}" alt="${p.address || 'Property photo'}">`;
+      const thumbs = all.length > 1
+        ? `<div class="thumb-row">` + all.map((src, i) =>
+            `<img src="${src}" alt="photo ${i+1}" onclick="document.getElementById('mainImg').src='${src}'">`
+          ).join('') + `</div>`
+        : '';
+      return `<div class="prop-gallery">${main}${thumbs}</div>`;
+    }
+
+    function infoHTML(p) {
+      const addr = [p.address || '', [p.suburb, p.state].filter(Boolean).join(', '), p.postcode || '']
+        .join(' ').replace(/\s+/g,' ').trim();
+      return `
+        <div class="prop-panel">
+          <div class="pill">${p.type || 'Property'}</div>
+          <h1 class="prop-title">${priceLabel(p)}</h1>
+          <div class="prop-sub">${addr}</div>
+          <div class="specs">
+            <span>🛏 <span class="value">${p.bedrooms ?? 0}</span></span>
+            <span>🛁 <span class="value">${p.bathrooms ?? 0}</span></span>
+            <span>🚗 <span class="value">${p.carspaces ?? 0}</span></span>
+          </div>
+          <div class="divider"></div>
+          <div>
+            <span class="label">Status</span>
+            <div class="value" style="text-transform:capitalize">${p.status || status || ''}</div>
+          </div>
+          ${p.description ? `<div><span class="label">Description</span><div>${p.description}</div></div>` : ''}
+          <div class="divider"></div>
+          <div class="cta-row">
+            <a class="btn-primary-full" href="/enquire.html?suburb=${encodeURIComponent(p.suburb || '')}">Enquire</a>
+            <button class="btn-ghost-full" onclick="saveListing(${p.id})">Save</button>
+          </div>
+          <p class="muted">ID: ${p.id ?? ''}</p>
+        </div>
+      `;
+    }
+
+    function render(p) {
+      document.getElementById('detail').innerHTML = `
+        ${galleryHTML(p)}
+        ${infoHTML(p)}
+      `;
+      // update breadcrumb with property type/address
+      const crumb = [];
+      if (p.type) crumb.push(p.type);
+      if (p.suburb) crumb.push(p.suburb);
+      document.getElementById('resultsPath').textContent =
+        crumb.length ? crumb.join(' • ') : document.getElementById('resultsPath').textContent;
+    }
+
+    function showError(msg) {
+      const box = document.getElementById('errorBox');
+      box.textContent = msg; box.hidden = false;
+      document.getElementById('detail').innerHTML = '';
+    }
+
+    async function load() {
+      if (!id) { showError('Missing property id.'); return; }
+      try {
+        const res = await fetch(`/api/listings/${encodeURIComponent(id)}`);
+        const text = await res.text();
+        let data = {}; try { data = JSON.parse(text); } catch { throw new Error(text || 'Failed to parse response'); }
+        if (!res.ok) throw new Error(data.error || 'Unable to load property');
+        data.status = (data.status || status || '').toLowerCase();
+        render(data);
+      } catch (err) {
+        showError(err.message || 'Could not load property.');
+      }
+    }
+
+    function saveListing(id) {
+      try {
+        const key = 'savedListings';
+        const arr = JSON.parse(localStorage.getItem(key) || '[]');
+        if (!arr.includes(id)) arr.push(id);
+        localStorage.setItem(key, JSON.stringify(arr));
+        alert('Saved!');
+      } catch (_) {}
+    }
+
+    load();
+  </script>
+</body>
+</html>

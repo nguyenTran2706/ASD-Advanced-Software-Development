@@ -166,4 +166,25 @@ router.post("/", (req, res) => {
   });
 });
 
+// GET /api/listings/:id  -> return a single listing
+router.get("/:id", (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  if (!id) return res.status(400).json({ error: "invalid id" });
+
+  db.get(`SELECT * FROM listings WHERE id = ?`, [id], (err, row) => {
+    if (err) return res.status(500).json({ error: err.message });
+    if (!row) return res.status(404).json({ error: "listing not found" });
+
+    let images = [];
+    try { images = row.images ? JSON.parse(row.images) : []; } catch (_) {}
+
+    res.json({
+      ...row,
+      images,
+      cover: row.image || images[0] || "/Assets/placeholder.png",
+    });
+  });
+});
+
+
 module.exports = router;

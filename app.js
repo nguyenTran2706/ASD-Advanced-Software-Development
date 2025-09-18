@@ -29,6 +29,8 @@ app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "frontend", "index.html"));
 });
 
+app.use("/api/listings", require("./backend/listings"));
+
 // Start server
 const PORT = 3000;
 app.listen(PORT, () =>
