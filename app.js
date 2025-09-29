@@ -22,7 +22,6 @@ app.use("/Assets", express.static(path.join(__dirname, "Assets")));
 
 // API routes
 app.use("/api/properties", propertiesRoute);
-app.use("/api/listings", listingsRoute);
 
 // Serve frontend index.html on root
 app.get("/", (req, res) => {
