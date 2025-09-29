@@ -146,14 +146,28 @@
         </article>`;
     }
 
-    async function fetchListings(q){
-      const url=new URL('/api/listings', location.origin);
-      url.searchParams.set('status','rent');
-      if(q) url.searchParams.set('q',q);
-      const res=await fetch(url);
-      if(!res.ok) throw new Error('Failed to load listings');
-      const data=await res.json();
-      return data.results||[];
+    //async function fetchListings(q){
+    //  const url=new URL('/api/listings', location.origin);
+     // url.searchParams.set('status','rent');
+   //   if(q) url.searchParams.set('q',q);
+     // const res=await fetch(url);
+      //if(!res.ok) throw new Error('Failed to load listings');
+     // const data=await res.json();
+     // return data.results||[];
+    //}
+    async function fetchListings(p) {
+      const url = new URL('/api/listings', location.origin);
+      url.searchParams.set('status', 'rent');
+      if (p.q) url.searchParams.set('q', p.q);
+      if (p.type) url.searchParams.set('type', p.type);
+      if (p.beds) url.searchParams.set('minBeds', p.beds);
+      url.searchParams.set('limit', '20');   // ✅ show 20 properties
+      url.searchParams.set('offset', '0');
+
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('Failed to load listings');
+      const data = await res.json();
+      return data.results || [];
     }
 
     async function render(){

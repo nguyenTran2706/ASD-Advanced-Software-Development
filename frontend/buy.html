@@ -30,7 +30,6 @@
 
         <div id="navLinks" class="nav-links">
             <nav id="navbar" class="navbar-selector">
-                <a href="index.html">Home</a>
                 <a href="buy.html">Buy</a>
                 <a href="rent.html">Rent</a>
                 <a href="sold.html">Sold</a>
@@ -178,10 +177,24 @@
       `;
         }
 
-        async function fetchListings(q) {
+        //async function fetchListings(q) {
+         //   const url = new URL('/api/listings', location.origin);
+           // url.searchParams.set('status', 'buy');
+           // if (q) url.searchParams.set('q', q);
+           // const res = await fetch(url);
+          //  if (!res.ok) throw new Error('Failed to load listings');
+           // const data = await res.json();
+           // return data.results || [];
+        //}
+        async function fetchListings(p) {
             const url = new URL('/api/listings', location.origin);
             url.searchParams.set('status', 'buy');
-            if (q) url.searchParams.set('q', q);
+            if (p.q) url.searchParams.set('q', p.q);
+            if (p.type) url.searchParams.set('type', p.type);
+            if (p.beds) url.searchParams.set('minBeds', p.beds);
+            url.searchParams.set('limit', '20');   // 👈 force 20 properties
+            url.searchParams.set('offset', '0');   // optional
+
             const res = await fetch(url);
             if (!res.ok) throw new Error('Failed to load listings');
             const data = await res.json();
