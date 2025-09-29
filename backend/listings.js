@@ -70,8 +70,8 @@ router.get("/", (req, res) => {
     params.push(parseInt(minBeds, 10) || 0);
   }
   if (type) {
-    where += " AND type = ?";
-    params.push(type);
+    where += " AND LOWER(type) = ?";
+    params.push(String(type).toLowerCase());
   }
 
   const sql = `
@@ -177,6 +177,9 @@ router.get("/:id", (req, res) => {
 
     let images = [];
     try { images = row.images ? JSON.parse(row.images) : []; } catch (_) { }
+    try {
+      images = row.images ? JSON.parse(row.images) : [];
+    } catch (_) {}
 
     res.json({
       ...row,
@@ -185,6 +188,5 @@ router.get("/:id", (req, res) => {
     });
   });
 });
-
 
 module.exports = router;

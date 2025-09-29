@@ -25,6 +25,7 @@ app.use("/api/properties", propertiesRoute);
 app.use("/api/listings", listingsRoute);
 app.use("/api/enquires", enquiriesRoute)
 
+
 // Serve frontend index.html on root
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "frontend", "index.html"));
