@@ -1601,14 +1601,19 @@ form button {
 }
 
 .property-image {
-  position: relative; /* Allows absolute children */
+  position: relative;
+  /* Allows absolute children */
   width: 440px;
   height: 370px;
-  background-image: url("../Assets/cream/cream1.png"); /* Set image as background */
-  background-size: cover; /* Makes image cover entire container */
+  background-image: url("../Assets/cream/cream1.png");
+  /* Set image as background */
+  background-size: cover;
+  /* Makes image cover entire container */
   background-position: center;
-  border-radius: 12px; /* Optional rounded corners */
-  overflow: hidden; /* Clip child elements if they overflow */
+  border-radius: 12px;
+  /* Optional rounded corners */
+  overflow: hidden;
+  /* Clip child elements if they overflow */
 }
 
 /* Pill (New) */
@@ -1635,7 +1640,8 @@ form button {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: calc(100% - 26px); /* Space for left & right padding */
+  width: calc(100% - 26px);
+  /* Space for left & right padding */
   position: absolute;
   bottom: 4px;
   left: 12px;
@@ -1665,6 +1671,7 @@ form button {
 .love-icon:hover {
   transform: scale(1.1);
 }
+
 .search-tab {
   cursor: pointer;
   font-weight: 400;
@@ -1731,13 +1738,15 @@ form button {
 .prop-title {
   font-size: 22px;
   font-weight: 700;
-  margin: 0 0 10px; /* Added line break spacing */
+  margin: 0 0 10px;
+  /* Added line break spacing */
 }
 
 .prop-sub {
   color: #64748b;
   margin: 0 0 12px;
-  line-height: 1.4; /* Better readability */
+  line-height: 1.4;
+  /* Better readability */
 }
 
 .specs {
@@ -1779,7 +1788,8 @@ form button {
   border: 1px solid #d1d5db;
   border-radius: 999px;
   font-size: 12px;
-  margin-bottom: 12px; /* Extra spacing */
+  margin-bottom: 12px;
+  /* Extra spacing */
 }
 
 .cta-row {
