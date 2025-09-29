@@ -48,16 +48,15 @@
           results with MyHome
         </p>
       </div>
-        <div class="search-section">
-          <div class="search-navbar">
-            <div id="searchTabs" class="search-navbar-texts">
-              <p class="search-tab active" data-type="rent">Rent</p>
-              <p class="search-tab" data-type="sold">Buy</p>
-              <p class="search-tab" data-type="address">Address</p>
-              <p class="search-tab" data-type="agent">Agent</p>
-              <p class="search-tab comingsoon">Coming Soon</p>
-            </div>
-            <div class="line"></div>
+
+      <div class="search-section">
+        <div class="search-navbar">
+          <div id="searchTabs" class="search-navbar-texts">
+            <p class="search-tab active" data-type="rent">Rent</p>
+            <p class="search-tab" data-type="sold">Sold</p>
+            <p class="search-tab" data-type="address">Address</p>
+            <p class="search-tab" data-type="agent">Agent</p>
+            <p class="search-tab comingsoon">Coming Soon</p>
           </div>
           <div class="line"></div>
         </div>
@@ -435,63 +434,6 @@
             alert(`Searching for: ${query}`);
             console.log("User search query:", query);
           }
-      // -------- Search (button + Enter + redirect to buyResults) --------
-      (function () {
-        const input =
-          document.querySelector("#mainQuery") ||
-          document.querySelector(".search-placeholder input");
-        const button =
-          document.querySelector("#goBtn") ||
-          document.querySelector(".button-primary-round");
-        function go() {
-          const q = ((input && input.value) || "").trim();
-          location.href =
-            "buyResults.html" + (q ? "?q=" + encodeURIComponent(q) : "");
-        }
-        if (button) button.addEventListener("click", go);
-        if (input)
-          input.addEventListener("keydown", (e) => {
-            if (e.key === "Enter") {
-              e.preventDefault();
-              go();
-            }
-          });
-
-        // legacy alert + log for the Search btn id
-        const searchBtn = document.getElementById("searchBtn");
-        const searchInput = document.getElementById("searchInput");
-        if (searchBtn && searchInput) {
-          searchBtn.addEventListener("click", () => {
-            const query = searchInput.value.trim();
-
-            console.log("User search query:", query);
-          });
-          searchInput.addEventListener("keypress", (e) => {
-            if (e.key === "Enter") searchBtn.click();
-          });
-        }
-      })();
-
-      // -------- filter
-      (function () {
-        // Tabs
-        const tabs = document.querySelectorAll(
-          "#searchTabs .search-tab:not(.comingsoon)"
-        );
-        let activeTab = "rent";
-        tabs.forEach((tab) => {
-          tab.addEventListener("click", () => {
-            tabs.forEach((t) => t.classList.remove("active"));
-            tab.classList.add("active");
-            activeTab = tab.dataset.type;
-            // Hide filter for Agent tab
-            const filterBtn = document.querySelector(".button-secondary-round");
-            if (filterBtn)
-              filterBtn.style.display =
-                activeTab === "agent" ? "none" : "inline-flex";
-            updatePriceOptions();
-            console.log("you selected:", activeTab);
-          });
         });
         searchInput.addEventListener("keypress", (e) => {
           if (e.key === "Enter") searchBtn.click();
@@ -622,107 +564,6 @@
         <div class="footer-col footer-brand">
           <div class="brand">
             <img src="/Assets/Logo.png" alt="MyHome logo" class="footer-logo" />
-
-        if (applyBtn) {
-          applyBtn.addEventListener("click", () => {
-            const filters = {
-              type: document.getElementById("typeFilter").value,
-              beds: document.getElementById("bedFilter").value,
-              price: priceFilter.value,
-              status: activeTab,
-            };
-            console.log("Applied filters:", filters);
-            modal.style.display = "none";
-            modal.setAttribute("aria-hidden", "true");
-          });
-        }
-      })();
-
-      (function () {
-        // Find active search tab
-        function getActiveTab() {
-          const active = document.querySelector(
-            "#searchTabs .search-tab.active"
-          );
-          return active ? active.dataset.type : "rent";
-        }
-
-        // Build results page per tab + filters
-        function buildResultsUrl(fromFilters = false) {
-          const activeTab = getActiveTab();
-
-          const qEl =
-            document.querySelector("#mainQuery") ||
-            document.querySelector(".search-placeholder input");
-          const q = (qEl && qEl.value.trim()) || "";
-
-          // Filters
-          const type = document.getElementById("typeFilter")?.value || "";
-          const beds = document.getElementById("bedFilter")?.value || "";
-          const price = document.getElementById("priceFilter")?.value || "";
-
-          //destination
-          let page = "buyResults.html";
-          if (activeTab === "rent") page = "rentResults.html";
-          else if (activeTab === "sold") page = "buyResults.html";
-          else if (activeTab === "agent") page = "findAgent.html";
-          else if (activeTab === "address") {
-            if (price.startsWith("rent-")) page = "rentResults.html";
-            else page = "buyResults.html"; // default to buy
-          }
-
-          // status to send (rent|buy)
-          const status =
-            activeTab === "rent" || price.startsWith("rent-")
-              ? "rent"
-              : activeTab === "sold" || price.startsWith("sold-")
-              ? "buy"
-              : "";
-
-          const params = new URLSearchParams();
-          if (q) params.set("q", q);
-          if (status) params.set("status", status);
-          if (type) params.set("type", type);
-          if (beds) params.set("beds", beds);
-          if (price) params.set("price", price.replace(/^rent-|^sold-/, ""));
-
-          return page + (params.toString() ? "?" + params.toString() : "");
-        }
-
-        const searchBtn = document.getElementById("searchBtn");
-        const input = document.getElementById("searchInput");
-        function go() {
-          location.href = buildResultsUrl();
-        }
-        if (searchBtn) searchBtn.addEventListener("click", go);
-        if (input)
-          input.addEventListener("keydown", (e) => {
-            if (e.key === "Enter") {
-              e.preventDefault();
-              go();
-            }
-          });
-
-        const applyBtn = document.getElementById("applyFilter");
-        if (applyBtn) applyBtn.addEventListener("click", go);
-      })();
-    </script>
-
-    <footer class="site-footer">
-      <div class="footer-inner">
-        <div class="footer-cols">
-          <div class="footer-col footer-brand">
-            <div class="brand">
-              <img
-                src="/Assets/Logo.png"
-                alt="MyHome logo"
-                class="footer-logo"
-              />
-            </div>
-            <p class="footer-desc">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Lorem
-              ipsum lorem lorem ipsums sum sum sum
-            </p>
           </div>
         </div>
 
