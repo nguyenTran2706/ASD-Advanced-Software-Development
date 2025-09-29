@@ -91,7 +91,7 @@ router.get("/", (req, res) => {
       let images = [];
       try {
         images = r.images ? JSON.parse(r.images) : [];
-      } catch (_) {}
+      } catch (_) { }
       return {
         ...r,
         images,
@@ -176,6 +176,7 @@ router.get("/:id", (req, res) => {
     if (!row) return res.status(404).json({ error: "listing not found" });
 
     let images = [];
+    try { images = row.images ? JSON.parse(row.images) : []; } catch (_) { }
     try {
       images = row.images ? JSON.parse(row.images) : [];
     } catch (_) {}

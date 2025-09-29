@@ -30,6 +30,19 @@ db.serialize(() => {
       image TEXT
     )
   `);
+
+  db.run(`
+  CREATE TABLE IF NOT EXISTS enquiries (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    property_id INTEGER,
+    name TEXT,
+    email TEXT,
+    phone TEXT,
+    message TEXT,
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY(property_id) REFERENCES listings(id)
+  )
+`);
 });
 
 process.on("SIGINT", () => db.close(() => process.exit(0)));
