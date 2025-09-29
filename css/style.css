@@ -1673,13 +1673,13 @@ form button {
 }
 
 .search-tab.active {
-  color: #047857; 
+  color: #047857;
   font-weight: bold;
 }
 
 .search-tab.comingsoon {
   opacity: 0.5;
-  pointer-events: none; 
+  pointer-events: none;
 }
 
 /* ========== Property Details Page ========== */
@@ -1798,4 +1798,62 @@ form button {
   .prop-detail {
     grid-template-columns: 1fr;
   }
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  position: relative;
+  background: #fff;
+  padding: 24px;
+  border-radius: 12px;
+  width: 320px;
+  max-width: 90%;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  font-family: "Inter", sans-serif;
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #047857;
+}
+
+.close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 22px;
+  cursor: pointer;
+  color: #666;
+}
+
+.filter-group {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-group label {
+  font-weight: 500;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #333;
+}
+
+.filter-group select {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
 }
