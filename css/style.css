@@ -286,10 +286,27 @@ form button {
   align-self: stretch;
 }
 
+/* ---- Responsive grid for property cards ---- */
 .container-layout {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 20px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+@media (max-width: 1280px) {
+  .container-layout {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 920px) {
+  .container-layout {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 600px) {
+  .container-layout {
+    grid-template-columns: 1fr;
+  }
 }
 
 .container {
@@ -298,6 +315,13 @@ form button {
   align-items: flex-start;
   gap: 20px;
   flex: 1 0 0;
+}
+
+.property-image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
 }
 
 .love {
