@@ -2,8 +2,7 @@
 A full-stack web app for browsing properties to **Buy**, **Rent**, and view **Sold** results, with a simple **enquiry** flow to contact agents. Built with **Node.js + Express**, **SQLite**, and **vanilla HTML/CSS/JS**.
 
 ## 🔗 Repository
-https://github.com/<your-org>/<your-repo-name>  
-*(replace with your actual GitHub URL)*
+https://github.com/nguyenTran2706/ASD-Advanced-Software-Development
 
 ## 🚀 How to Run (Step-by-Step)
 
@@ -89,10 +88,10 @@ nodemon app.js or node app.js
 
 | Member              | Responsibilities                                                                 |
 |---------------------|---------------------------------------------------------------------------------|
-| **Dicky Evaldo**    | Implemented **Property Search** (filters by suburb, postcode, budget, amenities) and **Wishlist** features (save/remove properties, view saved properties). |
-| **Ron Tran**        | Developed **User Login/Signup** and **User Management** (profile details, authentication, wishlist integration, bookings management). |
-| **Khoi Nguyen Tran**| Built **Book Inspections** (schedule, manage, cancel inspections) and **Get in Touch with Agent / Enquiries** (contact forms, enquiry DB integration). |
-| **Tran Bao Khoi Le**| Implemented **Property Listings** (Buy, Rent, Sold tabs, grid view, filters, pagination) and **Map View** (map integration, pins sync with listings). |
+| Dicky Evaldo      | Implemented **Property Search** (filters by suburb, postcode, budget, amenities) and **Wishlist** features (save/remove properties, view saved properties). |
+| Ron Tran          | Developed **User Login/Signup** and **User Management** (profile details, authentication, wishlist integration, bookings management). |
+| Khoi Nguyen Tran  | Built **Book Inspections** (schedule, manage, cancel inspections) and **Get in Touch with Agent / Enquiries** (contact forms, enquiry DB integration). |
+| Tran Bao Khoi Le  | Implemented **Property Listings** (Buy, Rent, Sold tabs, grid view, filters, pagination) and **Map View** (map integration, pins sync with listings). |
 
 🛠 Tech Stack
 - Frontend: HTML, CSS, JavaScript
