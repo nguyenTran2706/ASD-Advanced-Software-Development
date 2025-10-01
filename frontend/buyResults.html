@@ -1,231 +1,355 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Buy Results · MyHome</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <header class="nav-shell">
+      <div class="nav-top">
+        <button
+          id="menuToggle"
+          class="menu-btn"
+          aria-expanded="false"
+          aria-controls="navLinks"
+        >
+          <span class="menu-icon"></span>
+          <span class="menu-text">Menu</span>
+        </button>
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Buy Properties</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/css/style.css" />
-</head>
+        <a href="index.html" class="brand">
+          <img src="/Assets/Logo.png" alt="logo" style="height: 40px" />
+        </a>
 
-<body>
-  <!-- Header matches your other pages -->
-  <header class="nav-shell">
-    <div class="nav-top">
-      <button id="menuToggle" class="menu-btn" aria-expanded="false" aria-controls="navLinks">
-        <span class="menu-icon"></span><span class="menu-text">Menu</span>
-      </button>
-
-      <a href="index.html" class="brand"><img src="/Assets/Logo.png" alt="logo" style="height:40px" /></a>
-
-      <div class="navbar-buttons" id="navbarUser">
-        <a class="button-primary" href="signUp.html" style="text-decoration:none;color:#fff">Sign Up</a>
-        <a class="button-primary" href="login.html" style="text-decoration:none;color:#fff">Login</a>
-      </div>
-    </div>
-
-    <div id="navLinks" class="nav-links">
-      <nav id="navbar" class="navbar-selector">
-        <a href="buyResults.html" class="nav-active">Buy</a>
-        <a href="rent.html">Rent</a>
-        <a href="sold.html">Sold</a>
-        <a href="findAgent.html">Find Agent</a>
-        <a href="news.html">News</a>
-      </nav>
-    </div>
-  </header>
-
-  <!-- Slim hero search strip -->
-  <section class="prop-hero">
-    <div class="prop-hero-inner">
-      <div class="prop-search">
-        <div class="search-input-wrap">
-          <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M10 18a8 8 0 1 1 5.293-14.003A8 8 0 0 1 10 18Zm11 3-6.001-6" fill="none" stroke="currentColor"
-              stroke-width="2" stroke-linecap="round" />
-          </svg>
-          <input id="propQuery" class="agent-search-input"
-            placeholder="Search suburb or postcode (e.g., Campsie or 2194)" autocomplete="off" />
+        <div class="navbar-buttons" id="navbarUser">
+          <a
+            class="button-primary"
+            href="signUp.html"
+            style="text-decoration: none; color: #fff"
+            >Sign Up</a
+          >
+          <a
+            class="button-primary"
+            href="login.html"
+            style="text-decoration: none; color: #fff"
+            >Login</a
+          >
         </div>
-        <button id="propGo" class="agent-search-btn">Search</button>
       </div>
 
-      <div class="prop-chips">
-        <button class="chip active" data-mode="buy">Buy</button>
-        <button class="chip" data-mode="rent" onclick="location.href='rent.html'">Rent</button>
-        <button class="chip" data-mode="sold" onclick="location.href='sold.html'">Sold</button>
+      <div id="navLinks" class="nav-links">
+        <nav id="navbar" class="navbar-selector">
+          <a href="buy.html">Buy</a>
+          <a href="rent.html">Rent</a>
+          <a href="sold.html">Sold</a>
+          <a href="findAgent.html">Find Agent</a>
+          <a href="news.html">News</a>
+        </nav>
       </div>
-    </div>
-  </section>
+    </header>
 
-  <!-- Results header + filters -->
-  <section class="agent-results-wrap">
-    <div class="results-header">
-      <div id="resultsPath" class="results-path">Buy properties</div>
-      <div class="filters-row">
-        <div class="chip dropdown-chip">
-          <label for="typeSel">Type</label>
-          <select id="typeSel">
+    <section class="prop-hero">
+      <div class="prop-hero-inner">
+        <div class="prop-search">
+          <div id="chips" class="prop-chips"></div>
+        </div>
+        <div>
+          <button id="editFilters" class="button-secondary">
+            Edit filters
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <main style="padding: 24px 32px">
+      <div id="listingContainer" class="container-layout"></div>
+    </main>
+
+    <div id="filterModal" class="modal" aria-hidden="true">
+      <div class="modal-content">
+        <span id="closeFilter" class="close" aria-label="Close">&times;</span>
+        <h2>Filter Listings</h2>
+
+        <div class="filter-group">
+          <label for="typeFilter">Type</label>
+          <select id="typeFilter">
             <option value="">Any</option>
-            <option>House</option>
-            <option>Apartment</option>
-            <option>Townhouse</option>
+            <option value="house">House</option>
+            <option value="apartment">Apartment</option>
           </select>
         </div>
-        <div class="chip dropdown-chip">
-          <label for="bedSel">Beds</label>
-          <select id="bedSel">
+
+        <div class="filter-group">
+          <label for="bedFilter">Beds</label>
+          <select id="bedFilter">
             <option value="">Any</option>
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4+">4+</option>
           </select>
         </div>
-        <div class="chip dropdown-chip">
-          <label for="priceSel">Price</label>
-          <select id="priceSel">
+
+        <div class="filter-group">
+          <label for="priceFilter">Price</label>
+          <select id="priceFilter">
+            <!-- buy page uses SOLD/BUY buckets -->
             <option value="">Any</option>
-            <option value="0-600000">Up to $600k</option>
-            <option value="600000-900000">$600k–$900k</option>
-            <option value="900000-1500000">$900k–$1.5M</option>
-            <option value="1500000-99999999">$1.5M+</option>
+            <option value="0-600k">0-600k</option>
+            <option value="600k-900k">600k-900k</option>
+            <option value="900k-1.5M">900k-1.5M</option>
+            <option value="1.5M+">1.5M+</option>
           </select>
+        </div>
+
+        <div
+          style="
+            margin-top: 20px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+          "
+        >
+          <button class="button-secondary" id="resetFilter">Reset</button>
+          <button class="button-primary" id="applyFilter">Apply</button>
         </div>
       </div>
     </div>
 
-    <div id="propList" class="prop-grid"></div>
-  </section>
+    <script>
+      function escapeHtml(str = "") {
+        return String(str).replace(
+          /[&<>"']/g,
+          (s) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            }[s])
+        );
+      }
 
-  <div class="site-footer-spacer"></div>
+      const params = new URLSearchParams(location.search);
+      const q = params.get("q") || "";
+      const status = (params.get("status") || "buy").toLowerCase();
+      const type = params.get("type") || "";
+      const beds = params.get("beds") || "";
+      const price = params.get("price") || "";
 
-  <script>
-    /* show user state (same pattern as other pages) */
-    (function () {
-      const navbarUser = document.getElementById("navbarUser");
-      try {
-        const user = JSON.parse(localStorage.getItem("user") || "null");
-        if (!user) return;
-        const displayName = user.first_name?.trim() || user.email;
-        navbarUser.innerHTML = '<span style="margin-right:10px;color:#047857;font-weight:600;">Welcome, ' + displayName + '</span><button class="button-secondary" id="logoutBtn">Logout</button>';
-        document.getElementById("logoutBtn").addEventListener("click", () => { localStorage.removeItem("user"); location.reload(); });
-      } catch (_) { }
-    })();
+      function renderChips() {
+        const c = document.getElementById("chips");
+        if (!c) return;
+        const chips = [
+          `<span class="chip active">Status: ${escapeHtml(status)}</span>`,
+        ];
+        if (q) chips.push(`<span class="chip">Query: ${escapeHtml(q)}</span>`);
+        if (type)
+          chips.push(`<span class="chip">Type: ${escapeHtml(type)}</span>`);
+        if (beds)
+          chips.push(`<span class="chip">Beds: ${escapeHtml(beds)}</span>`);
+        if (price)
+          chips.push(`<span class="chip">Price: ${escapeHtml(price)}</span>`);
+        c.innerHTML = chips.join(" ");
+      }
 
-    /* demo dataset — replace later with API fetch */
-    const PROPS = [
-      { id: 1, suburb: "Campsie", postcode: "2194", state: "NSW", type: "Apartment", beds: 2, baths: 1, cars: 1, price: 785000, label: "$785,000", address: "2/88 Amy St, Campsie", photo: "/Assets/unit2.png" },
-      { id: 2, suburb: "Ashfield", postcode: "2131", state: "NSW", type: "Townhouse", beds: 3, baths: 2, cars: 1, price: 850000, label: "$850,000", address: "14 Queen St, Ashfield", photo: "/Assets/news1.png" },
-      { id: 3, suburb: "Carlton", postcode: "3053", state: "VIC", type: "House", beds: 4, baths: 2, cars: 2, price: 1390000, label: "$1,390,000", address: "9 Park Rd, Carlton", photo: "/Assets/news3.png" },
-      { id: 4, suburb: "Campsie", postcode: "2194", state: "NSW", type: "Apartment", beds: 1, baths: 1, cars: 0, price: 520000, label: "$520,000", address: "8/4 Loftus Ave, Campsie", photo: "/Assets/berita1.png" }
-    ];
+      // ---- prefill modal
+      function prefillModal() {
+        const t = document.getElementById("typeFilter");
+        if (t) t.value = type;
+        const b = document.getElementById("bedFilter");
+        if (b) b.value = beds;
+        const p = document.getElementById("priceFilter");
+        if (p) p.value = price;
+      }
 
-    const $ = s => document.querySelector(s);
-    const listEl = $('#propList');
-    const pathEl = $('#resultsPath');
-    const qEl = $('#propQuery');
+      function buildUrlWith(newVals = {}) {
+        const u = new URL(location.href);
+        const sp = u.searchParams;
 
-    function params() {
-      const u = new URL(location.href);
-      return {
-        q: (u.searchParams.get('q') || '').trim(),
-        type: u.searchParams.get('type') || '',
-        beds: u.searchParams.get('beds') || '',
-        price: u.searchParams.get('price') || ''
-      };
-    }
+        sp.set("status", "buy"); // always buy on this page
+        q ? sp.set("q", q) : sp.delete("q");
 
-    function setControls(p) {
-      qEl.value = p.q || '';
-      $('#typeSel').value = p.type || '';
-      $('#bedSel').value = p.beds || '';
-      $('#priceSel').value = p.price || '';
-    }
+        if ("type" in newVals)
+          newVals.type ? sp.set("type", newVals.type) : sp.delete("type");
+        if ("beds" in newVals)
+          newVals.beds ? sp.set("beds", newVals.beds) : sp.delete("beds");
+        if ("price" in newVals)
+          newVals.price ? sp.set("price", newVals.price) : sp.delete("price");
 
-    function inRange(price, range) {
-      if (!range) return true;
-      const [min, max] = range.split('-').map(Number);
-      return price >= min && price <= max;
-    }
+        return u.toString();
+      }
 
-    function card(p) {
-      return `
-        <article class="property-card">
-          <div class="prop-photo-wrap">
-            <img class="prop-photo" src="${p.photo}" alt="${p.address}">
-            <span class="prop-badge">${p.type}</span>
-          </div>
-          <div class="prop-body">
-            <div class="prop-price">${p.label}</div>
-            <div class="prop-address">${p.address}</div>
-            <div class="prop-sub">${p.suburb}, ${p.state} ${p.postcode}</div>
-            <div class="prop-meta">
-              <span>🛏 ${p.beds}</span>
-              <span>🛁 ${p.baths}</span>
-              <span>🚗 ${p.cars}</span>
+      function renderCard(l) {
+        const cover =
+          l.image || (l.images && l.images[0]) || "/Assets/placeholder.png";
+        const statusTag =
+          l.status === "rent"
+            ? "For Rent"
+            : l.status === "buy"
+            ? "For Sale"
+            : l.status || "";
+
+        return `
+      <div class="container">
+        <div class="property-image">
+          <div class="property-pill"><p>${escapeHtml(statusTag)}</p></div>
+          <div class="property-details">
+            <p>${escapeHtml(l.suburb || "")}, ${escapeHtml(l.state || "")}</p>
+            <div class="property-details-icons">
+              <div class="icon-text"><p>${escapeHtml(
+                l.bedrooms ?? 0
+              )}</p><img src="/Assets/bed.png" alt="bed" /></div>
+              <div class="icon-text"><p>${escapeHtml(
+                l.bathrooms ?? 0
+              )}</p><img src="/Assets/shower.png" alt="bath" /></div>
+              <div class="icon-text"><p>${escapeHtml(
+                l.carspaces ?? 0
+              )}</p><img src="/Assets/car.png" alt="car" /></div>
             </div>
-            <div class="prop-actions">
-              <button class="btn-primary-full">Enquire</button>
-              <button class="btn-ghost-full">Save</button>
+          </div>
+          <img src="${escapeHtml(cover)}" alt="property" />
+        </div>
+        <div class="love">
+          <div class="text-love">
+            <p>${escapeHtml(l.address || "")}</p>
+            <div class="unit-tag">
+              <img src="/Assets/dot-grey.png" alt="dot" />
+              <p>${escapeHtml(l.type || "")}</p>
             </div>
           </div>
-        </article>
-      `;
-    }
+          <img class="love-icon" src="/Assets/love-icon.png" alt="Love-icon" />
+        </div>
+      </div>
+    `;
+      }
 
-    function render() {
-      const p = params();
-      setControls(p);
+      // ---- optional: client-side price bucket
+      function priceBucketToRange(bucket) {
+        switch ((bucket || "").toLowerCase()) {
+          case "0-600k":
+            return [0, 600000];
+          case "600k-900k":
+            return [600000, 900000];
+          case "900k-1.5m":
+            return [900000, 1500000];
+          case "1.5m+":
+            return [1500000, Infinity];
+          default:
+            return null;
+        }
+      }
 
-      let data = PROPS.filter(x => !p.q ||
-        x.suburb.toLowerCase().includes(p.q.toLowerCase()) ||
-        x.postcode.includes(p.q));
+      async function fetchListings() {
+        const qs = new URLSearchParams();
+        qs.set("status", "buy");
+        if (q) qs.set("q", q);
+        if (type) qs.set("type", type);
+        if (beds) qs.set("minBeds", beds); // backend expects minBeds
 
-      if (p.type) data = data.filter(x => x.type === p.type);
-      if (p.beds) data = data.filter(x => x.beds >= Number(p.beds));
-      if (p.price) data = data.filter(x => inRange(x.price, p.price));
+        const url = "/api/listings?" + qs.toString();
 
-      pathEl.textContent = `Buy properties${p.q ? ' in ' + p.q : ''} • ${data.length} found`;
-      listEl.innerHTML = data.length ? data.map(card).join('') : '<p class="helper">No properties found. Try another suburb or clear filters.</p>';
-    }
+        try {
+          const res = await fetch(url);
+          if (!res.ok) throw new Error("fetch failed");
+          const data = await res.json();
+          let results = Array.isArray(data.results) ? data.results : [];
 
-    function pushState() {
-      const q = qEl.value.trim();
-      const type = $('#typeSel').value;
-      const beds = $('#bedSel').value;
-      const price = $('#priceSel').value;
+          if (price) {
+            const range = priceBucketToRange(price);
+            if (range) {
+              const [min, max] = range;
+              results = results.filter((r) => {
+                const p = Number(r.price);
+                return !isNaN(p) && p >= min && p < max;
+              });
+            }
+          }
 
-      const qs = new URLSearchParams({ q, type, beds, price });
-      history.replaceState(null, '', '?' + qs.toString());
-    }
+          return results;
+        } catch (e) {
+          console.error(e);
+          return [];
+        }
+      }
 
-    // events
-    $('#propGo').addEventListener('click', () => { pushState(); render(); });
-    qEl.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); pushState(); render(); } });
-    $('#typeSel').addEventListener('change', () => { pushState(); render(); });
-    $('#bedSel').addEventListener('change', () => { pushState(); render(); });
-    $('#priceSel').addEventListener('change', () => { pushState(); render(); });
+      async function load() {
+        renderChips();
+        prefillModal();
 
-    // mobile menu toggle (matches other pages)
-    (function () {
-      const shell = document.querySelector('.nav-shell');
-      const btn = document.getElementById('menuToggle');
-      if (btn && shell) btn.addEventListener('click', () => {
-        const isOpen = shell.classList.toggle('open');
-        btn.setAttribute('aria-expanded', String(isOpen));
-      });
-    })();
+        const container = document.getElementById("listingContainer");
+        container.innerHTML = "<p>Loading…</p>";
 
-    render();
-  </script>
-</body>
+        const results = await fetchListings();
 
-<footer class="site-footer">
-  <div class="footer-inner">
-    <!-- keep your existing footer layout/styles -->
-  </div>
-</footer>
+        if (!results.length) {
+          container.innerHTML = "<p>No properties found.</p>";
+          return;
+        }
 
+        container.innerHTML = results.map(renderCard).join("");
+
+        // heart toggle
+        container.addEventListener("click", function (e) {
+          if (e.target.classList.contains("love-icon")) {
+            const emptyHeart = "/Assets/love-icon.png";
+            const filledHeart = "/Assets/ri_heart-fill.png";
+            e.target.src = e.target.src.includes("love-icon.png")
+              ? filledHeart
+              : emptyHeart;
+          }
+        });
+      }
+
+      // ---- modal wiring (prefill + apply back to URL)
+      (function modalWiring() {
+        const editBtn = document.getElementById("editFilters");
+        const modal = document.getElementById("filterModal");
+        const closeBtn = document.getElementById("closeFilter");
+        const resetBtn = document.getElementById("resetFilter");
+        const applyBtn = document.getElementById("applyFilter");
+
+        editBtn.addEventListener("click", () => {
+          prefillModal();
+          modal.style.display = "flex";
+          modal.setAttribute("aria-hidden", "false");
+        });
+
+        closeBtn.addEventListener("click", () => {
+          modal.style.display = "none";
+          modal.setAttribute("aria-hidden", "true");
+        });
+        window.addEventListener("click", (e) => {
+          if (e.target === modal) {
+            modal.style.display = "none";
+            modal.setAttribute("aria-hidden", "true");
+          }
+        });
+
+        resetBtn.addEventListener("click", () => {
+          document.getElementById("typeFilter").value = "";
+          document.getElementById("bedFilter").value = "";
+          document.getElementById("priceFilter").value = "";
+        });
+
+        applyBtn.addEventListener("click", () => {
+          const newVals = {
+            type: document.getElementById("typeFilter").value,
+            beds: document.getElementById("bedFilter").value,
+            price: document.getElementById("priceFilter").value,
+          };
+          location.href = buildUrlWith(newVals);
+        });
+      })();
+
+      load();
+    </script>
+  </body>
 </html>
