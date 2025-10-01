@@ -82,72 +82,105 @@
 
   <script>
     // show user if logged in
-    (function () {
-      const navbarUser = document.getElementById("navbarUser");
-      try {
-        const user = JSON.parse(localStorage.getItem("user") || "null");
-        if (!user) return;
+  (function () {
+    const navbarUser = document.getElementById("navbarUser");
+    try {
+      const user = JSON.parse(localStorage.getItem("user") || "null");
+      if (!user) return;
 
-        const displayName = user.first_name?.trim() || user.email;
-        navbarUser.innerHTML = `
-          <span style="margin-right:10px; color:#047857; font-weight:600;">
-            Welcome, ${displayName}
-          </span>
-          <button class="button-secondary" id="logoutBtn">Logout</button>
-        `;
+      const displayName = user.first_name?.trim() || user.email;
+      navbarUser.innerHTML = `
+        <span style="margin-right:10px; color:#047857; font-weight:600;">
+          Welcome, ${displayName}
+        </span>
+        <button class="button-secondary" id="logoutBtn">Logout</button>
+      `;
 
-        document.getElementById("logoutBtn").addEventListener("click", () => {
-          localStorage.removeItem("user");
-          window.location.reload();
-        });
-      } catch (_) { }
-    })();
+      document.getElementById("logoutBtn").addEventListener("click", () => {
+        localStorage.removeItem("user");
+        window.location.reload();
+      });
+    } catch (_) { }
+  })();
 
-    const params = new URLSearchParams(location.search);
-    const agentId = params.get('agentId');
-    const agent = params.get('agent') || 'Agent';
-    const agency = params.get('agency') || '';
-    const suburb = params.get('suburb') || '';
+  const params = new URLSearchParams(location.search);
+  const agentId = params.get('agentId');
+  const agent = params.get('agent') || 'Agent';
+  const agency = params.get('agency') || '';
+  const suburb = params.get('suburb') || '';
 
-    // show context
-    const block = document.getElementById('agentBlock');
-    block.innerHTML = `
-      <div class="enquiry-agent-card">
-        <div class="enquiry-agent-lines">
-          <div class="enquiry-target">${agent}</div>
-          <div class="enquiry-agency">${agency}</div>
-          <div class="enquiry-suburb">${suburb}</div>
-        </div>
+  // show context
+  const block = document.getElementById('agentBlock');
+  block.innerHTML = `
+    <div class="enquiry-agent-card">
+      <div class="enquiry-agent-lines">
+        <div class="enquiry-target">${agent}</div>
+        <div class="enquiry-agency">${agency}</div>
+        <div class="enquiry-suburb">${suburb}</div>
       </div>
-    `;
+    </div>
+  `;
 
-    // populate hidden fields
-    document.getElementById('agentId').value = agentId || '';
-    document.getElementById('agentName').value = agent;
-    document.getElementById('agency').value = agency;
-    document.getElementById('suburb').value = suburb;
+  // populate hidden fields
+  document.getElementById('agentId').value = agentId || '';
+  document.getElementById('agentName').value = agent;
+  document.getElementById('agency').value = agency;
+  document.getElementById('suburb').value = suburb;
 
-    // submit (front-end only demo)
-    const form = document.getElementById('enquiryForm');
-    const msg = document.getElementById('formMsg');
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      msg.classList.remove('error', 'success');
-      const data = Object.fromEntries(new FormData(form).entries());
+  // strict validation + submit (front-end only demo)
+  const form = document.getElementById('enquiryForm');
+  const msg  = document.getElementById('formMsg');
 
-      if (!data.fullName?.trim() || !data.email?.trim()) {
-        msg.classList.add('error');
-        msg.textContent = 'Please enter your name and email.';
-        return;
-      }
+  // light HTML constraints (doesn't change your markup)
+  const phoneEl   = document.getElementById('phone');
+  const messageEl = document.getElementById('message');
+  if (phoneEl)   phoneEl.setAttribute('pattern', '[0-9]*');
+  if (messageEl) messageEl.setAttribute('maxlength', '300');
 
-      // TODO: POST to your backend endpoint if/when you build it
-      console.log('Enquiry submitted:', data);
+  const isValidEmail = (s) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s || '');
 
-      msg.classList.add('success');
-      msg.textContent = 'Thanks! Your enquiry has been sent.';
-      form.reset();
-    });
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    msg.classList.remove('error', 'success');
+    const data = Object.fromEntries(new FormData(form).entries());
+
+    // Full name required
+    if (!data.fullName?.trim()) {
+      msg.classList.add('error');
+      msg.textContent = 'Full name is required.';
+      return;
+    }
+
+    // Email must be valid
+    if (!isValidEmail(data.email)) {
+      msg.classList.add('error');
+      msg.textContent = 'Please enter a valid email address.';
+      return;
+    }
+
+    // Phone (if provided) must be digits only
+    if (data.phone && !/^[0-9]+$/.test(data.phone)) {
+      msg.classList.add('error');
+      msg.textContent = 'Phone number must contain only digits.';
+      return;
+    }
+
+    // Message max length 300 (empty allowed)
+    const msgLen = (data.message || '').trim().length;
+    if ((data.message || '').length > 300 || msgLen === 0) {
+      msg.classList.add('error');
+      msg.textContent = 'Message must be less than 300 characters or cannot be empty.';
+      return;
+    }
+
+    // TODO: POST to your backend endpoint 
+    console.log('Enquiry submitted:', data);
+
+    // Success
+    msg.classList.add('success');
+    msg.textContent = 'Thanks! Your enquiry has been sent.';
+    form.reset();
+  });
   </script>
 
   <!-- active nav pill -->
@@ -170,7 +203,7 @@
         });
       }
 
-      // Active tab highlighting (same logic you had)
+      // Active tab highlighting 
       const path = location.pathname.replace(/\/+$/, '');
       document.querySelectorAll('#navbar a[href]').forEach(a => {
         const href = a.getAttribute('href') || '';
@@ -189,12 +222,7 @@
       <div class="footer-col footer-brand">
         <div class="brand">
           <img src="/Assets/Logo.png" alt="MyHome logo" class="footer-logo" />
-          <span class="brand-text">MyHome</span>
         </div>
-        <p class="footer-desc">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Lorem ipsum
-          lorem lorem ipsums sum sum sum
-        </p>
       </div>
 
       <div class="footer-col">
