@@ -6,14 +6,12 @@ https://github.com/nguyenTran2706/ASD-Advanced-Software-Development
 
 ## 🚀 How to Run (Step-by-Step)
 
-1) **Clone & install**
-```bash
+1) Clone & Install
 git clone https://github.com/<your-org>/<your-repo-name>.git
 cd <your-repo-name>
 npm install
 
-2) **Start the server (choose one)**    
-```bash
+2) Start the server (choose one)    
 nodemon app.js or node app.js
 
 3) Open: http://localhost:3000
