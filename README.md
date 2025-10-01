@@ -12,7 +12,8 @@ git clone https://github.com/<your-org>/<your-repo-name>.git
 cd <your-repo-name>
 npm install
 
-2) Start the server (choose one)
+2) **Start the server (choose one)**    
+```bash
 nodemon app.js or node app.js
 
 3) Open: http://localhost:3000
