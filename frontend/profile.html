@@ -19,7 +19,7 @@
         User Profile
       </h1>
 
-      <!-- Personal Information Section (U211) -->
+      <!-- Personal Information Section -->
       <div id="personal-info" class="auth-card-lg" style="max-width: 800px; margin-bottom: 30px;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <h2 class="h2" style="font-size: 24px;">Personal Information</h2>
@@ -48,41 +48,135 @@
         </form>
       </div>
 
-      <!-- Wishlist Section (U213) -->
+      <!-- Wishlist Section -->
       <div id="wishlist-section" style="margin-bottom: 30px;">
         <h2 class="optimization-h1" style="color: #000; font-size: 24px; margin-bottom: 20px;">
           My Wishlist
         </h2>
         <div id="wishlist-container" class="container-layout">
-          <!-- Wishlist items will be dynamically inserted here -->
+          <p>Your wishlist is empty.</p>
         </div>
       </div>
 
-      <!-- Inspection Bookings Section (U216) -->
+      <!-- Inspection Bookings Section -->
       <div id="inspections-section">
         <h2 class="optimization-h1" style="color: #000; font-size: 24px; margin-bottom: 20px;">
           My Inspection Bookings
         </h2>
         <div id="inspections-container">
-          <!-- Inspection items will be dynamically inserted here -->
           <p>You have no upcoming inspections.</p>
         </div>
       </div>
     </div>
 
-    <script src="/js/profile.js"></script>
+    <!-- The <script src="/js/profile.js"></script> line has been REMOVED -->
+
+    <script>
+      // --- ALL OF YOUR FRONTEND JAVASCRIPT LOGIC IS NOW HERE ---
+
+      // This code runs in the user's WEB BROWSER after the page has loaded.
+      document.addEventListener("DOMContentLoaded", () => {
+        // Select all the HTML elements from this page
+        const viewDetailsDiv = document.getElementById("view-details");
+        const editDetailsForm = document.getElementById("edit-details-form");
+        const editDetailsBtn = document.getElementById("edit-details-btn");
+        const cancelEditBtn = document.getElementById("cancel-edit-btn");
+
+        const firstNameView = document.getElementById("firstNameView");
+        const lastNameView = document.getElementById("lastNameView");
+        const emailView = document.getElementById("emailView");
+        
+        const firstNameEdit = document.getElementById("firstNameEdit");
+        const lastNameEdit = document.getElementById("lastNameEdit");
+
+        // Function to display the user's data on the page
+        const populateUserData = (user) => {
+          firstNameView.textContent = user.first_name || "N/A";
+          lastNameView.textContent = user.last_name || "N/A";
+          emailView.textContent = user.email || "N/A";
+          firstNameEdit.value = user.first_name || "";
+          lastNameEdit.value = user.last_name || "";
+        };
+
+        // This function ASKS THE SERVER for the user's data
+        const fetchUserProfile = async () => {
+          try {
+            const response = await fetch("/api/profile"); // Calls your backend API
+
+            if (!response.ok) {
+              throw new Error("Could not load profile. Please log in again.");
+            }
+            const user = await response.json();
+            populateUserData(user); // Display the data on the page
+          } catch (error) {
+            console.error("Fetch Error:", error);
+            document.getElementById("personal-info").innerHTML = `<p style="color:red;">${error.message}</p>`;
+          }
+        };
+
+        // --- Event Listeners for buttons ---
+
+        editDetailsBtn.addEventListener("click", () => {
+          viewDetailsDiv.style.display = "none";
+          editDetailsForm.style.display = "block";
+        });
+
+        cancelEditBtn.addEventListener("click", () => {
+          viewDetailsDiv.style.display = "block";
+          editDetailsForm.style.display = "none";
+        });
+
+        editDetailsForm.addEventListener("submit", async (event) => {
+          event.preventDefault();
+          const updatedData = {
+            firstName: firstNameEdit.value.trim(),
+            lastName: lastNameEdit.value.trim(),
+          };
+
+          try {
+            const response = await fetch("/api/profile", {
+              method: "PUT", // Calls the PUT route on your backend
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(updatedData),
+            });
+
+            if (!response.ok) throw new Error("Failed to save changes.");
+            
+            alert("Profile updated successfully!");
+            await fetchUserProfile(); // Reload the data
+            viewDetailsDiv.style.display = "block";
+            editDetailsForm.style.display = "none";
+          } catch (error) {
+            console.error("Update Error:", error);
+            alert(error.message);
+          }
+        });
+
+        // --- Initial Call ---
+        fetchUserProfile();
+      });
+    </script>
+
     <script>
       // Reuse your navigation bar logic here to ensure it appears on this page
       (async function () {
-        const res = await fetch("index.html");
-        const html = await res.text();
-        const doc = new DOMParser().parseFromString(html, "text/html");
-        const navShell = doc.querySelector(".nav-shell");
-        const navScript = doc.querySelector(
-          'script:not([src])'
-        ); 
-        document.querySelector(".nav-shell").replaceWith(navShell);
-        eval(navScript.innerText); // Re-run the nav script
+        try {
+          const res = await fetch("index.html");
+          const html = await res.text();
+          const doc = new DOMParser().parseFromString(html, "text/html");
+          const navShell = doc.querySelector(".nav-shell");
+          // Find the nav bar's inline script in index.html
+          const navScriptText = Array.from(doc.querySelectorAll('script:not([src])'))
+                                     .find(s => s.innerText.includes('// -------- Auth area'))
+                                     ?.innerText;
+          
+          document.querySelector(".nav-shell").replaceWith(navShell);
+          if (navScriptText) {
+            eval(navScriptText); // Re-run the auth/nav script
+          }
+        } catch(e) {
+          console.error("Could not load navigation bar.", e);
+        }
       })();
     </script>
   </body>

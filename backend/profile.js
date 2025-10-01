@@ -5,19 +5,16 @@ const router = express.Router();
 // from the 'backend' folder to the project root where 'database.js' is located.
 const db = require('../database.js');
 
-/**
- * Authentication Middleware
- * This function runs before any route that uses it.
- * It checks if a user ID is stored in the session, which proves the user is logged in.
- * If not, it blocks the request with a 401 Unauthorized error.
- */
 const isAuthenticated = (req, res, next) => {
+  console.log('[PROFILE.JS] isAuthenticated middleware running...');
+  console.log('[PROFILE.JS] Current session object:', req.session);
+  console.log(`[PROFILE.JS] Checking for session.userId. Found: ${req.session.userId}`);
+  
   if (req.session && req.session.userId) {
-    // If a userId exists in the session, proceed to the route handler (the next function)
     return next();
   } else {
-    // If not, send an error response and stop the request.
-    res.status(401).json({ error: "Unauthorized. You must be logged in to access this resource." });
+    console.log('[PROFILE.JS] FAILED: No userId in session. Blocking request.');
+    res.status(401).json({ error: "Unauthorized. You must be logged in." });
   }
 };
 

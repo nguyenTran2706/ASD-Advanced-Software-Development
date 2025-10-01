@@ -101,6 +101,26 @@
       } catch (_) { }
     })();
 
+    (async function () {
+        try {
+          const res = await fetch("index.html");
+          const html = await res.text();
+          const doc = new DOMParser().parseFromString(html, "text/html");
+          const navShell = doc.querySelector(".nav-shell");
+          // Find the nav bar's inline script in index.html
+          const navScriptText = Array.from(doc.querySelectorAll('script:not([src])'))
+                                     .find(s => s.innerText.includes('// -------- Auth area'))
+                                     ?.innerText;
+          
+          document.querySelector(".nav-shell").replaceWith(navShell);
+          if (navScriptText) {
+            eval(navScriptText); // Re-run the auth/nav script
+          }
+        } catch(e) {
+          console.error("Could not load navigation bar.", e);
+        }
+      })();
+      
     const $ = s => document.querySelector(s);
     const listEl = $('#propList');
     const pathEl = $('#resultsPath');
