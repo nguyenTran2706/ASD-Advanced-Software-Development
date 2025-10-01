@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-g" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>My Profile - MyHome</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <!-- Reuse your existing header structure -->
+    <header class="nav-shell"></header>
+
+    <div id="profile-page" style="padding: 40px">
+      <h1 class="optimization-h1" style="color: #000; margin-bottom: 40px">
+        User Profile
+      </h1>
+
+      <!-- Personal Information Section (U211) -->
+      <div id="personal-info" class="auth-card-lg" style="max-width: 800px; margin-bottom: 30px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2 class="h2" style="font-size: 24px;">Personal Information</h2>
+            <button id="edit-details-btn" class="button-secondary">Edit</button>
+        </div>
+        
+        <div id="view-details">
+            <p><strong>First Name:</strong> <span id="firstNameView"></span></p>
+            <p><strong>Last Name:</strong> <span id="lastNameView"></span></p>
+            <p><strong>Email:</strong> <span id="emailView"></span></p>
+        </div>
+
+        <form id="edit-details-form" class="form-stack" style="display: none;">
+            <div class="field">
+                <label for="firstNameEdit">First Name</label>
+                <input type="text" id="firstNameEdit" class="input-lg" />
+            </div>
+            <div class="field">
+                <label for="lastNameEdit">Last Name</label>
+                <input type="text" id="lastNameEdit" class="input-lg" />
+            </div>
+            <div>
+                <button type="submit" class="button-primary">Save Changes</button>
+                <button type="button" id="cancel-edit-btn" class="button-secondary">Cancel</button>
+            </div>
+        </form>
+      </div>
+
+      <!-- Wishlist Section (U213) -->
+      <div id="wishlist-section" style="margin-bottom: 30px;">
+        <h2 class="optimization-h1" style="color: #000; font-size: 24px; margin-bottom: 20px;">
+          My Wishlist
+        </h2>
+        <div id="wishlist-container" class="container-layout">
+          <!-- Wishlist items will be dynamically inserted here -->
+        </div>
+      </div>
+
+      <!-- Inspection Bookings Section (U216) -->
+      <div id="inspections-section">
+        <h2 class="optimization-h1" style="color: #000; font-size: 24px; margin-bottom: 20px;">
+          My Inspection Bookings
+        </h2>
+        <div id="inspections-container">
+          <!-- Inspection items will be dynamically inserted here -->
+          <p>You have no upcoming inspections.</p>
+        </div>
+      </div>
+    </div>
+
+    <script src="/js/profile.js"></script>
+    <script>
+      // Reuse your navigation bar logic here to ensure it appears on this page
+      (async function () {
+        const res = await fetch("index.html");
+        const html = await res.text();
+        const doc = new DOMParser().parseFromString(html, "text/html");
+        const navShell = doc.querySelector(".nav-shell");
+        const navScript = doc.querySelector(
+          'script:not([src])'
+        ); 
+        document.querySelector(".nav-shell").replaceWith(navShell);
+        eval(navScript.innerText); // Re-run the nav script
+      })();
+    </script>
+  </body>
+</html>

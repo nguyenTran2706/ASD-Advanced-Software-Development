@@ -1890,3 +1890,42 @@ form button {
   border-radius: 8px;
   font-size: 14px;
 }
+
+/* 1. The main container for the dropdown */
+.dropdown {
+  position: relative; /* This is crucial for positioning the dropdown content */
+  display: inline-block;
+}
+
+/* 2. The dropdown content (the part that is hidden by default) */
+.dropdown-content {
+  display: none; /* This hides the menu initially */
+  position: absolute; /* Positions the menu relative to the .dropdown container */
+  background-color: #ffffff; /* A clean white background */
+  min-width: 180px; /* Adjust width as needed */
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.15); /* Adds a subtle shadow */
+  border: 1px solid #e5e7eb; /* A light border */
+  border-radius: 8px; /* Rounded corners */
+  z-index: 10; /* Ensures the dropdown appears above other content */
+  padding: 8px 0; /* Adds some vertical padding */
+}
+
+/* 3. The links inside the dropdown menu */
+.dropdown-content a {
+  color: #111827; /* Dark text color for readability */
+  padding: 10px 16px; /* Spacing for each link */
+  text-decoration: none; /* Removes the default underline */
+  display: block; /* Makes the entire area clickable, not just the text */
+  font-weight: 500; /* Normal font weight */
+  font-size: 14px;
+}
+
+/* 4. Change the background color of links on hover */
+.dropdown-content a:hover {
+  background-color: #f3f4f6; /* A light grey background on hover */
+}
+
+/* 5. The magic part: Show the dropdown menu when hovering over the container */
+.dropdown:hover .dropdown-content {
+  display: block; /* This makes the menu visible on hover */
+}

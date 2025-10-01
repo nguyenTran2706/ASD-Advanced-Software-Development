@@ -234,6 +234,52 @@
         }
       });
     })();
+
+    // -------- Auth area (creates dropdown for logged-in user) --------
+(function () {
+  const navbarUser = document.getElementById("navbarUser");
+  try {
+    const user = JSON.parse(localStorage.getItem("user") || "null");
+    if (!user) return; // Exit if no user is logged in
+
+    // Combine first name and last name for a full name display
+    const firstName = user.first_name || "";
+    const lastName = user.last_name || "";
+    const displayName =
+      `${firstName} ${lastName}`.trim() || user.email;
+
+    // This new HTML structure includes the dropdown menu
+    navbarUser.innerHTML = `
+      <div style="display:flex; align-items:center; gap:16px; color:#047857; font-weight:600;">
+        
+        <!-- Dropdown container -->
+        <div class="dropdown">
+          
+          <!-- This is the visible text that triggers the dropdown on hover -->
+          <span style="cursor: pointer;">Welcome, ${escapeHtml(displayName)}</span>
+          
+          <!-- This is the hidden dropdown content -->
+          <div class="dropdown-content">
+            <a href="profile.html">My Profile</a>
+            <a href="wishlist.html">My Wishlist</a>
+          </div>
+
+        </div>
+
+        <button class="button-secondary" id="logoutBtn">Logout</button>
+      </div>
+    `;
+
+    // The only event listener needed now is for the logout button
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      localStorage.removeItem("user");
+      window.location.reload(); // Reload the page to reset the state
+    });
+
+  } catch (err) {
+      console.error("Failed to initialize user navbar:", err);
+  }
+})();
   </script>
 </body>
 

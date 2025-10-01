@@ -5,10 +5,8 @@ const db = require("../database");
 
 const router = express.Router();
 
-function isEmail(email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email).toLowerCase());
-}
-
+// Your /signup route is perfect, no changes needed there.
+// ... (keep your signup route as is)
 router.post("/signup", (req, res) => {
   const { firstName, lastName, phone, email, password } = req.body || {};
 
@@ -42,6 +40,8 @@ router.post("/signup", (req, res) => {
   );
 });
 
+
+// --- THIS IS THE CORRECTED LOGIN ROUTE ---
 router.post("/login", (req, res) => {
   const { email, password } = req.body || {};
   if (!email || !password) return res.status(400).json({ error: "email and password are required" });
@@ -61,7 +61,27 @@ router.post("/login", (req, res) => {
         return res.status(401).json({ error: "invalid email or password" });
       }
 
-      res.json({ id: user.id, first_name: user.first_name, last_name: user.last_name, email: user.email, message: "login successful" });
+      // --- THIS IS THE CRITICAL FIX ---
+      // When the password is correct, save the user's ID to the session.
+      // This "remembers" the user for all future requests.
+      req.session.userId = user.id;
+
+      // It's best practice to save the session before sending the response
+      req.session.save(err => {
+        if (err) {
+          console.error("Session save error:", err);
+          return res.status(500).json({ error: "Failed to save session." });
+        }
+        
+        // Now send the success response
+        res.json({
+          id: user.id,
+          first_name: user.first_name,
+          last_name: user.last_name,
+          email: user.email,
+          message: "login successful"
+        });
+      });
     }
   );
 });
