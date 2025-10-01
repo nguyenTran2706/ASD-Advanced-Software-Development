@@ -258,6 +258,7 @@
   let currentMode = "Agent";
 
   function cardTemplate(a) {
+    const profileHref = `agentResults.html?id=${encodeURIComponent(a.id)}`;
   return `
     <div class="agent-card">
       <div class="agency-banner ${a.agency_slug === 'raywhite' ? 'agency-raywhite' : ''}">
@@ -267,14 +268,15 @@
       <div class="agent-card-body">
         <!-- Left: avatar + identity (clickable to profile) -->
         <div class="agent-left">
-          <a href="agentResults.html?id=${a.id}" aria-label="View ${a.name} profile">
-            <img
+          <a href="${profileHref}" data-profile-href="${profileHref}">
+          <img
             class="agent-avatar"
             src="${a.headshot || a.photo || a.avatar || '/Assets/agents/default.jpg'}"
             alt="${a.name}">
           </a>
           <div class="agent-ident">
-            <a href="agentResults.html?id=${a.id}" class="agent-name" style="text-decoration:none; color:inherit;">
+            <a href="${profileHref}" data-profile-href="${profileHref}"
+               class="agent-name" style="text-decoration:none; color:inherit;">
               ${a.name}
             </a>
             <div class="agent-role">${a.role || ''}</div>
@@ -303,7 +305,9 @@
 
         <!-- Right: actions -->
         <div class="agent-right">
-          <a class="btn-primary-full" href="agentResults.html?id=${a.id}">View profile</a>
+          <a class="btn-primary-full" href="${profileHref}" data-profile-href="${profileHref}">
+            View profile
+          </a>
           <button class="btn-ghost-full enquire-btn"
                   data-id="${a.id}"
                   data-name="${a.name}"
@@ -336,6 +340,16 @@
       location.href = `enquire.html?${q.toString()}`;
     });
   });
+
+  document.getElementById('agentList')?.addEventListener('click', (e) => {
+  const el = e.target.closest('[data-profile-href], a[href*="agentResults.html"]');
+  if (el) {
+    const href = el.dataset.profileHref || el.getAttribute('href');
+    if (href) {
+      window.location.href = href;  // go, even if something called preventDefault
+    }
+  }
+});
 }
 
   function renderAgents(list, label) {

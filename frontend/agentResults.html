@@ -187,56 +187,228 @@
   <!-- Scripts -->
   <script>
     // ===== Dataset (IDs must match links from findAgent.html) =====
-    const AGENTS = [
-      {
-        id: 1,
-        name: "Adrian William",
-        role: "Director",
-        agency: "Adrian William",
-        suburb: "Newtown, NSW 2042",
-        avatar: "/Assets/agents/broker2.jpg",  // if this 404s we'll try .png
-        phone: "+61 2 9999 1001",
-        rating: 5.0,
-        reviewsCount: 1093,
-        medianPrice: 1070000,
-        medianDays: 23,
-        leadSold: 20,
-        secondarySold: 15,
-        reviewQuote: "Great communication, very professional. The process was smooth from start to finish.",
-        photos: [
-          "/Assets/berita1.png","/Assets/berita2.png","/Assets/berita3.png","/Assets/berita4.png","/Assets/news1.png"
-        ],
-        props: {
-          sold: ["/Assets/cream/cream1.png","/Assets/cream/cream2.png","/Assets/cream/cream3.png","/Assets/cream/cream4.png"],
-          buy:  ["/Assets/cream/cream5.png","/Assets/cream/cream6.png","/Assets/cream/cream7.png","/Assets/cream/cream8.png"],
-          rent: ["/Assets/cream/cream9.png","/Assets/cream/cream10.png","/Assets/cream/cream11.png","/Assets/cream/cream12.png"]
-        }
-      },
-      {
-        id: 2,
-        name: "Linda Yu",
-        role: "Partner",
-        agency: "McGrath - South Hurstville",
-        suburb: "Hurstville, NSW",
-        avatar: "/Assets/agents/broker1.jpg", // if this 404s we'll try .png
-        phone: "+61 2 9999 2002",
-        rating: 5.0,
-        reviewsCount: 70,
-        medianPrice: 1830000,
-        medianDays: 26,
-        leadSold: 57,
-        secondarySold: 15,
-        reviewQuote: "Professional and responsive throughout the campaign. Highly recommended.",
-        photos: [
-          "/Assets/berita2.png","/Assets/berita3.png","/Assets/berita4.png","/Assets/news1.png","/Assets/news2.png"
-        ],
-        props: {
-          sold: ["/Assets/cream/cream2.png","/Assets/cream/cream4.png","/Assets/cream/cream6.png","/Assets/cream/cream8.png"],
-          buy:  ["/Assets/cream/cream1.png","/Assets/cream/cream3.png","/Assets/cream/cream5.png","/Assets/cream/cream7.png"],
-          rent: ["/Assets/cream/cream9.png","/Assets/cream/cream10.png","/Assets/cream/cream11.png","/Assets/cream/cream12.png"]
-        }
+  const AGENTS = [
+    {
+      id: 1,
+      name: "Adrian William",
+      role: "Director",
+      agency: "Adrian William",
+      suburb: "Newtown, NSW 2042",
+      avatar: "/Assets/broker2.png",
+      phone: "+61 2 9999 1001",
+      rating: 5.0,
+      reviewsCount: 1093,
+      medianPrice: 1070000,
+      medianDays: 23,
+      leadSold: 20,
+      secondarySold: 18, // 38 - 20
+      reviewQuote: "Great communication, very professional. The process was smooth from start to finish.",
+      photos: ["/Assets/berita2.png", "/Assets/berita3.png", "/Assets/berita1.png", "/Assets/news1.png"],
+      props: {
+        sold: ["/Assets/cream/cream1.png","/Assets/cream/cream2.png","/Assets/cream/cream3.png","/Assets/cream/cream4.png"],
+        buy:  ["/Assets/cream/cream5.png","/Assets/cream/cream6.png","/Assets/cream/cream7.png","/Assets/cream/cream8.png"],
+        rent: ["/Assets/cream/cream9.png","/Assets/cream/cream10.png","/Assets/cream/cream11.png","/Assets/cream/cream12.png"]
       }
-    ];
+    },
+    {
+      id: 2,
+      name: "Manuel Roussakis",
+      role: "Director",
+      agency: "Ray White - Canterbury",
+      suburb: "Canterbury, NSW 2193",
+      avatar: "/Assets/broker3.png",
+      phone: "+61 2 9999 2002",
+      rating: 5.0,
+      reviewsCount: 34,
+      medianPrice: 803000,
+      medianDays: 27,
+      leadSold: 18,
+      secondarySold: 19, // 37 - 18
+      reviewQuote: "Highly responsive and honest throughout the sale.",
+      photos: ["/Assets/berita3.png", "/Assets/news2.png", "/Assets/berita1.png", "/Assets/berita4.png"],
+      props: {
+        sold: ["/Assets/cream/cream2.png","/Assets/cream/cream4.png","/Assets/cream/cream6.png","/Assets/cream/cream8.png"],
+        buy:  ["/Assets/cream/cream1.png","/Assets/cream/cream3.png","/Assets/cream/cream5.png","/Assets/cream/cream7.png"],
+        rent: ["/Assets/cream/cream9.png","/Assets/cream/cream10.png","/Assets/cream/cream11.png","/Assets/cream/cream12.png"]
+      }
+    },
+    {
+      id: 3,
+      name: "Denny Barros",
+      role: "Licensed Agent",
+      agency: "Adrian William",
+      suburb: "Canterbury, NSW 2193",
+      avatar: "/Assets/broker4.png",
+      phone: "+61 2 9999 3003",
+      rating: 5.0,
+      reviewsCount: 48,
+      medianPrice: 1020000,
+      medianDays: 25,
+      leadSold: 15,
+      secondarySold: 15, // 30 - 15
+      reviewQuote: "Knowledgeable and a great communicator. Smooth experience.",
+      photos: ["/Assets/berita4.png", "/Assets/berita2.png", "/Assets/news3.png", "/Assets/berita1.png"],
+      props: {
+        sold: ["/Assets/cream/cream3.png","/Assets/cream/cream5.png","/Assets/cream/cream7.png","/Assets/cream/cream9.png"],
+        buy:  ["/Assets/cream/cream1.png","/Assets/cream/cream2.png","/Assets/cream/cream4.png","/Assets/cream/cream6.png"],
+        rent: ["/Assets/cream/cream10.png","/Assets/cream/cream11.png","/Assets/cream/cream12.png","/Assets/cream/cream8.png"]
+      }
+    },
+    {
+      id: 4,
+      name: "Sarah Kim",
+      role: "Senior Agent",
+      agency: "Ray White - Sydney",
+      suburb: "Sydney, NSW 2000",
+      avatar: "/Assets/broker1.png",
+      phone: "+61 2 9999 4004",
+      rating: 5.0,
+      reviewsCount: 220,
+      medianPrice: 1250000,
+      medianDays: 21,
+      leadSold: 30,
+      secondarySold: 20, // 50 - 30
+      reviewQuote: "Professional and local expert. Excellent outcome.",
+      photos: ["/Assets/berita1.png", "/Assets/news4.png", "/Assets/berita3.png", "/Assets/berita2.png"],
+      props: {
+        sold: ["/Assets/cream/cream4.png","/Assets/cream/cream6.png","/Assets/cream/cream8.png","/Assets/cream/cream2.png"],
+        buy:  ["/Assets/cream/cream1.png","/Assets/cream/cream3.png","/Assets/cream/cream5.png","/Assets/cream/cream7.png"],
+        rent: ["/Assets/cream/cream9.png","/Assets/cream/cream10.png","/Assets/cream/cream11.png","/Assets/cream/cream12.png"]
+      }
+    },
+    {
+      id: 5,
+      name: "Michael Chen",
+      role: "Director",
+      agency: "LJ Hooker",
+      suburb: "Chatswood, NSW 2067",
+      avatar: "/Assets/brooker11.png", // keep your path; your page will fall back if needed
+      phone: "+61 2 9999 5005",
+      rating: 5.0,
+      reviewsCount: 500,
+      medianPrice: 1480000,
+      medianDays: 22,
+      leadSold: 25,
+      secondarySold: 20, // 45 - 25
+      reviewQuote: "Great communicator and very professional.",
+      photos: ["/Assets/berita2.png", "/Assets/news1.png", "/Assets/berita3.png", "/Assets/berita4.png"],
+      props: {
+        sold: ["/Assets/cream/cream5.png","/Assets/cream/cream7.png","/Assets/cream/cream1.png","/Assets/cream/cream3.png"],
+        buy:  ["/Assets/cream/cream2.png","/Assets/cream/cream4.png","/Assets/cream/cream6.png","/Assets/cream/cream8.png"],
+        rent: ["/Assets/cream/cream9.png","/Assets/cream/cream10.png","/Assets/cream/cream11.png","/Assets/cream/cream12.png"]
+      }
+    },
+    {
+      id: 6,
+      name: "Emily Davis",
+      role: "Property Specialist",
+      agency: "Belle Property",
+      suburb: "Bondi, NSW 2022",
+      avatar: "/Assets/broker8.png",
+      phone: "+61 2 9999 6006",
+      rating: 4.9,
+      reviewsCount: 90,
+      medianPrice: 1350000,
+      medianDays: 19,
+      leadSold: 20,
+      secondarySold: 15, // 35 - 20
+      reviewQuote: "Local expert and very responsive.",
+      photos: ["/Assets/berita3.png", "/Assets/news2.png", "/Assets/berita1.png", "/Assets/berita4.png"],
+      props: {
+        sold: ["/Assets/cream/cream6.png","/Assets/cream/cream8.png","/Assets/cream/cream2.png","/Assets/cream/cream4.png"],
+        buy:  ["/Assets/cream/cream1.png","/Assets/cream/cream3.png","/Assets/cream/cream5.png","/Assets/cream/cream7.png"],
+        rent: ["/Assets/cream/cream9.png","/Assets/cream/cream10.png","/Assets/cream/cream11.png","/Assets/cream/cream12.png"]
+      }
+    },
+    {
+      id: 7,
+      name: "James Lee",
+      role: "Sales Agent",
+      agency: "Ray White - Chatswood",
+      suburb: "Chatswood, NSW 2067",
+      avatar: "/Assets/broker7.png",
+      phone: "+61 2 9999 7007",
+      rating: 5.0,
+      reviewsCount: 180,
+      medianPrice: 1400000,
+      medianDays: 20,
+      leadSold: 22,
+      secondarySold: 18, // 40 - 22
+      reviewQuote: "Professional and honest. Strong results.",
+      photos: ["/Assets/berita4.png", "/Assets/news3.png", "/Assets/berita2.png", "/Assets/berita1.png"],
+      props: {
+        sold: ["/Assets/cream/cream7.png","/Assets/cream/cream1.png","/Assets/cream/cream3.png","/Assets/cream/cream5.png"],
+        buy:  ["/Assets/cream/cream2.png","/Assets/cream/cream4.png","/Assets/cream/cream6.png","/Assets/cream/cream8.png"],
+        rent: ["/Assets/cream/cream9.png","/Assets/cream/cream10.png","/Assets/cream/cream11.png","/Assets/cream/cream12.png"]
+      }
+    },
+    {
+      id: 8,
+      name: "Laura White",
+      role: "Director",
+      agency: "McGrath",
+      suburb: "Zetland, NSW 2017",
+      avatar: "/Assets/broker10.png",
+      phone: "+61 2 9999 8008",
+      rating: 4.8,
+      reviewsCount: 75,
+      medianPrice: 930000,
+      medianDays: 24,
+      leadSold: 16,
+      secondarySold: 12, // 28 - 16
+      reviewQuote: "Knowledgeable and a trusted local expert.",
+      photos: ["/Assets/berita1.png", "/Assets/news4.png", "/Assets/berita3.png", "/Assets/berita2.png"],
+      props: {
+        sold: ["/Assets/cream/cream8.png","/Assets/cream/cream2.png","/Assets/cream/cream4.png","/Assets/cream/cream6.png"],
+        buy:  ["/Assets/cream/cream1.png","/Assets/cream/cream3.png","/Assets/cream/cream5.png","/Assets/cream/cream7.png"],
+        rent: ["/Assets/cream/cream9.png","/Assets/cream/cream10.png","/Assets/cream/cream11.png","/Assets/cream/cream12.png"]
+      }
+    },
+    {
+      id: 9,
+      name: "Daniel Brown",
+      role: "Agent",
+      agency: "LJ Hooker",
+      suburb: "Marrickville, NSW 2204",
+      avatar: "/Assets/broker9.png",
+      phone: "+61 2 9999 9009",
+      rating: 4.7,
+      reviewsCount: 60,
+      medianPrice: 780000,
+      medianDays: 29,
+      leadSold: 12,
+      secondarySold: 8, // 20 - 12
+      reviewQuote: "Friendly and kept us informed at every step.",
+      photos: ["/Assets/berita2.png", "/Assets/news1.png", "/Assets/berita4.png", "/Assets/berita3.png"],
+      props: {
+        sold: ["/Assets/cream/cream1.png","/Assets/cream/cream4.png","/Assets/cream/cream7.png","/Assets/cream/cream10.png"],
+        buy:  ["/Assets/cream/cream2.png","/Assets/cream/cream5.png","/Assets/cream/cream8.png","/Assets/cream/cream11.png"],
+        rent: ["/Assets/cream/cream3.png","/Assets/cream/cream6.png","/Assets/cream/cream9.png","/Assets/cream/cream12.png"]
+      }
+    },
+    {
+      id: 10,
+      name: "Sophie Martin",
+      role: "Agent",
+      agency: "Belle Property",
+      suburb: "Kingsford, NSW 2018",
+      avatar: "/Assets/broker5.png",
+      phone: "+61 2 9999 1010",
+      rating: 5.0,
+      reviewsCount: 120,
+      medianPrice: 1100000,
+      medianDays: 26,
+      leadSold: 18,
+      secondarySold: 14, // 32 - 18
+      reviewQuote: "Responsive and professional. Would recommend.",
+      photos: ["/Assets/berita3.png", "/Assets/news2.png", "/Assets/berita1.png", "/Assets/berita4.png"],
+      props: {
+        sold: ["/Assets/cream/cream2.png","/Assets/cream/cream5.png","/Assets/cream/cream8.png","/Assets/cream/cream11.png"],
+        buy:  ["/Assets/cream/cream1.png","/Assets/cream/cream3.png","/Assets/cream/cream6.png","/Assets/cream/cream9.png"],
+        rent: ["/Assets/cream/cream4.png","/Assets/cream/cream7.png","/Assets/cream/cream10.png","/Assets/cream/cream12.png"]
+      }
+    }
+  ];
 
     // ===== Utilities =====
     const money = v => {
