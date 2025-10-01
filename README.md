@@ -6,7 +6,7 @@ https://github.com/nguyenTran2706/ASD-Advanced-Software-Development
 
 ## 🚀 How to Run (Step-by-Step)
 
-1) Clone & Install
+1) **Clone & install**
 git clone https://github.com/<your-org>/<your-repo-name>.git
 cd <your-repo-name>
 npm install
@@ -47,9 +47,36 @@ nodemon app.js or node app.js
 - Page: frontend/news.html
 - Static news/resources section (placeholder for future integrations).
 
-## 📂 Project Structure
+📦 Project Structure
 
-![Uploading image.png…]()
+- app.js                → Express server + static hosting
+- database.js           → SQLite connection & schema (tables incl. enquiries)
+- database.db           → SQLite database file
+
+backend/
+- listings.js           → /api/listings (GET filters, GET by id, POST create)
+- properties.js         → /api/properties (demo/aux routes)
+- enquiries.js          → /api/enquiries (POST saves enquiries)
+- auth.js               → (optional) auth endpoints
+- seed_listings.js      → Seeds 50+ properties (rent/buy/sold)
+
+frontend/
+- index.html            → Home
+- buy.html              → Buy listings
+- rent.html             → Rent listings
+- sold.html             → Sold listings
+- property.html         → Property details
+- enquire.html          → Enquiry form
+- login.html            → Login
+- signUp.html           → Sign Up
+- wishlist.html         → Wishlist (optional)
+- findAgent.html        → Find Agent
+- news.html             → News
+- css/style.css         → Styles
+
+Assets/                 → Images + logos
+package.json            → Project metadata & dependencies
+README.md               → Documentation
 
 
 🔌 Key API Endpoints
