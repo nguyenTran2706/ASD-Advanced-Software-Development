@@ -122,6 +122,8 @@
       </div>
     </div>
 
+    <script src="/js/wishlist.js"></script>
+
     <script>
       function escapeHtml(str = "") {
         return String(str).replace(
@@ -136,7 +138,7 @@
             }[s])
         );
       }
-      
+
       (async function () {
         try {
           const res = await fetch("index.html");
@@ -144,15 +146,17 @@
           const doc = new DOMParser().parseFromString(html, "text/html");
           const navShell = doc.querySelector(".nav-shell");
           // Find the nav bar's inline script in index.html
-          const navScriptText = Array.from(doc.querySelectorAll('script:not([src])'))
-                                     .find(s => s.innerText.includes('// -------- Auth area'))
-                                     ?.innerText;
-          
+          const navScriptText = Array.from(
+            doc.querySelectorAll("script:not([src])")
+          ).find((s) =>
+            s.innerText.includes("// -------- Auth area")
+          )?.innerText;
+
           document.querySelector(".nav-shell").replaceWith(navShell);
           if (navScriptText) {
             eval(navScriptText); // Re-run the auth/nav script
           }
-        } catch(e) {
+        } catch (e) {
           console.error("Could not load navigation bar.", e);
         }
       })();
@@ -216,9 +220,11 @@
             : l.status === "buy"
             ? "For Sale"
             : l.status || "";
+        const payload = encodeURIComponent(JSON.stringify(l));
+        const filled = inWishlist(l);
 
         return `
-      <div class="container">
+      <div class="container" data-id="${l.id ?? ""}">
         <div class="property-image">
           <div class="property-pill"><p>${escapeHtml(statusTag)}</p></div>
           <div class="property-details">
@@ -245,13 +251,17 @@
               <p>${escapeHtml(l.type || "")}</p>
             </div>
           </div>
-          <img class="love-icon" src="/Assets/love-icon.png" alt="Love-icon" />
+          <img class="love-icon"
+           data-listing="${payload}"
+           src="${
+             filled ? "/Assets/ri_heart-fill.png" : "/Assets/love-icon.png"
+           }"
+           alt="Love-icon" />
         </div>
       </div>
     `;
       }
 
-      // ---- optional: client-side price bucket
       function priceBucketToRange(bucket) {
         switch ((bucket || "").toLowerCase()) {
           case "0-600k":
@@ -316,19 +326,18 @@
 
         container.innerHTML = results.map(renderCard).join("");
 
-        // heart toggle
-        container.addEventListener("click", function (e) {
-          if (e.target.classList.contains("love-icon")) {
-            const emptyHeart = "/Assets/love-icon.png";
-            const filledHeart = "/Assets/ri_heart-fill.png";
-            e.target.src = e.target.src.includes("love-icon.png")
-              ? filledHeart
-              : emptyHeart;
+        container.querySelectorAll(".love-icon").forEach((el) => {
+          try {
+            const listing = JSON.parse(
+              decodeURIComponent(el.dataset.listing || "{}")
+            );
+            setHeart(el, inWishlist(listing));
+          } catch {
+            setHeart(el, false);
           }
         });
       }
 
-      // ---- modal wiring (prefill + apply back to URL)
       (function modalWiring() {
         const editBtn = document.getElementById("editFilters");
         const modal = document.getElementById("filterModal");
@@ -366,6 +375,42 @@
             price: document.getElementById("priceFilter").value,
           };
           location.href = buildUrlWith(newVals);
+        });
+      })();
+
+      (function setupWishlistListeners() {
+        const container = document.getElementById("listingContainer");
+        if (!container) return;
+
+        container.addEventListener("click", (e) => {
+          const el = e.target.closest(".love-icon");
+          if (!el) return;
+
+          let listing;
+          try {
+            listing = JSON.parse(
+              decodeURIComponent(el.dataset.listing || "{}")
+            );
+          } catch {
+            listing = {};
+          }
+
+          const { added } = toggleWishlist(listing);
+          setHeart(el, added);
+        });
+
+        window.addEventListener("storage", (evt) => {
+          if (!evt.key || !evt.key.startsWith("wishlist:")) return;
+          container.querySelectorAll(".love-icon").forEach((el) => {
+            try {
+              const l = JSON.parse(
+                decodeURIComponent(el.dataset.listing || "{}")
+              );
+              setHeart(el, inWishlist(l));
+            } catch {
+              setHeart(el, false);
+            }
+          });
         });
       })();
 
