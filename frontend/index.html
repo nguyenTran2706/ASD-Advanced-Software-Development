@@ -1,367 +1,411 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Real Estate Listings</title>
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Real Estate Listings</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/css/style.css" />
-</head>
+  <body>
+    <header class="nav-shell">
+      <div class="nav-top">
+        <button
+          id="menuToggle"
+          class="menu-btn"
+          aria-expanded="false"
+          aria-controls="navLinks"
+        >
+          <span class="menu-icon"></span>
+          <span class="menu-text">Menu</span>
+        </button>
 
-<body>
-  <header class="nav-shell">
-    <div class="nav-top">
-      <button id="menuToggle" class="menu-btn" aria-expanded="false" aria-controls="navLinks">
-        <span class="menu-icon"></span>
-        <span class="menu-text">Menu</span>
-      </button>
+        <a href="index.html" class="brand">
+          <img src="/Assets/Logo.png" alt="logo" style="height: 40px" />
+        </a>
 
-      <a href="index.html" class="brand">
-        <img src="/Assets/Logo.png" alt="logo" style="height: 40px" />
-      </a>
-
-      <div class="navbar-buttons" id="navbarUser">
-        <a class="button-primary" href="signUp.html" style="text-decoration: none; color: #fff">Sign Up</a>
-        <a class="button-primary" href="login.html" style="text-decoration: none; color: #fff">Login</a>
-      </div>
-    </div>
-
-    <div id="navLinks" class="nav-links">
-      <nav id="navbar" class="navbar-selector">
-        <a href="buy.html">Buy</a>
-        <a href="rent.html">Rent</a>
-        <a href="sold.html">Sold</a>
-        <a href="findAgent.html">Find Agent</a>
-        <a href="news.html">News</a>
-      </nav>
-    </div>
-  </header>
-
-  <div id="hero-section">
-    <div class="hero-section-center">
-      <div class="hero-text">
-        <p class="h1">The Breakthrough Platform for Smarter Home Finding</p>
-        <p class="sub-header">
-          Streamline planning management, enhance collaboration, and deliver
-          results with MyHome
-        </p>
+        <div class="navbar-buttons" id="navbarUser">
+          <a
+            class="button-primary"
+            href="signUp.html"
+            style="text-decoration: none; color: #fff"
+            >Sign Up</a
+          >
+          <a
+            class="button-primary"
+            href="login.html"
+            style="text-decoration: none; color: #fff"
+            >Login</a
+          >
+        </div>
       </div>
 
-      <div class="search-section">
-        <div class="search-navbar">
-          <div id="searchTabs" class="search-navbar-texts">
-            <p class="search-tab active" data-type="rent">Rent</p>
-            <p class="search-tab" data-type="sold">Sold</p>
-            <p class="search-tab" data-type="address">Address</p>
-            <p class="search-tab" data-type="agent">Agent</p>
-            <p class="search-tab comingsoon">Coming Soon</p>
-          </div>
-          <div class="line"></div>
+      <div id="navLinks" class="nav-links">
+        <nav id="navbar" class="navbar-selector">
+          <a href="buy.html">Buy</a>
+          <a href="rent.html">Rent</a>
+          <a href="sold.html">Sold</a>
+          <a href="findAgent.html">Find Agent</a>
+          <a href="news.html">News</a>
+        </nav>
+      </div>
+    </header>
+
+    <div id="hero-section">
+      <div class="hero-section-center">
+        <div class="hero-text">
+          <p class="h1">The Breakthrough Platform for Smarter Home Finding</p>
+          <p class="sub-header">
+            Streamline planning management, enhance collaboration, and deliver
+            results with MyHome
+          </p>
         </div>
 
-        <div class="search-box">
-          <div class="search-placeholder">
-            <img src="/Assets/search.png" alt="searchicon" />
-            <input type="text" id="searchInput" placeholder="Search suburb, postcode or state" style="
+        <div class="search-section">
+          <div class="search-navbar">
+            <div id="searchTabs" class="search-navbar-texts">
+              <p class="search-tab active" data-type="rent">Rent</p>
+              <p class="search-tab" data-type="sold">Buy</p>
+              <p class="search-tab" data-type="address">Address</p>
+              <p class="search-tab" data-type="agent">Agent</p>
+              <p class="search-tab comingsoon">Coming Soon</p>
+            </div>
+            <div class="line"></div>
+          </div>
+
+          <div class="search-box">
+            <div class="search-placeholder">
+              <img src="/Assets/search.png" alt="searchicon" />
+              <input
+                type="text"
+                id="searchInput"
+                placeholder="Search suburb, postcode or state"
+                style="
                   border: none;
                   outline: none;
                   width: 250px;
                   font-size: 16px;
-                " />
+                "
+              />
+            </div>
+            <div class="button-secondary-round" style="border-radius: 40px">
+              <img src="/Assets/filter.png" alt="filtericon" /> Filters
+            </div>
+            <div
+              class="button-primary-round"
+              id="searchBtn"
+              style="border-radius: 40px"
+            >
+              Search
+            </div>
           </div>
-          <div class="button-secondary-round" style="border-radius: 40px">
-            <img src="/Assets/filter.png" alt="filtericon" /> Filters
+        </div>
+      </div>
+    </div>
+
+    <div id="optimization">
+      <div class="optimization-text">
+        <p class="optimization-h1">
+          Best optimization based on your credentials
+        </p>
+        <p class="optimization-subheader">
+          Streamline planning management, enhance collaboration, and deliver
+          results with Central Quita
+        </p>
+      </div>
+
+      <div class="container-layout" id="listingContainer"></div>
+    </div>
+
+    <div id="newest-development">
+      <div class="optimization-text">
+        <p class="optimization-h1">Newest Developments</p>
+        <p class="optimization-subheader">
+          Streamline planning management, enhance collaboration, and deliver
+          results with Central Quita
+        </p>
+      </div>
+
+      <div class="news-layout">
+        <img src="/Assets/news1.png" alt="news" />
+        <img src="/Assets/news2.png" alt="news" />
+        <img src="/Assets/news3.png" alt="news" />
+        <img src="/Assets/news3.png" alt="news" />
+      </div>
+
+      <div class="controller">
+        <img src="/Assets/left-arrow.png" alt="left" />
+        <div class="dots-layout">
+          <img src="/Assets/choosen-dot.png" alt="dot" />
+          <img src="/Assets/unchoosen-dot.png" alt="dot" />
+          <img src="/Assets/unchoosen-dot.png" alt="dot" />
+          <img src="/Assets/unchoosen-dot.png" alt="dot" />
+          <img src="/Assets/unchoosen-dot.png" alt="dot" />
+        </div>
+        <img src="/Assets/right-arrow.png" alt="right" />
+      </div>
+    </div>
+
+    <div id="latest-news">
+      <div class="optimization-text">
+        <p class="optimization-h1">Latest News</p>
+        <p class="optimization-subheader">
+          Streamline planning management, enhance collaboration, and deliver
+          results with Central Quita
+        </p>
+      </div>
+
+      <div class="berita-layout">
+        <div class="berita">
+          <img src="/Assets/berita1.png" alt="" />
+          <div class="berita-text">
+            <p>
+              Prince Hill period home sells for $2.9m after rate cut sales. this
+              lead to rising number of homeless people in Sydney
+            </p>
+            <p class="duration-text">3 days ago</p>
           </div>
-          <div class="button-primary-round" id="searchBtn" style="border-radius: 40px">
-            Search
+        </div>
+        <div class="berita">
+          <img src="/Assets/berita4.png" alt="" />
+          <div class="berita-text">
+            <p>
+              Prince Hill period home sells for $2.9m after rate cut sales. this
+              lead to rising number of homeless people in Sydney
+            </p>
+            <p class="duration-text">3 days ago</p>
+          </div>
+        </div>
+        <div class="berita">
+          <img src="/Assets/berita2.png" alt="" />
+          <div class="berita-text">
+            <p>
+              Prince Hill period home sells for $2.9m after rate cut sales. this
+              lead to rising number of homeless people in Sydney
+            </p>
+            <p class="duration-text">3 days ago</p>
+          </div>
+        </div>
+        <div class="berita">
+          <img src="/Assets/berita3.png" alt="" />
+          <div class="berita-text">
+            <p>
+              Prince Hill period home sells for $2.9m after rate cut sales. this
+              lead to rising number of homeless people in Sydney
+            </p>
+            <p class="duration-text">3 days ago</p>
+          </div>
+        </div>
+        <div class="berita">
+          <img src="/Assets/berita1.png" alt="" />
+          <div class="berita-text">
+            <p>
+              Prince Hill period home sells for $2.9m after rate cut sales. this
+              lead to rising number of homeless people in Sydney
+            </p>
+            <p class="duration-text">3 days ago</p>
           </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <div id="optimization">
-    <div class="optimization-text">
-      <p class="optimization-h1">
-        Best optimization based on your credentials
-      </p>
-      <p class="optimization-subheader">
-        Streamline planning management, enhance collaboration, and deliver
-        results with Central Quita
-      </p>
-    </div>
-
-    <div class="container-layout" id="listingContainer"></div>
-  </div>
-
-  <div id="newest-development">
-    <div class="optimization-text">
-      <p class="optimization-h1">Newest Developments</p>
-      <p class="optimization-subheader">
-        Streamline planning management, enhance collaboration, and deliver
-        results with Central Quita
-      </p>
-    </div>
-
-    <div class="news-layout">
-      <img src="/Assets/news1.png" alt="news" />
-      <img src="/Assets/news2.png" alt="news" />
-      <img src="/Assets/news3.png" alt="news" />
-      <img src="/Assets/news3.png" alt="news" />
-    </div>
-
-    <div class="controller">
-      <img src="/Assets/left-arrow.png" alt="left" />
-      <div class="dots-layout">
-        <img src="/Assets/choosen-dot.png" alt="dot" />
-        <img src="/Assets/unchoosen-dot.png" alt="dot" />
-        <img src="/Assets/unchoosen-dot.png" alt="dot" />
-        <img src="/Assets/unchoosen-dot.png" alt="dot" />
-        <img src="/Assets/unchoosen-dot.png" alt="dot" />
-      </div>
-      <img src="/Assets/right-arrow.png" alt="right" />
-    </div>
-  </div>
-
-  <div id="latest-news">
-    <div class="optimization-text">
-      <p class="optimization-h1">Latest News</p>
-      <p class="optimization-subheader">
-        Streamline planning management, enhance collaboration, and deliver
-        results with Central Quita
-      </p>
-    </div>
-
-    <div class="berita-layout">
-      <div class="berita">
-        <img src="/Assets/berita1.png" alt="" />
-        <div class="berita-text">
-          <p>
-            Prince Hill period home sells for $2.9m after rate cut sales. this
-            lead to rising number of homeless people in Sydney
-          </p>
-          <p class="duration-text">3 days ago</p>
+      <div class="controller">
+        <img src="/Assets/left-arrow.png" alt="" />
+        <div class="dots-layout">
+          <img src="/Assets/choosen-dot.png" alt="" />
+          <img src="/Assets/unchoosen-dot.png" alt="" />
+          <img src="/Assets/unchoosen-dot.png" alt="" />
+          <img src="/Assets/unchoosen-dot.png" alt="" />
+          <img src="/Assets/unchoosen-dot.png" alt="" />
         </div>
-      </div>
-      <div class="berita">
-        <img src="/Assets/berita4.png" alt="" />
-        <div class="berita-text">
-          <p>
-            Prince Hill period home sells for $2.9m after rate cut sales. this
-            lead to rising number of homeless people in Sydney
-          </p>
-          <p class="duration-text">3 days ago</p>
-        </div>
-      </div>
-      <div class="berita">
-        <img src="/Assets/berita2.png" alt="" />
-        <div class="berita-text">
-          <p>
-            Prince Hill period home sells for $2.9m after rate cut sales. this
-            lead to rising number of homeless people in Sydney
-          </p>
-          <p class="duration-text">3 days ago</p>
-        </div>
-      </div>
-      <div class="berita">
-        <img src="/Assets/berita3.png" alt="" />
-        <div class="berita-text">
-          <p>
-            Prince Hill period home sells for $2.9m after rate cut sales. this
-            lead to rising number of homeless people in Sydney
-          </p>
-          <p class="duration-text">3 days ago</p>
-        </div>
-      </div>
-      <div class="berita">
-        <img src="/Assets/berita1.png" alt="" />
-        <div class="berita-text">
-          <p>
-            Prince Hill period home sells for $2.9m after rate cut sales. this
-            lead to rising number of homeless people in Sydney
-          </p>
-          <p class="duration-text">3 days ago</p>
-        </div>
+        <img src="/Assets/right-arrow.png" alt="" />
       </div>
     </div>
 
-    <div class="controller">
-      <img src="/Assets/left-arrow.png" alt="" />
-      <div class="dots-layout">
-        <img src="/Assets/choosen-dot.png" alt="" />
-        <img src="/Assets/unchoosen-dot.png" alt="" />
-        <img src="/Assets/unchoosen-dot.png" alt="" />
-        <img src="/Assets/unchoosen-dot.png" alt="" />
-        <img src="/Assets/unchoosen-dot.png" alt="" />
-      </div>
-      <img src="/Assets/right-arrow.png" alt="" />
-    </div>
-  </div>
+    <!-- Filter POP-UP (from your snippet) -->
+    <div id="filterModal" class="modal" aria-hidden="true">
+      <div class="modal-content">
+        <span id="closeFilter" class="close" aria-label="Close">&times;</span>
+        <h2>Filter Listings</h2>
 
-  <!-- Filter POP-UP (from your snippet) -->
-  <div id="filterModal" class="modal" aria-hidden="true">
-    <div class="modal-content">
-      <span id="closeFilter" class="close" aria-label="Close">&times;</span>
-      <h2>Filter Listings</h2>
+        <div class="filter-group">
+          <label for="typeFilter">Type</label>
+          <select id="typeFilter">
+            <option value="">Any</option>
+            <option value="house">House</option>
+            <option value="apartment">Apartment</option>
+          </select>
+        </div>
 
-      <div class="filter-group">
-        <label for="typeFilter">Type</label>
-        <select id="typeFilter">
-          <option value="">Any</option>
-          <option value="house">House</option>
-          <option value="apartment">Apartment</option>
-        </select>
-      </div>
+        <div class="filter-group">
+          <label for="bedFilter">Beds</label>
+          <select id="bedFilter">
+            <option value="">Any</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4+">4+</option>
+          </select>
+        </div>
 
-      <div class="filter-group">
-        <label for="bedFilter">Beds</label>
-        <select id="bedFilter">
-          <option value="">Any</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4+">4+</option>
-        </select>
-      </div>
+        <div class="filter-group">
+          <label for="priceFilter">Price</label>
+          <select id="priceFilter"></select>
+        </div>
 
-      <div class="filter-group">
-        <label for="priceFilter">Price</label>
-        <select id="priceFilter"></select>
-      </div>
-
-      <div style="
+        <div
+          style="
             margin-top: 20px;
             display: flex;
             justify-content: flex-end;
             gap: 12px;
-          ">
-        <button class="button-secondary" id="resetFilter">Reset</button>
-        <button class="button-primary" id="applyFilter">Apply</button>
+          "
+        >
+          <button class="button-secondary" id="resetFilter">Reset</button>
+          <button class="button-primary" id="applyFilter">Apply</button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <script>
-    // -------- Helpers --------
-    function escapeHtml(str = "") {
-      return String(str).replace(
-        /[&<>"']/g,
-        (s) =>
-        ({
-          "&": "&amp;",
-          "<": "&lt;",
-          ">": "&gt;",
-          '"': "&quot;",
-          "'": "&#39;",
-        }[s])
-      );
-    }
+    <script src="/js/wishlist.js"></script>
 
-    // -------- Nav: burger + active link --------
-    (function () {
-      const shell = document.querySelector(".nav-shell");
-      const btn = document.getElementById("menuToggle");
-      if (btn && shell) {
-        btn.addEventListener("click", () => {
-          const isOpen = shell.classList.toggle("open");
-          btn.setAttribute("aria-expanded", String(isOpen));
-        });
+    <script>
+      // -------- Helpers --------
+      function escapeHtml(str = "") {
+        return String(str).replace(
+          /[&<>"']/g,
+          (s) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            }[s])
+        );
       }
 
-      const path = location.pathname.replace(/\/+$/, "");
-      document.querySelectorAll("#navbar a[href]").forEach((a) => {
-        const href = a.getAttribute("href") || "";
-        const isHome =
-          (path === "" || path === "/") &&
-          (href === "index.html" || href === "/index.html");
-        if (
-          isHome ||
-          path.endsWith(href) ||
-          (href.startsWith("/") && path === href)
-        ) {
-          a.classList.add("nav-active");
-        }
-      });
-    })();
-
-    // -------- Auth area (adds Wishlist button & Logout) --------
-    (function () {
-      const navbarUser = document.getElementById("navbarUser");
-      try {
-        const user = JSON.parse(localStorage.getItem("user") || "null");
-        if (!user) return;
-
-        const displayName = (user.first_name || "").trim() || user.email;
-        navbarUser.innerHTML = `
-          <div style="display:flex; align-items:center; gap:12px; color:#047857; font-weight:600;">
-            <button id="wishlistBtn" style="background:none; border:none; cursor:pointer; padding:0; display:flex; align-items:center;">
-              <img class="love-icon" src="/Assets/love-icon.png" alt="Love-icon" style="width:20px; height:20px; object-fit:contain;" />
-            </button>
-            <span>Welcome, ${escapeHtml(displayName)}</span>
-            <button class="button-secondary" id="logoutBtn">Logout</button>
-          </div>
-        `;
-
-        document.getElementById("logoutBtn").addEventListener("click", () => {
-          localStorage.removeItem("user");
-          window.location.reload();
-        });
-
-        document
-          .getElementById("wishlistBtn")
-          .addEventListener("click", () => {
-            window.location.href = "/frontend/wishlist.html";
+      // -------- Nav: burger + active link --------
+      (function () {
+        const shell = document.querySelector(".nav-shell");
+        const btn = document.getElementById("menuToggle");
+        if (btn && shell) {
+          btn.addEventListener("click", () => {
+            const isOpen = shell.classList.toggle("open");
+            btn.setAttribute("aria-expanded", String(isOpen));
           });
-      } catch (_) { }
-    })();
+        }
 
-    // -------- Listings --------
-    document.addEventListener("DOMContentLoaded", async function () {
-      const container = document.getElementById("listingContainer");
-      if (!container) return;
+        const path = location.pathname.replace(/\/+$/, "");
+        document.querySelectorAll("#navbar a[href]").forEach((a) => {
+          const href = a.getAttribute("href") || "";
+          const isHome =
+            (path === "" || path === "/") &&
+            (href === "index.html" || href === "/index.html");
+          if (
+            isHome ||
+            path.endsWith(href) ||
+            (href.startsWith("/") && path === href)
+          ) {
+            a.classList.add("nav-active");
+          }
+        });
+      })();
 
-      async function loadListings() {
+      // -------- Auth area (creates dropdown for logged-in user) --------
+      (function () {
+        const navbarUser = document.getElementById("navbarUser");
         try {
-          const res = await fetch("/api/listings");
-          if (!res.ok) throw new Error("Failed to load listings");
-          const listings = await res.json();
-          const visible = (listings.results || []).slice(0, 4);
+          const user = JSON.parse(localStorage.getItem("user") || "null");
+          if (!user) return; // Exit if no user is logged in
 
-          container.innerHTML = visible
-            .map((l) => {
-              const cover =
-                l.image ||
-                (l.images && l.images[0]) ||
-                "/Assets/placeholder.png";
-              const statusTag =
-                l.status === "rent"
-                  ? "For Rent"
-                  : l.status === "buy"
+          // Combine first name and last name for a full name display
+          const firstName = user.first_name || "";
+          const lastName = user.last_name || "";
+          const displayName = `${firstName} ${lastName}`.trim() || user.email;
+
+          // This new HTML structure includes the dropdown menu
+          navbarUser.innerHTML = `
+      <div style="display:flex; align-items:center; gap:16px; color:#047857; font-weight:600;">
+        
+        <!-- Dropdown container -->
+        <div class="dropdown">
+          
+          <!-- This is the visible text that triggers the dropdown on hover -->
+          <span style="cursor: pointer;">Welcome, ${escapeHtml(
+            displayName
+          )}</span>
+          
+          <!-- This is the hidden dropdown content -->
+          <div class="dropdown-content">
+            <a href="profile.html">My Profile</a>
+            <a href="wishlist.html">My Wishlist</a>
+          </div>
+
+        </div>
+
+        <button class="button-secondary" id="logoutBtn">Logout</button>
+      </div>
+    `;
+
+          // The only event listener needed now is for the logout button
+          document.getElementById("logoutBtn").addEventListener("click", () => {
+            localStorage.removeItem("user");
+            window.location.reload(); // Reload the page to reset the state
+          });
+        } catch (err) {
+          console.error("Failed to initialize user navbar:", err);
+        }
+      })();
+
+      document.addEventListener("DOMContentLoaded", async function () {
+        const container = document.getElementById("listingContainer");
+        if (!container) return;
+
+        async function loadListings() {
+          try {
+            const res = await fetch("/api/listings");
+            if (!res.ok) throw new Error("Failed to load listings");
+            const listings = await res.json();
+            const visible = (listings.results || []).slice(0, 4);
+
+            container.innerHTML = visible
+              .map((l) => {
+                const cover =
+                  l.image ||
+                  (l.images && l.images[0]) ||
+                  "/Assets/placeholder.png";
+                const statusTag =
+                  l.status === "rent"
+                    ? "For Rent"
+                    : l.status === "buy"
                     ? "For Sale"
                     : l.status || "";
 
-              return `
+                return `
               <div class="container">
                 <div class="property-image">
                   <div class="property-pill"><p>${escapeHtml(
-                statusTag
-              )}</p></div>
+                    statusTag
+                  )}</p></div>
                   <div class="property-details">
                     <p>${escapeHtml(l.suburb || "")}, ${escapeHtml(
-                l.state || ""
-              )}</p>
+                  l.state || ""
+                )}</p>
                     <div class="property-details-icons">
                       <div class="icon-text"><p>${escapeHtml(
-                l.bedrooms ?? 0
-              )}</p><img src="/Assets/bed.png" alt="bed" /></div>
+                        l.bedrooms ?? 0
+                      )}</p><img src="/Assets/bed.png" alt="bed" /></div>
                       <div class="icon-text"><p>${escapeHtml(
-                l.bathrooms ?? 0
-              )}</p><img src="/Assets/shower.png" alt="bath" /></div>
+                        l.bathrooms ?? 0
+                      )}</p><img src="/Assets/shower.png" alt="bath" /></div>
                       <div class="icon-text"><p>${escapeHtml(
-                l.carspaces ?? 0
-              )}</p><img src="/Assets/car.png" alt="car" /></div>
+                        l.carspaces ?? 0
+                      )}</p><img src="/Assets/car.png" alt="car" /></div>
                     </div>
                   </div>
                   <img src="${escapeHtml(cover)}" alt="property" />
@@ -374,113 +418,153 @@
                       <p>${escapeHtml(l.type || "")}</p>
                     </div>
                   </div>
-                  <img class="love-icon" src="/Assets/love-icon.png" alt="Love-icon" />
+                  <img
+  class="love-icon"
+  data-listing="${encodeURIComponent(JSON.stringify(l))}"
+  src="${inWishlist(l) ? "/Assets/ri_heart-fill.png" : "/Assets/love-icon.png"}"
+  alt="Love-icon"
+/>
                 </div>
               </div>
             `;
-            })
-            .join("");
-        } catch (err) {
-          console.error(err);
-          container.innerHTML = "<p>Could not load listings.</p>";
+              })
+              .join("");
+          } catch (err) {
+            console.error(err);
+            container.innerHTML = "<p>Could not load listings.</p>";
+          }
         }
-      }
 
-      loadListings();
+        loadListings();
 
-      // Heart toggle
-      container.addEventListener("click", function (e) {
-        if (e.target.classList.contains("love-icon")) {
-          const emptyHeart = "/Assets/love-icon.png";
-          const filledHeart = "/Assets/ri_heart-fill.png";
-          e.target.src = e.target.src.includes("love-icon.png")
-            ? filledHeart
-            : emptyHeart;
-        }
-      });
-    });
-
-    // -------- Search (button + Enter + redirect to buyResults) --------
-    (function () {
-      const input =
-        document.querySelector("#mainQuery") ||
-        document.querySelector(".search-placeholder input");
-      const button =
-        document.querySelector("#goBtn") ||
-        document.querySelector(".button-primary-round");
-      function go() {
-        const q = ((input && input.value) || "").trim();
-        location.href =
-          "buyResults.html" + (q ? "?q=" + encodeURIComponent(q) : "");
-      }
-      if (button) button.addEventListener("click", go);
-      if (input)
-        input.addEventListener("keydown", (e) => {
-          if (e.key === "Enter") {
-            e.preventDefault();
-            go();
+        container.querySelectorAll(".love-icon").forEach((el) => {
+          try {
+            const listing = JSON.parse(
+              decodeURIComponent(el.dataset.listing || "{}")
+            );
+            setHeart(el, inWishlist(listing));
+          } catch {
+            setHeart(el, false);
           }
         });
 
-      // legacy alert + log for the Search btn id
-      const searchBtn = document.getElementById("searchBtn");
-      const searchInput = document.getElementById("searchInput");
-      if (searchBtn && searchInput) {
-        searchBtn.addEventListener("click", () => {
-          const query = searchInput.value.trim();
-          if (!query) {
-            alert("Please enter a suburb, postcode, or state.");
-          } else {
-            alert(`Searching for: ${query}`);
-            console.log("User search query:", query);
-          }
-        });
-        searchInput.addEventListener("keypress", (e) => {
-          if (e.key === "Enter") searchBtn.click();
-        });
-      }
-    })();
+        container.addEventListener("click", (e) => {
+          const el = e.target.closest(".love-icon");
+          if (!el) return;
 
-    // -------- filter
-    (function () {
-      // Tabs
-      const tabs = document.querySelectorAll(
-        "#searchTabs .search-tab:not(.comingsoon)"
-      );
-      let activeTab = "rent";
-      tabs.forEach((tab) => {
-        tab.addEventListener("click", () => {
-          tabs.forEach((t) => t.classList.remove("active"));
-          tab.classList.add("active");
-          activeTab = tab.dataset.type;
-          // Hide filter for Agent tab
-          const filterBtn = document.querySelector(".button-secondary-round");
-          if (filterBtn)
-            filterBtn.style.display =
-              activeTab === "agent" ? "none" : "inline-flex";
-          updatePriceOptions();
-          console.log("you selected:", activeTab);
+          let listing;
+          try {
+            listing = JSON.parse(
+              decodeURIComponent(el.dataset.listing || "{}")
+            );
+          } catch {
+            listing = {};
+          }
+
+          const { added } = toggleWishlist(listing);
+          setHeart(el, added);
         });
       });
 
-      // Modal wiring
-      const filterBtn = document.querySelector(".button-secondary-round");
-      const modal = document.getElementById("filterModal");
-      const closeBtn = document.getElementById("closeFilter");
-      const priceFilter = document.getElementById("priceFilter");
-      const resetBtn = document.getElementById("resetFilter");
-      const applyBtn = document.getElementById("applyFilter");
+      (function () {
+        function getActiveTab() {
+          const active = document.querySelector(
+            "#searchTabs .search-tab.active"
+          );
+          return active ? active.dataset.type : "rent";
+        }
 
-      const priceOptions = {
-        rent: [
-          "Any",
-          "0-500/week",
-          "500-800/week",
-          "800-1200/week",
-          "1200+/week",
-        ],
-        sold: ["Any", "0-600k", "600k-900k", "900k-1.5M", "1.5M+"],
-        address: {
+        function buildResultsUrl() {
+          const activeTab = getActiveTab();
+
+          const qEl =
+            document.querySelector("#mainQuery") ||
+            document.querySelector(".search-placeholder input");
+          const q = (qEl && qEl.value.trim()) || "";
+
+          const type = document.getElementById("typeFilter")?.value || "";
+          const beds = document.getElementById("bedFilter")?.value || "";
+          const price = document.getElementById("priceFilter")?.value || "";
+
+          let page = "buyResults.html";
+          if (activeTab === "rent") page = "rentResults.html";
+          else if (activeTab === "sold") page = "buyResults.html";
+          else if (activeTab === "agent") page = "findAgent.html";
+          else if (activeTab === "address") {
+            page = price.startsWith("rent-")
+              ? "rentResults.html"
+              : "buyResults.html";
+          }
+
+          const status =
+            activeTab === "rent" || price.startsWith("rent-")
+              ? "rent"
+              : activeTab === "sold" || price.startsWith("sold-")
+              ? "buy"
+              : "";
+
+          const params = new URLSearchParams();
+          if (q) params.set("q", q);
+          if (status) params.set("status", status);
+          if (type) params.set("type", type);
+          if (beds) params.set("beds", beds);
+          if (price) params.set("price", price.replace(/^rent-|^sold-/, ""));
+
+          return page + (params.toString() ? "?" + params.toString() : "");
+        }
+
+        function go() {
+          location.href = buildResultsUrl();
+        }
+
+        const searchBtn = document.getElementById("searchBtn");
+        const input =
+          document.querySelector("#mainQuery") ||
+          document.querySelector(".search-placeholder input");
+
+        if (searchBtn) searchBtn.addEventListener("click", go);
+        if (input)
+          input.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              go();
+            }
+          });
+
+        const applyBtn = document.getElementById("applyFilter");
+        if (applyBtn) applyBtn.addEventListener("click", go);
+      })();
+
+      (function () {
+        // Tabs
+        const tabs = document.querySelectorAll(
+          "#searchTabs .search-tab:not(.comingsoon)"
+        );
+        let activeTab = "rent";
+        tabs.forEach((tab) => {
+          tab.addEventListener("click", () => {
+            tabs.forEach((t) => t.classList.remove("active"));
+            tab.classList.add("active");
+            activeTab = tab.dataset.type;
+            // Hide filter for Agent tab
+            const filterBtn = document.querySelector(".button-secondary-round");
+            if (filterBtn)
+              filterBtn.style.display =
+                activeTab === "agent" ? "none" : "inline-flex";
+            updatePriceOptions();
+            console.log("you selected:", activeTab);
+          });
+        });
+
+        // Modal wiring
+        const filterBtn = document.querySelector(".button-secondary-round");
+        const modal = document.getElementById("filterModal");
+        const closeBtn = document.getElementById("closeFilter");
+        const priceFilter = document.getElementById("priceFilter");
+        const resetBtn = document.getElementById("resetFilter");
+        const applyBtn = document.getElementById("applyFilter");
+
+        const priceOptions = {
           rent: [
             "Any",
             "0-500/week",
@@ -489,142 +573,183 @@
             "1200+/week",
           ],
           sold: ["Any", "0-600k", "600k-900k", "900k-1.5M", "1.5M+"],
-        },
-      };
+          address: {
+            rent: [
+              "Any",
+              "0-500/week",
+              "500-800/week",
+              "800-1200/week",
+              "1200+/week",
+            ],
+            sold: ["Any", "0-600k", "600k-900k", "900k-1.5M", "1.5M+"],
+          },
+        };
 
-      function updatePriceOptions() {
-        if (!priceFilter) return;
-        if (activeTab === "address") {
-          priceFilter.innerHTML = `
+        function updatePriceOptions() {
+          if (!priceFilter) return;
+          if (activeTab === "address") {
+            priceFilter.innerHTML = `
             <optgroup label="Rent">
               ${priceOptions.address.rent
-              .map((p) => `<option value="rent-${p}">${p}</option>`)
-              .join("")}
+                .map((p) => `<option value="rent-${p}">${p}</option>`)
+                .join("")}
             </optgroup>
             <optgroup label="Sold">
               ${priceOptions.address.sold
-              .map((p) => `<option value="sold-${p}">${p}</option>`)
-              .join("")}
+                .map((p) => `<option value="sold-${p}">${p}</option>`)
+                .join("")}
             </optgroup>
           `;
-        } else {
-          priceFilter.innerHTML = priceOptions[activeTab]
-            .map((p) => `<option value="${p}">${p}</option>`)
-            .join("");
+          } else {
+            priceFilter.innerHTML = priceOptions[activeTab]
+              .map((p) => `<option value="${p}">${p}</option>`)
+              .join("");
+          }
         }
-      }
-      updatePriceOptions();
+        updatePriceOptions();
 
-      if (filterBtn && modal) {
-        filterBtn.addEventListener("click", () => {
-          modal.style.display = "flex";
-          modal.setAttribute("aria-hidden", "false");
-        });
-      }
-      if (closeBtn && modal) {
-        closeBtn.addEventListener("click", () => {
-          modal.style.display = "none";
-          modal.setAttribute("aria-hidden", "true");
-        });
-        window.addEventListener("click", (e) => {
-          if (e.target === modal) {
+        if (filterBtn && modal) {
+          filterBtn.addEventListener("click", () => {
+            modal.style.display = "flex";
+            modal.setAttribute("aria-hidden", "false");
+          });
+        }
+        if (closeBtn && modal) {
+          closeBtn.addEventListener("click", () => {
             modal.style.display = "none";
             modal.setAttribute("aria-hidden", "true");
-          }
-        });
-      }
+          });
+          window.addEventListener("click", (e) => {
+            if (e.target === modal) {
+              modal.style.display = "none";
+              modal.setAttribute("aria-hidden", "true");
+            }
+          });
+        }
 
-      if (resetBtn) {
-        resetBtn.addEventListener("click", () => {
-          document.getElementById("typeFilter").value = "";
-          document.getElementById("bedFilter").value = "";
-          priceFilter.value = "";
-        });
-      }
+        if (resetBtn) {
+          resetBtn.addEventListener("click", () => {
+            document.getElementById("typeFilter").value = "";
+            document.getElementById("bedFilter").value = "";
+            priceFilter.value = "";
+          });
+        }
 
-      if (applyBtn) {
-        applyBtn.addEventListener("click", () => {
-          const filters = {
-            type: document.getElementById("typeFilter").value,
-            beds: document.getElementById("bedFilter").value,
-            price: priceFilter.value,
-            status: activeTab,
-          };
-          console.log("Applied filters:", filters);
-          modal.style.display = "none";
-          modal.setAttribute("aria-hidden", "true");
-        });
-      }
-    })();
-  </script>
+        if (applyBtn) {
+          applyBtn.addEventListener("click", () => {
+            const filters = {
+              type: document.getElementById("typeFilter").value,
+              beds: document.getElementById("bedFilter").value,
+              price: priceFilter.value,
+              status: activeTab,
+            };
+            console.log("Applied filters:", filters);
+            modal.style.display = "none";
+            modal.setAttribute("aria-hidden", "true");
+          });
+        }
+      })();
+    </script>
 
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <div class="footer-cols">
-        <div class="footer-col footer-brand">
-          <div class="brand">
-            <img src="/Assets/Logo.png" alt="MyHome logo" class="footer-logo" />
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-cols">
+          <div class="footer-col footer-brand">
+            <div class="brand">
+              <img
+                src="/Assets/Logo.png"
+                alt="MyHome logo"
+                class="footer-logo"
+              />
+            </div>
+          </div>
+
+          <div class="footer-col">
+            <h4 class="footer-title">Product</h4>
+            <a href="#">How it works</a>
+            <a href="#">Who we help</a>
+            <a href="#">Features</a>
+            <a href="#">Pricing</a>
+          </div>
+
+          <div class="footer-col">
+            <h4 class="footer-title">Resources</h4>
+            <a href="#">Get Help</a>
+            <a href="#">Partnership</a>
+            <a href="#">Blog</a>
+            <a href="#">Legal</a>
+          </div>
+
+          <div class="footer-col">
+            <h4 class="footer-title">About</h4>
+            <a href="#">About</a>
+            <a href="#">Sponsorship</a>
+            <a href="#">Hardship</a>
+            <a href="#">Contact</a>
+          </div>
+
+          <div class="footer-col footer-connect">
+            <h4 class="footer-title">Connect with us</h4>
+            <div class="footer-socials">
+              <a href="#" aria-label="Facebook" class="icon">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="18"
+                  height="18"
+                  aria-hidden="true"
+                >
+                  <image
+                    href="/Assets/facebook.png"
+                    xlink:href="/Assets/facebook-app-symbol.png"
+                    width="18"
+                    height="18"
+                  />
+                </svg>
+              </a>
+
+              <a href="#" aria-label="YouTube" class="icon">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="18"
+                  height="18"
+                  aria-hidden="true"
+                >
+                  <image
+                    href="/Assets/youtube.png"
+                    xlink:href="/Assets/youtube.png"
+                    width="18"
+                    height="18"
+                  />
+                </svg>
+              </a>
+              <a href="#" aria-label="Twitter" class="icon">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="18"
+                  height="18"
+                  aria-hidden="true"
+                >
+                  <image
+                    href="/Assets/twitter.png"
+                    xlink:href="/Assets/twitter.png"
+                    width="18"
+                    height="18"
+                  />
+                </svg>
+              </a>
+            </div>
           </div>
         </div>
 
-        <div class="footer-col">
-          <h4 class="footer-title">Product</h4>
-          <a href="#">How it works</a>
-          <a href="#">Who we help</a>
-          <a href="#">Features</a>
-          <a href="#">Pricing</a>
-        </div>
-
-        <div class="footer-col">
-          <h4 class="footer-title">Resources</h4>
-          <a href="#">Get Help</a>
-          <a href="#">Partnership</a>
-          <a href="#">Blog</a>
-          <a href="#">Legal</a>
-        </div>
-
-        <div class="footer-col">
-          <h4 class="footer-title">About</h4>
-          <a href="#">About</a>
-          <a href="#">Sponsorship</a>
-          <a href="#">Hardship</a>
-          <a href="#">Contact</a>
-        </div>
-
-        <div class="footer-col footer-connect">
-          <h4 class="footer-title">Connect with us</h4>
-          <div class="footer-socials">
-            <a href="#" aria-label="Facebook" class="icon">
-              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-                <image href="/Assets/facebook.png" xlink:href="/Assets/facebook-app-symbol.png" width="18"
-                  height="18" />
-              </svg>
-            </a>
-
-            <a href="#" aria-label="YouTube" class="icon">
-              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-                <image href="/Assets/youtube.png" xlink:href="/Assets/youtube.png" width="18" height="18" />
-              </svg>
-            </a>
-            <a href="#" aria-label="Twitter" class="icon">
-              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-                <image href="/Assets/twitter.png" xlink:href="/Assets/twitter.png" width="18" height="18" />
-              </svg>
-            </a>
+        <hr class="footer-divider" />
+        <div class="footer-bottom">
+          <div>Copyright 2025 · MyHome</div>
+          <div class="footer-legal">
+            <a href="#">Terms of Service</a>
+            <a href="#">Privacy Policy</a>
           </div>
         </div>
       </div>
-
-      <hr class="footer-divider" />
-      <div class="footer-bottom">
-        <div>Copyright 2025 · MyHome</div>
-        <div class="footer-legal">
-          <a href="#">Terms of Service</a>
-          <a href="#">Privacy Policy</a>
-        </div>
-      </div>
-    </div>
-  </footer>
-</body>
-
+    </footer>
+  </body>
 </html>

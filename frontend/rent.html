@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -7,10 +8,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/css/style.css" />
 </head>
+
 <body>
   <header class="nav-shell">
     <div class="nav-top">
-      <button id="menuToggle" class="menu-btn" aria-expanded="false"><span class="menu-icon"></span><span class="menu-text">Menu</span></button>
+      <button id="menuToggle" class="menu-btn" aria-expanded="false"><span class="menu-icon"></span><span
+          class="menu-text">Menu</span></button>
       <a href="index.html" class="brand"><img src="/Assets/Logo.png" alt="logo" style="height:40px" /></a>
       <div class="navbar-buttons" id="navbarUser">
         <a class="button-primary" href="signUp.html" style="text-decoration:none;color:#fff">Sign Up</a>
@@ -33,9 +36,11 @@
       <div class="prop-search">
         <div class="search-input-wrap">
           <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M10 18a8 8 0 1 1 5.293-14.003A8 8 0 0 1 10 18Zm11 3-6.001-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            <path d="M10 18a8 8 0 1 1 5.293-14.003A8 8 0 0 1 10 18Zm11 3-6.001-6" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" />
           </svg>
-          <input id="propQuery" class="agent-search-input" placeholder="Search suburb or postcode (e.g., Ultimo or 2007)" autocomplete="off" />
+          <input id="propQuery" class="agent-search-input"
+            placeholder="Search suburb or postcode (e.g., Ultimo or 2007)" autocomplete="off" />
         </div>
         <button id="propGo" class="agent-search-btn">Search</button>
       </div>
@@ -101,6 +106,26 @@
       } catch (_) { }
     })();
 
+    (async function () {
+      try {
+        const res = await fetch("index.html");
+        const html = await res.text();
+        const doc = new DOMParser().parseFromString(html, "text/html");
+        const navShell = doc.querySelector(".nav-shell");
+        // Find the nav bar's inline script in index.html
+        const navScriptText = Array.from(doc.querySelectorAll('script:not([src])'))
+          .find(s => s.innerText.includes('// -------- Auth area'))
+          ?.innerText;
+
+        document.querySelector(".nav-shell").replaceWith(navShell);
+        if (navScriptText) {
+          eval(navScriptText); // Re-run the auth/nav script
+        }
+      } catch (e) {
+        console.error("Could not load navigation bar.", e);
+      }
+    })();
+
     const $ = s => document.querySelector(s);
     const listEl = $('#propList');
     const pathEl = $('#resultsPath');
@@ -115,24 +140,24 @@
         price: u.searchParams.get('price') || ''
       };
     }
-    function setControls(p){ qEl.value=p.q||''; $('#typeSel').value=p.type||''; $('#bedSel').value=p.beds||''; $('#priceSel').value=p.price||''; }
-    function inRange(price, range){ if(!range) return true; const [min,max]=range.split('-').map(Number); return price>=min && price<=max; }
+    function setControls(p) { qEl.value = p.q || ''; $('#typeSel').value = p.type || ''; $('#bedSel').value = p.beds || ''; $('#priceSel').value = p.price || ''; }
+    function inRange(price, range) { if (!range) return true; const [min, max] = range.split('-').map(Number); return price >= min && price <= max; }
 
-    function money(n){ if(typeof n!=='number') return ''; return n.toLocaleString('en-AU',{style:'currency',currency:'AUD',maximumFractionDigits:0}); }
+    function money(n) { if (typeof n !== 'number') return ''; return n.toLocaleString('en-AU', { style: 'currency', currency: 'AUD', maximumFractionDigits: 0 }); }
 
-    function card(p){
-      const label = money(Number(p.price||0)) + ' / wk';
+    function card(p) {
+      const label = money(Number(p.price || 0)) + ' / wk';
       const cover = p.image || '/Assets/placeholder.png';
       return `
         <article class="property-card" onclick="location.href='property.html?id=${p.id}&status=rent'" style="cursor:pointer">
           <div class="prop-photo-wrap">
-            <img class="prop-photo" src="${cover}" alt="${p.address||''}">
-            <span class="prop-badge">${p.type||'Property'}</span>
+            <img class="prop-photo" src="${cover}" alt="${p.address || ''}">
+            <span class="prop-badge">${p.type || 'Property'}</span>
           </div>
           <div class="prop-body">
             <div class="prop-price">${label}</div>
-            <div class="prop-address">${p.address||''}</div>
-            <div class="prop-sub">${p.suburb||''}, ${p.state||''} ${p.postcode||''}</div>
+            <div class="prop-address">${p.address || ''}</div>
+            <div class="prop-sub">${p.suburb || ''}, ${p.state || ''} ${p.postcode || ''}</div>
             <div class="prop-meta">
               <span>🛏 ${p.bedrooms ?? 0}</span>
               <span>🛁 ${p.bathrooms ?? 0}</span>
@@ -141,6 +166,11 @@
             <div class="prop-actions">
               <button class="btn-primary-full">Enquire</button>
               <button class="btn-ghost-full">Save</button>
+              <a class="btn btn-primary"
+                href="bookInspection.html?propertyId=${p.id}&address=${encodeURIComponent(p.address)}&price=${encodeURIComponent(p.price)}">
+                Book inspection
+              </a>
+
             </div>
           </div>
         </article>`;
@@ -148,12 +178,12 @@
 
     //async function fetchListings(q){
     //  const url=new URL('/api/listings', location.origin);
-     // url.searchParams.set('status','rent');
-   //   if(q) url.searchParams.set('q',q);
-     // const res=await fetch(url);
-      //if(!res.ok) throw new Error('Failed to load listings');
-     // const data=await res.json();
-     // return data.results||[];
+    // url.searchParams.set('status','rent');
+    //   if(q) url.searchParams.set('q',q);
+    // const res=await fetch(url);
+    //if(!res.ok) throw new Error('Failed to load listings');
+    // const data=await res.json();
+    // return data.results||[];
     //}
     async function fetchListings(p) {
       const url = new URL('/api/listings', location.origin);
@@ -170,34 +200,37 @@
       return data.results || [];
     }
 
-    async function render(){
-      const p=params(); setControls(p);
-      try{
-        let data=await fetchListings(p.q);
-        if(p.type) data=data.filter(x=>(x.type||'')===p.type);
-        if(p.beds) data=data.filter(x=>(x.bedrooms||0)>=Number(p.beds));
-        if(p.price) data=data.filter(x=>inRange(Number(x.price||0),p.price));
-        pathEl.textContent=`Rent properties${p.q?' in '+p.q:''} • ${data.length} found`;
-        listEl.innerHTML=data.length?data.map(card).join(''):'<p class="helper">No properties found. Try another suburb or clear filters.</p>';
-      }catch(e){ console.error(e); listEl.innerHTML='<p class="helper error">Could not load properties.</p>'; }
+    async function render() {
+      const p = params(); setControls(p);
+      try {
+        let data = await fetchListings(p.q);
+        if (p.type) data = data.filter(x => (x.type || '') === p.type);
+        if (p.beds) data = data.filter(x => (x.bedrooms || 0) >= Number(p.beds));
+        if (p.price) data = data.filter(x => inRange(Number(x.price || 0), p.price));
+        pathEl.textContent = `Rent properties${p.q ? ' in ' + p.q : ''} • ${data.length} found`;
+        listEl.innerHTML = data.length ? data.map(card).join('') : '<p class="helper">No properties found. Try another suburb or clear filters.</p>';
+      } catch (e) { console.error(e); listEl.innerHTML = '<p class="helper error">Could not load properties.</p>'; }
     }
 
-    function pushState(){
-      const q=qEl.value.trim(); const type=$('#typeSel').value; const beds=$('#bedSel').value; const price=$('#priceSel').value;
-      const qs=new URLSearchParams({q,type,beds,price}); history.replaceState(null,'','?'+qs.toString());
+    function pushState() {
+      const q = qEl.value.trim(); const type = $('#typeSel').value; const beds = $('#bedSel').value; const price = $('#priceSel').value;
+      const qs = new URLSearchParams({ q, type, beds, price }); history.replaceState(null, '', '?' + qs.toString());
     }
 
-    $('#propGo').addEventListener('click', ()=>{ pushState(); render(); });
-    qEl.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); pushState(); render(); } });
-    $('#typeSel').addEventListener('change', ()=>{ pushState(); render(); });
-    $('#bedSel').addEventListener('change', ()=>{ pushState(); render(); });
-    $('#priceSel').addEventListener('change', ()=>{ pushState(); render(); });
+    $('#propGo').addEventListener('click', () => { pushState(); render(); });
+    qEl.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); pushState(); render(); } });
+    $('#typeSel').addEventListener('change', () => { pushState(); render(); });
+    $('#bedSel').addEventListener('change', () => { pushState(); render(); });
+    $('#priceSel').addEventListener('change', () => { pushState(); render(); });
 
-    (function(){ const shell=document.querySelector('.nav-shell'); const btn=document.getElementById('menuToggle'); if(btn&&shell) btn.addEventListener('click',()=>{ const isOpen=shell.classList.toggle('open'); btn.setAttribute('aria-expanded', String(isOpen)); }); })();
+    (function () { const shell = document.querySelector('.nav-shell'); const btn = document.getElementById('menuToggle'); if (btn && shell) btn.addEventListener('click', () => { const isOpen = shell.classList.toggle('open'); btn.setAttribute('aria-expanded', String(isOpen)); }); })();
 
     render();
   </script>
 </body>
 
-<footer class="site-footer"><div class="footer-inner"></div></footer>
+<footer class="site-footer">
+  <div class="footer-inner"></div>
+</footer>
+
 </html>

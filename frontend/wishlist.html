@@ -60,14 +60,14 @@
       <div class="optimization-text">
         <p class="optimization-h1">Your Wishlist</p>
         <p class="optimization-subheader">
-          Streamline planning management, enhance collaboration, and deliver
-          results with Central Quita
+          Here are all the properties you have wishlisted!
         </p>
       </div>
 
-      <div class="wishlist-layout">
-      </div>
+      <div class="wishlist-layout"></div>
     </div>
+
+    <script src="/js/wishlist.js"></script>
 
     <script>
       (function () {
@@ -168,8 +168,29 @@
     </script>
 
     <script>
+      (async function () {
+        try {
+          const res = await fetch("index.html");
+          const html = await res.text();
+          const doc = new DOMParser().parseFromString(html, "text/html");
+          const navShell = doc.querySelector(".nav-shell");
+
+          const navScriptText = Array.from(
+            doc.querySelectorAll("script:not([src])")
+          ).find((s) =>
+            s.innerText.includes("// -------- Auth area")
+          )?.innerText;
+
+          document.querySelector(".nav-shell").replaceWith(navShell);
+          if (navScriptText) {
+            eval(navScriptText); // Re-run the auth/nav script
+          }
+        } catch (e) {
+          console.error("Could not load navigation bar.", e);
+        }
+      })();
+
       (function () {
-        // Update these selectors to match your input/button if different
         const input =
           document.querySelector("#mainQuery") ||
           document.querySelector(".search-placeholder input");
@@ -179,7 +200,6 @@
 
         function go() {
           const q = ((input && input.value) || "").trim();
-          // Go to the Buy results page we created
           location.href =
             "buyResults.html" + (q ? "?q=" + encodeURIComponent(q) : "");
         }
@@ -194,22 +214,106 @@
           });
       })();
 
-      document.addEventListener("DOMContentLoaded", function () {
-        const loveIcons = document.querySelectorAll(".love-icon");
+      document.addEventListener("DOMContentLoaded", () => {
+        const wrap = document.querySelector(".wishlist-layout");
 
-        loveIcons.forEach((icon) => {
-          icon.addEventListener("click", function () {
-            const emptyHeart = "../Assets/love-icon.png";
-            const filledHeart = "../Assets/ri_heart-fill.png";
+        function renderWishlist() {
+          const items = getWishlist();
 
-            if (this.src.includes("ri_heart-fill.png")) {
-              this.src = emptyHeart;
-            } else {
-              this.src = filledHeart;
-            }
-          });
+          if (!items.length) {
+            wrap.innerHTML = `<p style="padding:16px">No saved properties yet.</p>`;
+            return;
+          }
+
+          wrap.innerHTML = items
+            .map((l) => {
+              const cover =
+                l.image ||
+                (l.images && l.images[0]) ||
+                "/Assets/placeholder.png";
+              const statusTag =
+                l.status === "rent"
+                  ? "For Rent"
+                  : l.status === "buy"
+                  ? "For Sale"
+                  : l.status || "";
+              const payload = encodeURIComponent(JSON.stringify(l));
+
+              return `
+          <div class="container" data-id="${l.id ?? ""}">
+            <div class="property-image">
+              <div class="property-pill"><p>${escapeHtml(statusTag)}</p></div>
+              <div class="property-details">
+                <p>${escapeHtml(l.suburb || "")}, ${escapeHtml(
+                l.state || ""
+              )}</p>
+                <div class="property-details-icons">
+                  <div class="icon-text"><p>${escapeHtml(
+                    l.bedrooms ?? 0
+                  )}</p><img src="/Assets/bed.png" alt="bed" /></div>
+                  <div class="icon-text"><p>${escapeHtml(
+                    l.bathrooms ?? 0
+                  )}</p><img src="/Assets/shower.png" alt="bath" /></div>
+                  <div class="icon-text"><p>${escapeHtml(
+                    l.carspaces ?? 0
+                  )}</p><img src="/Assets/car.png" alt="car" /></div>
+                </div>
+              </div>
+              <img src="${escapeHtml(cover)}" alt="property" />
+            </div>
+            <div class="love">
+              <div class="text-love">
+                <p>${escapeHtml(l.address || "")}</p>
+                <div class="unit-tag">
+                  <img src="/Assets/dot-grey.png" alt="dot" />
+                  <p>${escapeHtml(l.type || "")}</p>
+                </div>
+              </div>
+              <!-- Heart is always filled in wishlist; clicking removes -->
+              <img class="love-icon"
+                   data-listing="${payload}"
+                   src="/Assets/ri_heart-fill.png"
+                   alt="Remove from wishlist" />
+            </div>
+          </div>
+        `;
+            })
+            .join("");
+        }
+
+        wrap.addEventListener("click", (e) => {
+          const el = e.target.closest(".love-icon");
+          if (!el) return;
+
+          let listing;
+          try {
+            listing = JSON.parse(
+              decodeURIComponent(el.dataset.listing || "{}")
+            );
+          } catch {
+            listing = {};
+          }
+
+          removeFromWishlist(listing);
+          renderWishlist();
         });
+
+        renderWishlist();
       });
+
+      function escapeHtml(str = "") {
+        return String(str).replace(
+          /[&<>"']/g,
+          (s) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            }[s])
+        );
+      }
     </script>
   </body>
 
@@ -219,12 +323,7 @@
         <div class="footer-col footer-brand">
           <div class="brand">
             <img src="/Assets/Logo.png" alt="MyHome logo" class="footer-logo" />
-            <span class="brand-text">MyHome</span>
           </div>
-          <p class="footer-desc">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Lorem
-            ipsum lorem lorem ipsums sum sum sum
-          </p>
         </div>
 
         <div class="footer-col">
@@ -257,36 +356,46 @@
             <a href="#" aria-label="Facebook" class="icon">
               <svg
                 viewBox="0 0 24 24"
-                width="22"
-                height="22"
-                fill="currentColor"
+                width="18"
+                height="18"
+                aria-hidden="true"
               >
-                <path
-                  d="M13.5 9H16V6h-2.5C11.57 6 11 7.57 11 9v2H9v3h2v7h3v-7h2.1l.4-3H14v-1c0-.55.45-1 1-1Z"
+                <image
+                  href="/Assets/facebook.png"
+                  xlink:href="/Assets/facebook-app-symbol.png"
+                  width="18"
+                  height="18"
                 />
               </svg>
             </a>
+
             <a href="#" aria-label="YouTube" class="icon">
               <svg
                 viewBox="0 0 24 24"
-                width="22"
-                height="22"
-                fill="currentColor"
+                width="18"
+                height="18"
+                aria-hidden="true"
               >
-                <path
-                  d="M21.6 7.2a3 3 0 0 0-2.1-2.1C17.9 4.7 12 4.7 12 4.7s-5.9 0-7.5.4A3 3 0 0 0 2.4 7.2 31 31 0 0 0 2 12a31 31 0 0 0 .4 4.8 3 3 0 0 0 2.1 2.1c1.6.4 7.5.4 7.5.4s5.9 0 7.5-.4a3 3 0 0 0 2.1-2.1A31 31 0 0 0 22 12a31 31 0 0 0-.4-4.8ZM10 15.5v-7l6 3.5-6 3.5Z"
+                <image
+                  href="/Assets/youtube.png"
+                  xlink:href="/Assets/youtube.png"
+                  width="18"
+                  height="18"
                 />
               </svg>
             </a>
             <a href="#" aria-label="Twitter" class="icon">
               <svg
                 viewBox="0 0 24 24"
-                width="22"
-                height="22"
-                fill="currentColor"
+                width="18"
+                height="18"
+                aria-hidden="true"
               >
-                <path
-                  d="M21 7.5c-.6.3-1.2.5-1.9.6.7-.4 1.2-1 1.5-1.8-.6.4-1.4.7-2.1.9a3.3 3.3 0 0 0-5.7 3c-2.7-.1-5.1-1.4-6.7-3.4a3.3 3.3 0 0 0 1 4.4c-.5 0-1-.1-1.4-.4v.1a3.3 3.3 0 0 0 2.6 3.2c-.4.1-.8.1-1.3 0 .4 1.2 1.6 2.1 3 2.1A6.6 6.6 0 0 1 3 18.6 9.3 9.3 0 0 0 8 20c5.7 0 8.9-4.8 8.9-8.9v-.4c.6-.4 1.2-1 1.6-1.7Z"
+                <image
+                  href="/Assets/twitter.png"
+                  xlink:href="/Assets/twitter.png"
+                  width="18"
+                  height="18"
                 />
               </svg>
             </a>
@@ -295,7 +404,6 @@
       </div>
 
       <hr class="footer-divider" />
-
       <div class="footer-bottom">
         <div>Copyright 2025 · MyHome</div>
         <div class="footer-legal">

@@ -10,6 +10,7 @@
 </head>
 
 <body>
+  <!-- NAVBAR -->
   <header class="nav-shell">
     <div class="nav-top">
       <button id="menuToggle" class="menu-btn" aria-expanded="false" aria-controls="navLinks">
@@ -33,26 +34,27 @@
         <a href="buy.html">Buy</a>
         <a href="rent.html">Rent</a>
         <a href="sold.html">Sold</a>
-        <a href="findAgent.html">Find Agent</a>
+        <a href="findAgent.html" class="nav-active">Find Agent</a>
         <a href="news.html">News</a>
       </nav>
     </div>
   </header>
 
+  <!-- HERO -->
   <section class="agent-hero">
     <div class="agent-hero-inner">
       <div class="agent-hero-left">
-        <h1 class="agent-title">Search and compare real<br />estate agents</h1>
+        <h1 class="agent-title">Search and compare real estate agents</h1>
         <p class="agent-subtitle">
           Whether you're starting your search or already have someone in mind,
-          you can compare sales agents, property managers or agencies before making your decision.
+          compare sales agents, property managers, or agencies before deciding.
         </p>
-
+        
         <div class="agent-search">
           <div class="search-input-wrap">
             <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M10 18a8 8 0 1 1 5.293-14.003A8 8 0 0 1 10 18Zm11 3-6.001-6" fill="none" stroke="currentColor"
-                stroke-width="2" stroke-linecap="round" />
+              <path d="M10 18a8 8 0 1 1 5.293-14.003A8 8 0 0 1 10 18Zm11 3-6.001-6"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
             </svg>
             <input id="agentSearch" class="agent-search-input" placeholder="Search by region, suburb or postcode"
               autocomplete="off" />
@@ -60,11 +62,10 @@
           <ul id="agentSuggest" class="agent-suggest"></ul>
           <button id="agentSearchBtn" class="agent-search-btn">Search</button>
         </div>
-      </div>
 
-      <div class="agent-hero-right">
-        <img src="/Assets/housekey.avif" class="agent-hero-img" alt="People discussing with agent" />
-      </div>
+        <div class="agent-hero-right">
+          <img src="/Assets/housekey.avif" class="agent-hero-img" alt="Agents meeting" />
+        </div>
     </div>
   </section>
 
@@ -93,15 +94,40 @@
     </div>
   </section>
 
+  <!-- FILTERS -->
   <section class="agent-results-wrap">
     <div class="results-header">
       <div class="results-path" id="resultsPath">Real Estate Agents</div>
       <div class="filters-row">
-        <button class="chip active">Agent</button>
-        <button class="chip">Agency</button>
-        <div class="chip dropdown-chip" id="sortChip">Suburb sales &amp; performance ▾</div>
-        <div class="chip dropdown-chip">12 months ▾</div>
-        <div class="chip dropdown-chip">All property types ▾</div>
+        <button id="agentBtn" class="chip active">Agent</button>
+        <button id="agencyBtn" class="chip">Agency</button>
+
+        <div class="chip dropdown-chip">
+          <select id="sortSel">
+            <option value="">Suburb sales & performance</option>
+            <option value="sales">Most Properties Sold</option>
+            <option value="price">Highest Median Price</option>
+            <option value="days">Fastest Sale (Fewest Days)</option>
+          </select>
+        </div>
+
+        <div class="chip dropdown-chip">
+          <select id="reviewSel">
+            <option value="">Reviews (12 months)</option>
+            <option value="10">≥ 10</option>
+            <option value="50">≥ 50</option>
+            <option value="100">≥ 100</option>
+          </select>
+        </div>
+
+        <div class="chip dropdown-chip">
+          <select id="typeSel">
+            <option value="">All Property Types</option>
+            <option value="professional">Professional</option>
+            <option value="communicator">Great Communicator</option>
+            <option value="local">Local Expert</option>
+          </select>
+        </div>
       </div>
     </div>
 
@@ -110,220 +136,292 @@
 
   <div style="height:60px"></div>
 
+  <!-- SCRIPT -->
   <script>
-    // Navbar user state (login/logout)
-    (function () {
-      const navbarUser = document.getElementById("navbarUser");
-      try {
-        const user = JSON.parse(localStorage.getItem("user") || "null");
-        if (!user) return;
-
-        const displayName = user.first_name?.trim() || user.email;
-        navbarUser.innerHTML = `
-          <span style="margin-right:10px; color:#047857; font-weight:600;">
-            Welcome, ${displayName}
-          </span>
-          <button class="button-secondary" id="logoutBtn">Logout</button>
-        `;
-
-        document.getElementById("logoutBtn").addEventListener("click", () => {
-          localStorage.removeItem("user");
-          window.location.reload();
-        });
-      } catch (_) { }
-    })();
-
-    const SUBURBS = [
-      { name: "Canterbury, NSW", postcode: "2193" },
-      { name: "Ashbury, NSW", postcode: "2193" },
-      { name: "Hurlstone Park, NSW", postcode: "2193" },
-      { name: "Newtown, NSW", postcode: "2042" },
-      { name: "Marrickville, NSW", postcode: "2204" },
-      { name: "Zetland, NSW", postcode: "2017" },
-    ];
-
-    const AGENTS = [
-      {
-        id: 1,
-        name: "Adrian William",
-        role: "Director",
-        agency: "Adrian William",
-        suburb: "Newtown, NSW 2042",
-        stats: { sold_suburb: 20, median_price: "$1.07M", median_days: 23, sold_all: 38 },
-        reviews: { score: 5.0, count: 1093, last12: 324 },
-        tags: ["Professional (791)", "Great communicator (703)", "Genuine (622)"],
-        photos: ["/Assets/berita2.png", "/Assets/berita3.png", "/Assets/berita4.png", "/Assets/berita1.png"],
-        headshot: "/Assets/berita4.png",
-        agencyVideo: "/Assets/berita2.png"
-      },
-      {
-        id: 2,
-        name: "Manuel Roussakis",
-        role: "Director",
-        agency: "Ray White - Canterbury",
-        suburb: "Canterbury, NSW 2193",
-        stats: { sold_suburb: 20, median_price: "$803k", median_days: 27, sold_all: 37 },
-        reviews: { score: 5.0, count: 34, last12: 13 },
-        tags: ["Responsive", "Honest", "Local expert"],
-        photos: ["/Assets/berita1.png", "/Assets/berita2.png", "/Assets/berita3.png", "/Assets/berita4.png"],
-        headshot: "/Assets/berita1.png",
-        agencyVideo: "/Assets/news1.png"
-      },
-      {
-        id: 3,
-        name: "Denny Barros",
-        role: "Licensed Real Estate Agent",
-        agency: "Adrian William",
-        suburb: "Canterbury, NSW 2193",
-        stats: { sold_suburb: 17, median_price: "$1.07M", median_days: 23, sold_all: 38 },
-        reviews: { score: 5.0, count: 48, last12: 17 },
-        tags: ["Knowledgeable", "Great communicator"],
-        photos: ["/Assets/berita3.png", "/Assets/berita2.png", "/Assets/berita4.png", "/Assets/berita1.png"],
-        headshot: "/Assets/berita2.png",
-        agencyVideo: "/Assets/news2.png"
-      }
-    ];
-
-    const qs = sel => document.querySelector(sel);
-    const agentListEl = qs("#agentList");
-    const input = qs("#agentSearch");
-    const suggest = qs("#agentSuggest");
-    const searchBtn = qs("#agentSearchBtn");
-    const pathEl = qs("#resultsPath");
-
-    function renderAgents(list, label = "Real Estate Agents") {
-      pathEl.textContent = label;
-      agentListEl.innerHTML = list.map(a => `
-        <article class="agent-card">
-          <div class="agency-banner ${a.agency.toLowerCase().includes('ray white') ? 'agency-raywhite' : ''}">
-            ${a.agency.toLowerCase().includes('ray white') ? 'RayWhite.' : a.agency}
-          </div>
-
-          <div class="agent-card-body">
-            <div class="agent-left">
-              <img class="agent-avatar" src="${a.headshot}" alt="${a.name}">
-              <div class="agent-ident">
-                <h3 class="agent-name">${a.name}</h3>
-                <div class="agent-role">${a.role}</div>
-                <div class="agent-agency">at ${a.agency}</div>
-                <div class="agent-reviews">⭐ ${a.reviews.score} (${a.reviews.count} reviews)</div>
-                <div class="agent-reviews-sub">${a.reviews.last12} reviews in last 12 months</div>
-              </div>
-            </div>
-
-            <div class="agent-middle">
-              <div class="stat">
-                <div class="stat-label">Canterbury</div>
-                <div class="stat-value">${a.stats.sold_suburb}</div>
-                <div class="stat-sub">Properties sold (as lead agent)</div>
-              </div>
-              <div class="stat">
-                <div class="stat-label">Median sold price</div>
-                <div class="stat-value">${a.stats.median_price}</div>
-                <div class="stat-sub">Median sold price</div>
-              </div>
-              <div class="stat">
-                <div class="stat-label">Median days advertised</div>
-                <div class="stat-value">${a.stats.median_days}</div>
-                <div class="stat-sub">Median days advertised</div>
-              </div>
-              <div class="stat">
-                <div class="stat-label">All suburbs</div>
-                <div class="stat-value">${a.stats.sold_all}</div>
-                <div class="stat-sub">Properties sold</div>
-              </div>
-
-              <div class="agent-quote">
-                <span>★ 5/5 • Rating from a seller</span>
-                <span class="muted">• Verified review</span>
-                <p>“Great communication, very professional. The process was smooth from start to finish.”</p>
-              </div>
-
-              <div class="thumbs-row">
-                <img src="${a.agencyVideo}" alt="agency video">
-                ${a.photos.map(p => `<img src="${p}" alt="recently sold">`).join('')}
-              </div>
-            </div>
-
-            <div class="agent-right">
-              <button class="btn-ghost-full">Enquire</button>
-              <button class="btn-primary-full">Request a free appraisal</button>
-              <div class="agent-tags">
-                ${a.tags.map(t => `<span class="tag">${t}</span>`).join('')}
-              </div>
-            </div>
-          </div>
-        </article>
-      `).join("");
-    }
-
-    function showSuggestions(val) {
-      const v = val.trim().toLowerCase();
-      if (!v) { suggest.innerHTML = ""; suggest.classList.remove("open"); return; }
-      const hits = SUBURBS.filter(s => s.name.toLowerCase().includes(v) || s.postcode.includes(v)).slice(0, 5);
-      suggest.innerHTML = hits.map(h => `
-        <li class="suggest-item" data-name="${h.name} ${h.postcode}">
-          <span class="suggest-icon">📍</span>
-          <span>${h.name} <strong>${h.postcode}</strong></span>
-        </li>`).join("");
-      suggest.classList.toggle("open", hits.length > 0);
-    }
-
-    input.addEventListener("input", e => showSuggestions(e.target.value));
-    suggest.addEventListener("click", (e) => {
-      const li = e.target.closest(".suggest-item");
-      if (!li) return;
-      input.value = li.dataset.name;
-      suggest.classList.remove("open");
-      doSearch();
-    });
-    document.addEventListener('click', (e) => { if (!e.target.closest('.agent-search')) suggest.classList.remove('open'); });
-
-    function doSearch() {
-      const q = input.value.trim();
-      if (!q) return;
-      window.location.href = `/agentResults.html?q=${encodeURIComponent(q)}`;
-    }
-    searchBtn.addEventListener("click", doSearch);
-    input.addEventListener("keydown", (e) => { if (e.key === 'Enter') { e.preventDefault(); doSearch(); } });
-
-    (function () {
-      const path = location.pathname.replace(/\/+$/, '');
-      const links = document.querySelectorAll('#navbar .navbar-selector a[href]');
-      links.forEach(a => {
-        const href = a.getAttribute('href') || '';
-        const isHome = (path === '' || path === '/') && (href === 'index.html' || href === '/index.html');
-        const matches =
-          isHome ||
-          path.endsWith(href) ||
-          (href.startsWith('/') && path === href);
-
-        if (matches) a.classList.add('nav-active');
+  (() => {
+  /* -------- NAVBAR LOGIN/LOGOUT (kept) -------- */
+  (function () {
+    const navbarUser = document.getElementById("navbarUser");
+    try {
+      const user = JSON.parse(localStorage.getItem("user") || "null");
+      if (!user) return;
+      const displayName = user.first_name?.trim() || user.email;
+      navbarUser.innerHTML = `
+        <span style="margin-right:10px; color:#047857; font-weight:600;">Welcome, ${displayName}</span>
+        <button class="button-secondary" id="logoutBtn">Logout</button>`;
+      document.getElementById("logoutBtn").addEventListener("click", () => {
+        localStorage.removeItem("user"); window.location.reload();
       });
-    })();
+    } catch (_) {}
+  })();
 
-    (function () {
-      const shell = document.querySelector('.nav-shell');
-      const btn = document.getElementById('menuToggle');
-      if (btn && shell) {
-        btn.addEventListener('click', () => {
-          const isOpen = shell.classList.toggle('open');
-          btn.setAttribute('aria-expanded', String(isOpen));
-        });
-      }
-
-      // Active tab highlighting (same logic you had)
-      const path = location.pathname.replace(/\/+$/, '');
-      document.querySelectorAll('#navbar a[href]').forEach(a => {
-        const href = a.getAttribute('href') || '';
-        const isHome = (path === '' || path === '/') && (href === 'index.html' || href === '/index.html');
-        if (isHome || path.endsWith(href) || (href.startsWith('/') && path === href)) {
-          a.classList.add('nav-active');
+  (async function () {
+        try {
+          const res = await fetch("index.html");
+          const html = await res.text();
+          const doc = new DOMParser().parseFromString(html, "text/html");
+          const navShell = doc.querySelector(".nav-shell");
+          // Find the nav bar's inline script in index.html
+          const navScriptText = Array.from(doc.querySelectorAll('script:not([src])'))
+                                     .find(s => s.innerText.includes('// -------- Auth area'))
+                                     ?.innerText;
+          
+          document.querySelector(".nav-shell").replaceWith(navShell);
+          if (navScriptText) {
+            eval(navScriptText); // Re-run the auth/nav script
+          }
+        } catch(e) {
+          console.error("Could not load navigation bar.", e);
         }
+      })();
+
+  /* -------- MENU TOGGLE + ACTIVE NAV (kept) -------- */
+  (function () {
+    const shell = document.querySelector(".nav-shell");
+    const btn = document.getElementById("menuToggle");
+    if (btn && shell) {
+      btn.addEventListener("click", () => {
+        const isOpen = shell.classList.toggle("open");
+        btn.setAttribute("aria-expanded", String(isOpen));
       });
-    })();
-    // initial
-    renderAgents(AGENTS);
+    }
+    const path = location.pathname.replace(/\/+$/, "");
+    document.querySelectorAll("#navbar a[href]").forEach((a) => {
+      const href = a.getAttribute("href") || "";
+      const isHome =
+        (path === "" || path === "/") &&
+        (href === "index.html" || href === "/index.html");
+      if (isHome || path.endsWith(href) || (href.startsWith("/") && path === href)) {
+        a.classList.add("nav-active");
+      }
+    });
+  })();
+
+  /* ======================================================
+     AUTOCOMPLETE (restored old-style SUBURBS suggestion)
+     ====================================================== */
+
+  const input = document.getElementById("agentSearch");
+  const suggest = document.getElementById("agentSuggest");
+  const searchBtn = document.getElementById("agentSearchBtn");
+
+  // CHANGED: Using fallback static SUBURBS (like old version)
+  const SUBURBS = [
+    { name: "Canterbury, NSW", postcode: "2193" },
+    { name: "Ashbury, NSW", postcode: "2193" },
+    { name: "Hurlstone Park, NSW", postcode: "2193" },
+    { name: "Newtown, NSW", postcode: "2042" },
+    { name: "Marrickville, NSW", postcode: "2204" },
+    { name: "Zetland, NSW", postcode: "2017" },
+  ];
+
+  function showSuggestions(val) {
+    const v = (val || "").trim().toLowerCase();
+    if (!v) {
+      suggest.innerHTML = "";
+      suggest.classList.remove("open");
+      return;
+    }
+    const hits = SUBURBS.filter(
+      s => s.name.toLowerCase().includes(v) || s.postcode.includes(v)
+    ).slice(0, 5);
+
+    suggest.innerHTML = hits.map(h => `
+      <li class="suggest-item" data-name="${h.name} ${h.postcode}">
+        <span class="suggest-icon">📍</span>
+        <span>${h.name} <strong>${h.postcode}</strong></span>
+      </li>`).join("");
+    suggest.classList.toggle("open", hits.length > 0);
+  }
+
+  input.addEventListener("input", (e) => showSuggestions(e.target.value));
+  suggest.addEventListener("click", (e) => {
+    const li = e.target.closest(".suggest-item");
+    if (!li) return;
+    input.value = li.dataset.name;
+    suggest.classList.remove("open");
+    doSearch();
+  });
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".agent-search")) suggest.classList.remove("open");
+  });
+
+  function doSearch() {
+    const q = input.value.trim();
+    const u = new URL(location.href);
+    if (q) u.searchParams.set("q", q);
+    else u.searchParams.delete("q");
+    history.replaceState({}, "", u);
+    renderFiltered();
+  }
+  searchBtn.addEventListener("click", doSearch);
+  input.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); doSearch(); } });
+
+  /* ===================== AGENTS DATA ===================== */
+  const AGENTS = [
+    { id: 1, name: "Adrian William", role: "Director", agency: "Adrian William", suburb: "Newtown, NSW 2042", stats: { sold_suburb: 20, median_price: "$1.07M", median_days: 23, sold_all: 38 }, reviews: { score: 5, count: 1093, last12: 324 }, tags: ["Professional", "Great Communicator", "Genuine"], headshot: "/Assets/broker2.png", photos: ["/Assets/berita2.png", "/Assets/berita3.png"], agencyVideo: "/Assets/news1.png" },
+    { id: 2, name: "Manuel Roussakis", role: "Director", agency: "Ray White - Canterbury", suburb: "Canterbury, NSW 2193", stats: { sold_suburb: 18, median_price: "$803k", median_days: 27, sold_all: 37 }, reviews: { score: 5, count: 34, last12: 13 }, tags: ["Responsive", "Honest", "Local Expert"], headshot: "/Assets/broker3.png", photos: ["/Assets/berita3.png"], agencyVideo: "/Assets/news2.png" },
+    { id: 3, name: "Denny Barros", role: "Licensed Agent", agency: "Adrian William", suburb: "Canterbury, NSW 2193", stats: { sold_suburb: 15, median_price: "$1.02M", median_days: 25, sold_all: 30 }, reviews: { score: 5, count: 48, last12: 17 }, tags: ["Knowledgeable", "Great Communicator"], headshot: "/Assets/broker4.png", photos: ["/Assets/berita4.png"], agencyVideo: "/Assets/news3.png" },
+    { id: 4, name: "Sarah Kim", role: "Senior Agent", agency: "Ray White - Sydney", suburb: "Sydney, NSW 2000", stats: { sold_suburb: 30, median_price: "$1.25M", median_days: 21, sold_all: 50 }, reviews: { score: 5, count: 220, last12: 80 }, tags: ["Professional", "Local Expert"], headshot: "/Assets/broker1.png", photos: ["/Assets/berita1.png"], agencyVideo: "/Assets/news4.png" },
+    { id: 5, name: "Michael Chen", role: "Director", agency: "LJ Hooker", suburb: "Chatswood, NSW 2067", stats: { sold_suburb: 25, median_price: "$1.48M", median_days: 22, sold_all: 45 }, reviews: { score: 5, count: 500, last12: 150 }, tags: ["Great Communicator", "Professional"], headshot: "/Assets/brooker11.png", photos: ["/Assets/berita2.png"], agencyVideo: "/Assets/news1.png" },
+    { id: 6, name: "Emily Davis", role: "Property Specialist", agency: "Belle Property", suburb: "Bondi, NSW 2022", stats: { sold_suburb: 20, median_price: "$1.35M", median_days: 19, sold_all: 35 }, reviews: { score: 4.9, count: 90, last12: 40 }, tags: ["Local Expert", "Responsive"], headshot: "/Assets/broker8.png", photos: ["/Assets/berita3.png"], agencyVideo: "/Assets/news2.png" },
+    { id: 7, name: "James Lee", role: "Sales Agent", agency: "Ray White - Chatswood", suburb: "Chatswood, NSW 2067", stats: { sold_suburb: 22, median_price: "$1.4M", median_days: 20, sold_all: 40 }, reviews: { score: 5, count: 180, last12: 60 }, tags: ["Professional", "Honest"], headshot: "/Assets/broker7.png", photos: ["/Assets/berita4.png"], agencyVideo: "/Assets/news3.png" },
+    { id: 8, name: "Laura White", role: "Director", agency: "McGrath", suburb: "Zetland, NSW 2017", stats: { sold_suburb: 16, median_price: "$930k", median_days: 24, sold_all: 28 }, reviews: { score: 4.8, count: 75, last12: 25 }, tags: ["Knowledgeable", "Local Expert"], headshot: "/Assets/broker10.png", photos: ["/Assets/berita1.png"], agencyVideo: "/Assets/news4.png" },
+    { id: 9, name: "Daniel Brown", role: "Agent", agency: "LJ Hooker", suburb: "Marrickville, NSW 2204", stats: { sold_suburb: 12, median_price: "$780k", median_days: 29, sold_all: 20 }, reviews: { score: 4.7, count: 60, last12: 18 }, tags: ["Friendly", "Great Communicator"], headshot: "/Assets/broker9.png", photos: ["/Assets/berita2.png"], agencyVideo: "/Assets/news1.png" },
+    { id: 10, name: "Sophie Martin", role: "Agent", agency: "Belle Property", suburb: "Kingsford, NSW 2018", stats: { sold_suburb: 18, median_price: "$1.1M", median_days: 26, sold_all: 32 }, reviews: { score: 5, count: 120, last12: 55 }, tags: ["Responsive", "Professional"], headshot: "/Assets/broker5.png", photos: ["/Assets/berita3.png"], agencyVideo: "/Assets/news2.png" },
+  ];
+
+  /* =========================== RENDERING =========================== */
+  const $ = (s) => document.querySelector(s);
+  const listEl = $("#agentList");
+  const pathEl = $("#resultsPath");
+  let currentMode = "Agent";
+
+  function cardTemplate(a) {
+    const profileHref = `agentResults.html?id=${encodeURIComponent(a.id)}`;
+  return `
+    <div class="agent-card">
+      <div class="agency-banner ${a.agency_slug === 'raywhite' ? 'agency-raywhite' : ''}">
+        ${a.agency || ''}
+      </div>
+
+      <div class="agent-card-body">
+        <!-- Left: avatar + identity (clickable to profile) -->
+        <div class="agent-left">
+          <a href="${profileHref}" data-profile-href="${profileHref}">
+          <img
+            class="agent-avatar"
+            src="${a.headshot || a.photo || a.avatar || '/Assets/agents/default.jpg'}"
+            alt="${a.name}">
+          </a>
+          <div class="agent-ident">
+            <a href="${profileHref}" data-profile-href="${profileHref}"
+               class="agent-name" style="text-decoration:none; color:inherit;">
+              ${a.name}
+            </a>
+            <div class="agent-role">${a.role || ''}</div>
+            <div class="agent-agency">${a.agency || ''}</div>
+            <div class="agent-reviews">⭐ ${a.rating?.toFixed ? a.rating.toFixed(1) : (a.rating || '5.0')}
+              <span class="agent-reviews-sub">(${a.reviews_count || 0} reviews)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Middle: quick stats (keep your existing stats if different) -->
+        <div class="agent-middle">
+          <div class="stat">
+            <div class="stat-label">Median sold price</div>
+            <div class="stat-value">${a.stats?.median_price || '$1.07M'}</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Median days</div>
+            <div class="stat-value">${a.stats?.median_days || 23}</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Sold (lead)</div>
+            <div class="stat-value">${a.stats?.sold_suburb || a.stats?.lead_sold || 20}</div>
+          </div>
+        </div>
+
+        <!-- Right: actions -->
+        <div class="agent-right">
+          <a class="btn-primary-full" href="${profileHref}" data-profile-href="${profileHref}">
+            View profile
+          </a>
+          <button class="btn-ghost-full enquire-btn"
+                  data-id="${a.id}"
+                  data-name="${a.name}"
+                  data-agency="${a.agency || ''}"
+                  data-suburb="${a.suburb || ''}">
+            Enquire
+          </button>
+          <a class="btn-ghost-full" href="tel:${(a.phone || '').replace(/\s+/g,'')}">Call</a>
+
+          <!-- tags (optional) -->
+          ${Array.isArray(a.tags) && a.tags.length
+            ? `<div class="agent-tags">${a.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>`
+            : ''}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+  function bindActions(list) {
+  // Enquire buttons → go to enquire.html with agent details in querystring
+  document.querySelectorAll('.enquire-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const q = new URLSearchParams({
+        agentId: btn.dataset.id,
+        agent: btn.dataset.name,
+        agency: btn.dataset.agency || '',
+        suburb: btn.dataset.suburb || ''
+      });
+      location.href = `enquire.html?${q.toString()}`;
+    });
+  });
+
+  document.getElementById('agentList')?.addEventListener('click', (e) => {
+  const el = e.target.closest('[data-profile-href], a[href*="agentResults.html"]');
+  if (el) {
+    const href = el.dataset.profileHref || el.getAttribute('href');
+    if (href) {
+      window.location.href = href;  // go, even if something called preventDefault
+    }
+  }
+});
+}
+
+  function renderAgents(list, label) {
+    pathEl.textContent = label;
+    listEl.innerHTML = list.map(cardTemplate).join("");
+    bindActions(list);
+  }
+
+  function renderFiltered() {
+    let list = [...AGENTS];
+
+    const u = new URL(location.href);
+    const q = (u.searchParams.get("q") || "").toLowerCase();
+    if (q) {
+      list = list.filter(a =>
+        a.suburb.toLowerCase().includes(q) ||
+        a.name.toLowerCase().includes(q) ||
+        a.agency.toLowerCase().includes(q)
+      );
+    }
+
+    const sort = $("#sortSel").value;
+    const review = $("#reviewSel").value;
+    const type = $("#typeSel").value;
+
+    if (review) list = list.filter(a => a.reviews.last12 >= Number(review));
+    if (type) list = list.filter(a => a.tags.some(t => t.toLowerCase().includes(type)));
+
+    if (sort === "sales") list.sort((a, b) => b.stats.sold_suburb - a.stats.sold_suburb);
+    else if (sort === "price") {
+      const val = s => parseInt(String(s.stats.median_price).replace(/\D/g, "")) || 0;
+      list.sort((a, b) => val(b) - val(a));
+    } else if (sort === "days") list.sort((a, b) => a.stats.median_days - b.stats.median_days);
+
+    if (currentMode === "Agency") {
+      const seen = new Map();
+      list = list.filter(a => { if (seen.has(a.agency)) return false; seen.set(a.agency, true); return true; });
+    }
+
+    renderAgents(list, currentMode === "Agency" ? "Agencies" : "Agents");
+  }
+
+  // Filter controls
+  $("#agentBtn").addEventListener("click", () => { currentMode = "Agent"; renderFiltered(); });
+  $("#agencyBtn").addEventListener("click", () => { currentMode = "Agency"; renderFiltered(); });
+  ["sortSel", "reviewSel", "typeSel"].forEach(id =>
+    document.getElementById(id).addEventListener("change", renderFiltered)
+  );
+
+  // INITIAL RENDER
+  renderFiltered();
+})();
   </script>
 </body>
 
@@ -363,24 +461,19 @@
       <div class="footer-col footer-connect">
         <h4 class="footer-title">Connect with us</h4>
         <div class="footer-socials">
-          <!-- Simple inline SVGs so you don't depend on external assets -->
           <a href="#" aria-label="Facebook" class="icon">
             <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-              <image href="../Assets/facebook.png" xlink:href="../Assets/facebook-app-symbol.png" width="18"
-                height="18" />
+              <image href="../Assets/facebook.png" width="18" height="18" />
             </svg>
           </a>
-
-          <a href="#" aria-label="Facebook" class="icon">
+          <a href="#" aria-label="YouTube" class="icon">
             <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-              <image href="../Assets/youtube.png" xlink:href="../Assets/facebook-app-symbol.png" width="18"
-                height="18" />
+              <image href="../Assets/youtube.png" width="18" height="18" />
             </svg>
           </a>
-          <a href="#" aria-label="Facebook" class="icon">
+          <a href="#" aria-label="Twitter" class="icon">
             <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-              <image href="../Assets/twitter.png" xlink:href="../Assets/facebook-app-symbol.png" width="18"
-                height="18" />
+              <image href="../Assets/twitter.png" width="18" height="18" />
             </svg>
           </a>
         </div>

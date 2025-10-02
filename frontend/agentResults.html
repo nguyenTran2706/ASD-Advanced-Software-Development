@@ -1,15 +1,15 @@
 <!doctype html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Agents</title>
+  <title>Agent Profile</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/css/style.css" />
 </head>
-
 <body>
+
+  <!-- top nav (re-uses your existing styles) -->
   <header class="nav-shell">
     <div class="nav-top">
       <button id="menuToggle" class="menu-btn" aria-expanded="false" aria-controls="navLinks">
@@ -39,182 +39,533 @@
     </div>
   </header>
 
-  <section class="agent-results-wrap">
-    <div class="results-header">
-      <div class="results-path" id="resultsPath">Real Estate Agents</div>
-      <div class="filters-row">
-        <button class="chip active">Agent</button>
-        <button class="chip">Agency</button>
-        <div class="chip dropdown-chip">Suburb sales &amp; performance ▾</div>
-        <div class="chip dropdown-chip">12 months ▾</div>
-        <div class="chip dropdown-chip">All property types ▾</div>
+  <main class="container-xl" id="page">
+    <!-- Agent header -->
+    <section id="agentHeader" class="card p">
+      <div class="agent-head">
+        <div class="agent-id">
+          <img id="avatar" class="agent-avatar-lg" src="/Assets/agents/default.jpg" alt="Agent avatar" />
+          <div>
+            <h1 id="name" class="agent-name">Agent Name</h1>
+            <p class="agent-sub">
+              <span id="role">Director</span> at <span id="agency">Agency</span> — <span id="suburb">Suburb</span>
+            </p>
+            <div class="agent-stars">
+              ⭐ <span id="rating">5.0</span>
+              <a href="#reviews" id="reviewsLink">(0 reviews)</a>
+            </div>
+          </div>
+        </div>
+        <div class="agent-actions">
+          <button class="btn btn-primary" id="btnAppraisal">Request a free appraisal</button>
+          <button class="btn btn-ghost" id="btnEnquire">Enquire</button>
+          <a class="btn btn-ghost" id="btnCall" href="tel:">Call</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid-2">
+      <!-- Left column -->
+      <div class="col-left" id="leftCol">
+        <!-- Performance snapshot -->
+        <div class="card p">
+          <h3 style="margin:0 0 12px;">Performance snapshot</h3>
+          <div class="snapshot">
+            <div class="snap">
+              <div class="v" id="medianPrice">$0</div>
+              <div class="l">Median sold price</div>
+            </div>
+            <div class="snap">
+              <div class="v" id="medianDays">0</div>
+              <div class="l">Median days advertised</div>
+            </div>
+            <div class="snap">
+              <div class="v" id="leadSold">0</div>
+              <div class="l">Properties sold (as lead agent)</div>
+            </div>
+            <div class="snap">
+              <div class="v" id="secondarySold">0</div>
+              <div class="l">Properties sold (as secondary agent)</div>
+            </div>
+          </div>
+
+          <!-- Review block -->
+          <div class="review-block" id="reviews">
+            <div class="review-stars">⭐ <span id="rating2">5.0</span> • Rating from a seller • Verified review</div>
+            <p class="review-quote" id="reviewQuote">“Great communication, very professional. The process was smooth from start to finish.”</p>
+            <div class="review-photos" id="reviewPhotos"></div>
+          </div>
+        </div>
+
+        <!-- Properties gallery -->
+        <div class="card p" style="margin-top:12px;">
+          <div class="props-head">
+            <h3 style="margin:0;">Properties</h3>
+            <select id="propFilter">
+              <option value="sold">Sold</option>
+              <option value="rent">For rent</option>
+              <option value="buy">For sale</option>
+            </select>
+          </div>
+          <div class="thumbs" id="propsGrid"></div>
+        </div>
+      </div>
+
+      <!-- Right rail -->
+      <aside class="col-right">
+        <div class="card p">
+          <div class="mini-agent">
+            <img id="avatarMini" class="agent-avatar-lg" style="width:48px;height:48px;" src="/Assets/agents/default.jpg" alt="Agent avatar" />
+            <div>
+              <p class="mini-name" id="nameMini">Agent Name</p>
+              <div class="agent-stars" style="font-size:14px;">⭐ <span id="ratingMini">5.0</span> (<span id="reviewCountMini">0</span> reviews)</div>
+            </div>
+          </div>
+          <div class="rail-actions">
+            <button class="btn btn-primary" id="btnAppraisal2">Request a free appraisal</button>
+            <button class="btn btn-ghost" id="btnEnquire2">Enquire</button>
+            <a class="btn btn-ghost" id="btnCall2" href="tel:">Call</a>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <div class="site-footer-spacer"></div>
+  </main>
+
+  <!-- Minimal modal for appraisal -->
+  <div id="appraiseModal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="closeAppraise">&times;</span>
+      <h2>Request a free appraisal</h2>
+      <p id="appraiseWho" class="muted" style="margin-top:-6px;"></p>
+      <form id="appraiseForm">
+        <div class="field">
+          <label for="apprName">Full name</label>
+          <input id="apprName" required />
+        </div>
+        <div class="field">
+          <label for="apprEmail">Email</label>
+          <input id="apprEmail" type="email" required />
+        </div>
+        <div class="field">
+          <label for="apprPhone">Phone (optional)</label>
+          <input id="apprPhone" inputmode="tel" pattern="[0-9]*" />
+        </div>
+        <div class="field">
+          <label for="apprMsg">Message</label>
+          <textarea id="apprMsg" rows="3" maxlength="300" placeholder="I’d like an appraisal for my property."></textarea>
+        </div>
+        <div id="apprMsgBox" class="helper"></div>
+        <button class="btn btn-primary" type="submit">Send request</button>
+      </form>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-cols">
+        <div class="footer-col footer-brand">
+          <div class="brand">
+            <img src="/Assets/Logo.png" alt="MyHome logo" class="footer-logo" />
+            <span class="brand-text">MyHome</span>
+          </div>
+          <p class="footer-desc">Find an agent and get moving with confidence.</p>
+        </div>
+      </div>
+      <hr class="footer-divider" />
+      <div class="footer-bottom">
+        <div>Copyright 2025 · MyHome</div>
+        <div class="footer-legal">
+          <a href="#">Terms of Service</a>
+          <a href="#">Privacy Policy</a>
+        </div>
       </div>
     </div>
-    <div id="agentList" class="agent-list"></div>
-  </section>
+  </footer>
 
-  <div class="site-footer-spacer"></div>
-
+  <!-- Scripts -->
   <script>
-    // show user if logged in
-    (function () {
+    // ===== Dataset (IDs must match links from findAgent.html) =====
+  const AGENTS = [
+    {
+      id: 1,
+      name: "Adrian William",
+      role: "Director",
+      agency: "Adrian William",
+      suburb: "Newtown, NSW 2042",
+      avatar: "/Assets/broker2.png",
+      phone: "+61 2 9999 1001",
+      rating: 5.0,
+      reviewsCount: 1093,
+      medianPrice: 1070000,
+      medianDays: 23,
+      leadSold: 20,
+      secondarySold: 18, // 38 - 20
+      reviewQuote: "Great communication, very professional. The process was smooth from start to finish.",
+      photos: ["/Assets/berita2.png", "/Assets/berita3.png", "/Assets/berita1.png", "/Assets/news1.png"],
+      props: {
+        sold: ["/Assets/cream/cream1.png","/Assets/cream/cream2.png","/Assets/cream/cream3.png","/Assets/cream/cream4.png"],
+        buy:  ["/Assets/cream/cream5.png","/Assets/cream/cream6.png","/Assets/cream/cream7.png","/Assets/cream/cream8.png"],
+        rent: ["/Assets/cream/cream9.png","/Assets/cream/cream10.png","/Assets/cream/cream11.png","/Assets/cream/cream12.png"]
+      }
+    },
+    {
+      id: 2,
+      name: "Manuel Roussakis",
+      role: "Director",
+      agency: "Ray White - Canterbury",
+      suburb: "Canterbury, NSW 2193",
+      avatar: "/Assets/broker3.png",
+      phone: "+61 2 9999 2002",
+      rating: 5.0,
+      reviewsCount: 34,
+      medianPrice: 803000,
+      medianDays: 27,
+      leadSold: 18,
+      secondarySold: 19, // 37 - 18
+      reviewQuote: "Highly responsive and honest throughout the sale.",
+      photos: ["/Assets/berita3.png", "/Assets/news2.png", "/Assets/berita1.png", "/Assets/berita4.png"],
+      props: {
+        sold: ["/Assets/cream/cream2.png","/Assets/cream/cream4.png","/Assets/cream/cream6.png","/Assets/cream/cream8.png"],
+        buy:  ["/Assets/cream/cream1.png","/Assets/cream/cream3.png","/Assets/cream/cream5.png","/Assets/cream/cream7.png"],
+        rent: ["/Assets/cream/cream9.png","/Assets/cream/cream10.png","/Assets/cream/cream11.png","/Assets/cream/cream12.png"]
+      }
+    },
+    {
+      id: 3,
+      name: "Denny Barros",
+      role: "Licensed Agent",
+      agency: "Adrian William",
+      suburb: "Canterbury, NSW 2193",
+      avatar: "/Assets/broker4.png",
+      phone: "+61 2 9999 3003",
+      rating: 5.0,
+      reviewsCount: 48,
+      medianPrice: 1020000,
+      medianDays: 25,
+      leadSold: 15,
+      secondarySold: 15, // 30 - 15
+      reviewQuote: "Knowledgeable and a great communicator. Smooth experience.",
+      photos: ["/Assets/berita4.png", "/Assets/berita2.png", "/Assets/news3.png", "/Assets/berita1.png"],
+      props: {
+        sold: ["/Assets/cream/cream3.png","/Assets/cream/cream5.png","/Assets/cream/cream7.png","/Assets/cream/cream9.png"],
+        buy:  ["/Assets/cream/cream1.png","/Assets/cream/cream2.png","/Assets/cream/cream4.png","/Assets/cream/cream6.png"],
+        rent: ["/Assets/cream/cream10.png","/Assets/cream/cream11.png","/Assets/cream/cream12.png","/Assets/cream/cream8.png"]
+      }
+    },
+    {
+      id: 4,
+      name: "Sarah Kim",
+      role: "Senior Agent",
+      agency: "Ray White - Sydney",
+      suburb: "Sydney, NSW 2000",
+      avatar: "/Assets/broker1.png",
+      phone: "+61 2 9999 4004",
+      rating: 5.0,
+      reviewsCount: 220,
+      medianPrice: 1250000,
+      medianDays: 21,
+      leadSold: 30,
+      secondarySold: 20, // 50 - 30
+      reviewQuote: "Professional and local expert. Excellent outcome.",
+      photos: ["/Assets/berita1.png", "/Assets/news4.png", "/Assets/berita3.png", "/Assets/berita2.png"],
+      props: {
+        sold: ["/Assets/cream/cream4.png","/Assets/cream/cream6.png","/Assets/cream/cream8.png","/Assets/cream/cream2.png"],
+        buy:  ["/Assets/cream/cream1.png","/Assets/cream/cream3.png","/Assets/cream/cream5.png","/Assets/cream/cream7.png"],
+        rent: ["/Assets/cream/cream9.png","/Assets/cream/cream10.png","/Assets/cream/cream11.png","/Assets/cream/cream12.png"]
+      }
+    },
+    {
+      id: 5,
+      name: "Michael Chen",
+      role: "Director",
+      agency: "LJ Hooker",
+      suburb: "Chatswood, NSW 2067",
+      avatar: "/Assets/brooker11.png", // keep your path; your page will fall back if needed
+      phone: "+61 2 9999 5005",
+      rating: 5.0,
+      reviewsCount: 500,
+      medianPrice: 1480000,
+      medianDays: 22,
+      leadSold: 25,
+      secondarySold: 20, // 45 - 25
+      reviewQuote: "Great communicator and very professional.",
+      photos: ["/Assets/berita2.png", "/Assets/news1.png", "/Assets/berita3.png", "/Assets/berita4.png"],
+      props: {
+        sold: ["/Assets/cream/cream5.png","/Assets/cream/cream7.png","/Assets/cream/cream1.png","/Assets/cream/cream3.png"],
+        buy:  ["/Assets/cream/cream2.png","/Assets/cream/cream4.png","/Assets/cream/cream6.png","/Assets/cream/cream8.png"],
+        rent: ["/Assets/cream/cream9.png","/Assets/cream/cream10.png","/Assets/cream/cream11.png","/Assets/cream/cream12.png"]
+      }
+    },
+    {
+      id: 6,
+      name: "Emily Davis",
+      role: "Property Specialist",
+      agency: "Belle Property",
+      suburb: "Bondi, NSW 2022",
+      avatar: "/Assets/broker8.png",
+      phone: "+61 2 9999 6006",
+      rating: 4.9,
+      reviewsCount: 90,
+      medianPrice: 1350000,
+      medianDays: 19,
+      leadSold: 20,
+      secondarySold: 15, // 35 - 20
+      reviewQuote: "Local expert and very responsive.",
+      photos: ["/Assets/berita3.png", "/Assets/news2.png", "/Assets/berita1.png", "/Assets/berita4.png"],
+      props: {
+        sold: ["/Assets/cream/cream6.png","/Assets/cream/cream8.png","/Assets/cream/cream2.png","/Assets/cream/cream4.png"],
+        buy:  ["/Assets/cream/cream1.png","/Assets/cream/cream3.png","/Assets/cream/cream5.png","/Assets/cream/cream7.png"],
+        rent: ["/Assets/cream/cream9.png","/Assets/cream/cream10.png","/Assets/cream/cream11.png","/Assets/cream/cream12.png"]
+      }
+    },
+    {
+      id: 7,
+      name: "James Lee",
+      role: "Sales Agent",
+      agency: "Ray White - Chatswood",
+      suburb: "Chatswood, NSW 2067",
+      avatar: "/Assets/broker7.png",
+      phone: "+61 2 9999 7007",
+      rating: 5.0,
+      reviewsCount: 180,
+      medianPrice: 1400000,
+      medianDays: 20,
+      leadSold: 22,
+      secondarySold: 18, // 40 - 22
+      reviewQuote: "Professional and honest. Strong results.",
+      photos: ["/Assets/berita4.png", "/Assets/news3.png", "/Assets/berita2.png", "/Assets/berita1.png"],
+      props: {
+        sold: ["/Assets/cream/cream7.png","/Assets/cream/cream1.png","/Assets/cream/cream3.png","/Assets/cream/cream5.png"],
+        buy:  ["/Assets/cream/cream2.png","/Assets/cream/cream4.png","/Assets/cream/cream6.png","/Assets/cream/cream8.png"],
+        rent: ["/Assets/cream/cream9.png","/Assets/cream/cream10.png","/Assets/cream/cream11.png","/Assets/cream/cream12.png"]
+      }
+    },
+    {
+      id: 8,
+      name: "Laura White",
+      role: "Director",
+      agency: "McGrath",
+      suburb: "Zetland, NSW 2017",
+      avatar: "/Assets/broker10.png",
+      phone: "+61 2 9999 8008",
+      rating: 4.8,
+      reviewsCount: 75,
+      medianPrice: 930000,
+      medianDays: 24,
+      leadSold: 16,
+      secondarySold: 12, // 28 - 16
+      reviewQuote: "Knowledgeable and a trusted local expert.",
+      photos: ["/Assets/berita1.png", "/Assets/news4.png", "/Assets/berita3.png", "/Assets/berita2.png"],
+      props: {
+        sold: ["/Assets/cream/cream8.png","/Assets/cream/cream2.png","/Assets/cream/cream4.png","/Assets/cream/cream6.png"],
+        buy:  ["/Assets/cream/cream1.png","/Assets/cream/cream3.png","/Assets/cream/cream5.png","/Assets/cream/cream7.png"],
+        rent: ["/Assets/cream/cream9.png","/Assets/cream/cream10.png","/Assets/cream/cream11.png","/Assets/cream/cream12.png"]
+      }
+    },
+    {
+      id: 9,
+      name: "Daniel Brown",
+      role: "Agent",
+      agency: "LJ Hooker",
+      suburb: "Marrickville, NSW 2204",
+      avatar: "/Assets/broker9.png",
+      phone: "+61 2 9999 9009",
+      rating: 4.7,
+      reviewsCount: 60,
+      medianPrice: 780000,
+      medianDays: 29,
+      leadSold: 12,
+      secondarySold: 8, // 20 - 12
+      reviewQuote: "Friendly and kept us informed at every step.",
+      photos: ["/Assets/berita2.png", "/Assets/news1.png", "/Assets/berita4.png", "/Assets/berita3.png"],
+      props: {
+        sold: ["/Assets/cream/cream1.png","/Assets/cream/cream4.png","/Assets/cream/cream7.png","/Assets/cream/cream10.png"],
+        buy:  ["/Assets/cream/cream2.png","/Assets/cream/cream5.png","/Assets/cream/cream8.png","/Assets/cream/cream11.png"],
+        rent: ["/Assets/cream/cream3.png","/Assets/cream/cream6.png","/Assets/cream/cream9.png","/Assets/cream/cream12.png"]
+      }
+    },
+    {
+      id: 10,
+      name: "Sophie Martin",
+      role: "Agent",
+      agency: "Belle Property",
+      suburb: "Kingsford, NSW 2018",
+      avatar: "/Assets/broker5.png",
+      phone: "+61 2 9999 1010",
+      rating: 5.0,
+      reviewsCount: 120,
+      medianPrice: 1100000,
+      medianDays: 26,
+      leadSold: 18,
+      secondarySold: 14, // 32 - 18
+      reviewQuote: "Responsive and professional. Would recommend.",
+      photos: ["/Assets/berita3.png", "/Assets/news2.png", "/Assets/berita1.png", "/Assets/berita4.png"],
+      props: {
+        sold: ["/Assets/cream/cream2.png","/Assets/cream/cream5.png","/Assets/cream/cream8.png","/Assets/cream/cream11.png"],
+        buy:  ["/Assets/cream/cream1.png","/Assets/cream/cream3.png","/Assets/cream/cream6.png","/Assets/cream/cream9.png"],
+        rent: ["/Assets/cream/cream4.png","/Assets/cream/cream7.png","/Assets/cream/cream10.png","/Assets/cream/cream12.png"]
+      }
+    }
+  ];
+
+    // ===== Utilities =====
+    const money = v => {
+      try {
+        if (v >= 1_000_000) return `$${(v/1_000_000).toFixed(2)}M`;
+        if (v >= 1_000) return `$${Math.round(v/1_000)}k`;
+        return `$${v}`;
+      } catch { return `$${v}`; }
+    };
+
+    // Try a list of image sources; if one fails, try next; end with default
+    function setImageFromCandidates(imgEl, candidates, fallback = "/Assets/agents/default.jpg") {
+      if (!imgEl) return;
+      const list = candidates.filter(Boolean).concat(fallback);
+      let i = 0;
+      const tryNext = () => {
+        if (i >= list.length) return;
+        imgEl.onerror = () => { i++; tryNext(); };
+        imgEl.src = list[i];
+      };
+      tryNext();
+    }
+
+    function withAltExtension(path) {
+      if (!path) return [];
+      if (path.endsWith(".png")) return [path, path.replace(/\.png$/i, ".jpg")];
+      if (path.endsWith(".jpg") || path.endsWith(".jpeg")) return [path, path.replace(/\.jpe?g$/i, ".png")];
+      return [path]; // unknown ext, just try as-is
+    }
+
+    // ===== Read ID from query =====
+    const params = new URLSearchParams(location.search);
+    const agentId = Number(params.get('id')) || Number(params.get('agentId')) || 0;
+    const agent = AGENTS.find(a => a.id === agentId) || AGENTS[0];
+
+    // ===== Render header =====
+    function renderHeader() {
+      const avatarCandidates = [
+        ...(withAltExtension(agent.headshot)),
+        ...(withAltExtension(agent.avatar)),
+        ...(withAltExtension(agent.photo))
+      ].filter(Boolean);
+
+      setImageFromCandidates(document.getElementById('avatar'), avatarCandidates);
+      setImageFromCandidates(document.getElementById('avatarMini'), avatarCandidates);
+
+      document.getElementById('name').textContent = agent.name;
+      document.getElementById('role').textContent = agent.role;
+      document.getElementById('agency').textContent = agent.agency;
+      document.getElementById('suburb').textContent = agent.suburb;
+      document.getElementById('rating').textContent = agent.rating.toFixed(1);
+      document.getElementById('reviewsLink').textContent = `(${agent.reviewsCount} reviews)`;
+
+      const tel = (agent.phone || '').replace(/\s+/g,'');
+      document.getElementById('btnCall').href = `tel:${tel}`;
+      document.getElementById('btnCall2').href = `tel:${tel}`;
+
+      // mini labels
+      document.getElementById('nameMini').textContent = agent.name;
+      document.getElementById('ratingMini').textContent = agent.rating.toFixed(1);
+      document.getElementById('reviewCountMini').textContent = agent.reviewsCount;
+    }
+
+    // ===== Render snapshot + reviews =====
+    function renderSnapshot() {
+      document.getElementById('medianPrice').textContent = money(agent.medianPrice);
+      document.getElementById('medianDays').textContent = agent.medianDays;
+      document.getElementById('leadSold').textContent = agent.leadSold;
+      document.getElementById('secondarySold').textContent = agent.secondarySold;
+      document.getElementById('rating2').textContent = agent.rating.toFixed(1);
+      document.getElementById('reviewQuote').textContent = `“${agent.reviewQuote}”`;
+
+      const photosRow = document.getElementById('reviewPhotos');
+      photosRow.innerHTML = (agent.photos || []).slice(0,5).map(p => (
+        `<img src="${p}" alt="testimonial photo">`
+      )).join('');
+    }
+
+    // ===== Render properties gallery =====
+    function renderProps(kind = 'sold') {
+      const grid = document.getElementById('propsGrid');
+      const imgs = (agent.props?.[kind] || []);
+      grid.innerHTML = imgs.map(src => `<img src="${src}" alt="property">`).join('');
+    }
+
+    // ===== Enquire / Appraisal wiring =====
+    function wireActions() {
+      const qs = (extra={}) => {
+        const q = new URLSearchParams({
+          agentId: String(agent.id),
+          agent: agent.name,
+          agency: agent.agency,
+          suburb: agent.suburb,
+          ...extra
+        });
+        return q.toString();
+      };
+
+      const toEnquire = () => location.href = `enquire.html?${qs()}`;
+      document.getElementById('btnEnquire').addEventListener('click', toEnquire);
+      document.getElementById('btnEnquire2').addEventListener('click', toEnquire);
+
+      // Appraisal modal
+      const modal = document.getElementById('appraiseModal');
+      const open = () => { 
+        document.getElementById('appraiseWho').textContent = `Your request will be sent to ${agent.name} (${agent.agency}).`;
+        modal.style.display = 'flex';
+      };
+      const close = () => modal.style.display = 'none';
+
+      document.getElementById('btnAppraisal').addEventListener('click', open);
+      document.getElementById('btnAppraisal2').addEventListener('click', open);
+      document.getElementById('closeAppraise').addEventListener('click', close);
+      window.addEventListener('click', (e) => { if (e.target === modal) close(); });
+
+      const form = document.getElementById('appraiseForm');
+      const box  = document.getElementById('apprMsgBox');
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        box.classList.remove('error','success');
+        const name  = document.getElementById('apprName').value.trim();
+        const email = document.getElementById('apprEmail').value.trim();
+        const phone = document.getElementById('apprPhone').value.trim();
+        const note  = document.getElementById('apprMsg').value.trim();
+
+        const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        if (!name) { box.classList.add('error'); box.textContent='Full name is required.'; return; }
+        if (!emailOk) { box.classList.add('error'); box.textContent='Valid email is required.'; return; }
+        if (phone && !/^[0-9]+$/.test(phone)) { box.classList.add('error'); box.textContent='Phone must contain only digits.'; return; }
+        if (note.length > 300) { box.classList.add('error'); box.textContent='Message must be ≤ 300 characters.'; return; }
+
+        // Demo success
+        box.classList.add('success');
+        box.textContent = 'Thanks! Your appraisal request has been sent.';
+        form.reset();
+      });
+    }
+
+    // ===== Navbar user + mobile nav (reuse) =====
+    (function navbar() {
       const navbarUser = document.getElementById("navbarUser");
       try {
         const user = JSON.parse(localStorage.getItem("user") || "null");
-        if (!user) return;
+        if (user) {
+          const displayName = user.first_name?.trim() || user.email;
+          navbarUser.innerHTML = `
+            <span style="margin-right:10px; color:#047857; font-weight:600;">
+              Welcome, ${displayName}
+            </span>
+            <button class="button-secondary" id="logoutBtn">Logout</button>
+          `;
+          document.getElementById("logoutBtn").addEventListener("click", () => {
+            localStorage.removeItem("user"); window.location.reload();
+          });
+        }
+      } catch {}
 
-        const displayName = user.first_name?.trim() || user.email;
-        navbarUser.innerHTML = `
-          <span style="margin-right:10px; color:#047857; font-weight:600;">
-            Welcome, ${displayName}
-          </span>
-          <button class="button-secondary" id="logoutBtn">Logout</button>
-        `;
-
-        document.getElementById("logoutBtn").addEventListener("click", () => {
-          localStorage.removeItem("user");
-          window.location.reload();
-        });
-      } catch (_) { }
-    })();
-
-    const AGENTS = [
-      {
-        id: 1,
-        name: "Adrian William",
-        role: "Director",
-        agency: "Adrian William",
-        suburb: "Newtown, NSW 2042",
-        stats: { sold_suburb: 20, median_price: "$1.07M", median_days: 23, sold_all: 38 },
-        reviews: { score: 5.0, count: 1093, last12: 324 },
-        tags: ["Professional (791)", "Great communicator (703)", "Genuine (622)"],
-        photos: ["/Assets/recentSold.webp", "/Assets/berita3.png", "/Assets/berita4.png", "/Assets/berita1.png"],
-        headshot: "/Assets/berita4.png",
-        agencyVideo: "/Assets/berita2.png"
-      },
-      {
-        id: 2,
-        name: "Manuel Roussakis",
-        role: "Director",
-        agency: "Ray White - Canterbury",
-        suburb: "Canterbury, NSW 2193",
-        stats: { sold_suburb: 20, median_price: "$803k", median_days: 27, sold_all: 37 },
-        reviews: { score: 5.0, count: 34, last12: 13 },
-        tags: ["Responsive", "Honest", "Local expert"],
-        photos: ["/Assets/berita1.png", "/Assets/berita2.png", "/Assets/berita3.png", "/Assets/berita4.png"],
-        headshot: "/Assets/berita1.png",
-        agencyVideo: "/Assets/news1.png"
-      },
-      {
-        id: 3,
-        name: "Denny Barros",
-        role: "Licensed Real Estate Agent",
-        agency: "Adrian William",
-        suburb: "Canterbury, NSW 2193",
-        stats: { sold_suburb: 17, median_price: "$1.07M", median_days: 23, sold_all: 38 },
-        reviews: { score: 5.0, count: 48, last12: 17 },
-        tags: ["Knowledgeable", "Great communicator"],
-        photos: ["/Assets/berita3.png", "/Assets/berita2.png", "/Assets/berita4.png", "/Assets/berita1.png"],
-        headshot: "/Assets/berita2.png",
-        agencyVideo: "/Assets/news2.png"
-      }
-    ];
-
-    const qs = s => document.querySelector(s);
-    const listEl = qs('#agentList');
-    const pathEl = qs('#resultsPath');
-
-    function getQ() {
-      const u = new URL(location.href);
-      return u.searchParams.get('q') || '';
-    }
-
-    function renderAgents(list, label) {
-      pathEl.textContent = label;
-      listEl.innerHTML = list.map(a => `
-        <article class="agent-card">
-          <div class="agency-banner ${a.agency.toLowerCase().includes('ray white') ? 'agency-raywhite' : ''}">
-            ${a.agency.toLowerCase().includes('ray white') ? 'RayWhite.' : a.agency}
-          </div>
-
-          <div class="agent-card-body">
-            <div class="agent-left">
-              <img class="agent-avatar" src="${a.headshot}" alt="${a.name}">
-              <div class="agent-ident">
-                <h3 class="agent-name">${a.name}</h3>
-                <div class="agent-role">${a.role}</div>
-                <div class="agent-agency">at ${a.agency}</div>
-                <div class="agent-reviews">⭐ ${a.reviews.score} (${a.reviews.count} reviews)</div>
-                <div class="agent-reviews-sub">${a.reviews.last12} reviews in last 12 months</div>
-              </div>
-            </div>
-
-            <div class="agent-middle">
-              <div class="stat">
-                <div class="stat-label">${a.suburb.split(',')[0]}</div>
-                <div class="stat-value">${a.stats.sold_suburb}</div>
-                <div class="stat-sub">Properties sold (as lead agent)</div>
-              </div>
-              <div class="stat">
-                <div class="stat-label">Median sold price</div>
-                <div class="stat-value">${a.stats.median_price}</div>
-                <div class="stat-sub">Median sold price</div>
-              </div>
-              <div class="stat">
-                <div class="stat-label">Median days advertised</div>
-                <div class="stat-value">${a.stats.median_days}</div>
-                <div class="stat-sub">Median days advertised</div>
-              </div>
-              <div class="stat">
-                <div class="stat-label">All suburbs</div>
-                <div class="stat-value">${a.stats.sold_all}</div>
-                <div class="stat-sub">Properties sold</div>
-              </div>
-
-              <div class="agent-quote">
-                <span>★ 5/5 • Rating from a seller</span>
-                <span class="muted">• Verified review</span>
-                <p>“Great communication, very professional. The process was smooth from start to finish.”</p>
-              </div>
-
-              <div class="thumbs-row">
-                <img src="${a.agencyVideo}" alt="agency video">
-                ${a.photos.map(p => `<img src="${p}" alt="recently sold">`).join('')}
-              </div>
-            </div>
-
-            <div class="agent-right">
-              <a class="btn-ghost-full" href="/enquire.html?agentId=${a.id}&agent=${encodeURIComponent(a.name)}&agency=${encodeURIComponent(a.agency)}&suburb=${encodeURIComponent(a.suburb)}">Enquire</a>
-              <button class="btn-primary-full">Request a free appraisal</button>
-              <div class="agent-tags">
-                ${a.tags.map(t => `<span class="tag">${t}</span>`).join('')}
-              </div>
-            </div>
-          </div>
-        </article>
-      `).join('');
-    }
-
-    // Init
-    const q = getQ();
-    const filtered = AGENTS.filter(a =>
-      a.suburb.toLowerCase().includes(q.toLowerCase()) ||
-      a.name.toLowerCase().includes(q.toLowerCase()) ||
-      a.agency.toLowerCase().includes(q.toLowerCase())
-    );
-    renderAgents(filtered.length ? filtered : AGENTS, filtered.length ? `Real Estate Agents in ${q}` : 'Real Estate Agents');
-  </script>
-
-  <script>
-    (function () {
-      const path = location.pathname.replace(/\/+$/, '');
-      document.querySelectorAll('#navbar .navbar-selector a[href]').forEach(a => {
-        const href = a.getAttribute('href') || '';
-        if (path.endsWith(href) || (path === '/' && href === 'index.html')) a.classList.add('nav-active');
-      });
-    })();
-
-    (function () {
       const shell = document.querySelector('.nav-shell');
       const btn = document.getElementById('menuToggle');
       if (btn && shell) {
@@ -224,7 +575,6 @@
         });
       }
 
-      // Active tab highlighting (same logic you had)
       const path = location.pathname.replace(/\/+$/, '');
       document.querySelectorAll('#navbar a[href]').forEach(a => {
         const href = a.getAttribute('href') || '';
@@ -234,79 +584,16 @@
         }
       });
     })();
+
+    // ===== Boot =====
+    renderHeader();
+    renderSnapshot();
+    renderProps('sold');
+    wireActions();
+
+    document.getElementById('propFilter').addEventListener('change', (e) => {
+      renderProps(e.target.value);
+    });
   </script>
 </body>
-
-<footer class="site-footer">
-  <div class="footer-inner">
-    <div class="footer-cols">
-      <div class="footer-col footer-brand">
-        <div class="brand">
-          <img src="/Assets/Logo.png" alt="MyHome logo" class="footer-logo" />
-        </div>
-      </div>
-
-      <div class="footer-col">
-        <h4 class="footer-title">Product</h4>
-        <a href="#">How it works</a>
-        <a href="#">Who we help</a>
-        <a href="#">Features</a>
-        <a href="#">Pricing</a>
-      </div>
-
-      <div class="footer-col">
-        <h4 class="footer-title">Resources</h4>
-        <a href="#">Get Help</a>
-        <a href="#">Partnership</a>
-        <a href="#">Blog</a>
-        <a href="#">Legal</a>
-      </div>
-
-      <div class="footer-col">
-        <h4 class="footer-title">About</h4>
-        <a href="#">About</a>
-        <a href="#">Sponsorship</a>
-        <a href="#">Hardship</a>
-        <a href="#">Contact</a>
-      </div>
-
-      <div class="footer-col footer-connect">
-        <h4 class="footer-title">Connect with us</h4>
-        <div class="footer-socials">
-          <!-- Simple inline SVGs so you don't depend on external assets -->
-          <a href="#" aria-label="Facebook" class="icon">
-            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-              <image href="../Assets/facebook.png" xlink:href="../Assets/facebook-app-symbol.png" width="18"
-                height="18" />
-            </svg>
-          </a>
-
-          <a href="#" aria-label="Facebook" class="icon">
-            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-              <image href="../Assets/youtube.png" xlink:href="../Assets/facebook-app-symbol.png" width="18"
-                height="18" />
-            </svg>
-          </a>
-          <a href="#" aria-label="Facebook" class="icon">
-            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-              <image href="../Assets/twitter.png" xlink:href="../Assets/facebook-app-symbol.png" width="18"
-                height="18" />
-            </svg>
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <hr class="footer-divider" />
-
-    <div class="footer-bottom">
-      <div>Copyright 2025 · MyHome</div>
-      <div class="footer-legal">
-        <a href="#">Terms of Service</a>
-        <a href="#">Privacy Policy</a>
-      </div>
-    </div>
-  </div>
-</footer>
-
 </html>
