@@ -21,32 +21,64 @@
 
       <!-- Personal Information Section -->
       <div id="personal-info" class="auth-card-lg" style="max-width: 800px; margin-bottom: 30px;">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h2 class="h2" style="font-size: 24px;">Personal Information</h2>
-            <button id="edit-details-btn" class="button-secondary">Edit</button>
-        </div>
-        
-        <div id="view-details">
-            <p><strong>First Name:</strong> <span id="firstNameView"></span></p>
-            <p><strong>Last Name:</strong> <span id="lastNameView"></span></p>
-            <p><strong>Email:</strong> <span id="emailView"></span></p>
-        </div>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2 class="h2" style="font-size: 24px;">Personal Information</h2>
+        <button id="edit-details-btn" class="button-secondary">Edit</button>
+    </div>
+    
+    <div id="view-details">
+        <p><strong>First Name:</strong> <span id="firstNameView"></span></p>
+        <p><strong>Last Name:</strong> <span id="lastNameView"></span></p>
+        <p><strong>Phone:</strong> <span id="phoneView"></span></p>
+        <p><strong>Email:</strong> <span id="emailView"></span></p>
+    </div>
 
-        <form id="edit-details-form" class="form-stack" style="display: none;">
-            <div class="field">
-                <label for="firstNameEdit">First Name</label>
-                <input type="text" id="firstNameEdit" class="input-lg" />
-            </div>
-            <div class="field">
-                <label for="lastNameEdit">Last Name</label>
-                <input type="text" id="lastNameEdit" class="input-lg" />
-            </div>
-            <div>
-                <button type="submit" class="button-primary">Save Changes</button>
-                <button type="button" id="cancel-edit-btn" class="button-secondary">Cancel</button>
-            </div>
-        </form>
-      </div>
+    <form id="edit-details-form" class="form-stack" style="display: none;">
+        <div class="field">
+            <label for="firstNameEdit">First Name</label>
+            <input type="text" id="firstNameEdit" class="input-lg" />
+        </div>
+        <div class="field">
+            <label for="lastNameEdit">Last Name</label>
+            <input type="text" id="lastNameEdit" class="input-lg" />
+        </div>
+        <div class="field">
+            <label for="phoneEdit">Phone</label>
+            <input type="tel" id="phoneEdit" class="input-lg" />
+        </div>
+        <div class="field">
+            <label for="emailEdit">Email</label>
+            <input type="email" id="emailEdit" class="input-lg" />
+        </div>
+        <div>
+            <button type="submit" class="button-primary">Save Changes</button>
+            <button type="button" id="cancel-edit-btn" class="button-secondary">Cancel</button>
+        </div>
+    </form>
+  </div>
+
+  <!-- NEW Password Change Section -->
+  <div id="password-change" class="auth-card-lg" style="max-width: 800px; margin-bottom: 30px;">
+    <h2 class="h2" style="font-size: 24px;">Change Password</h2>
+    <form id="password-change-form" class="form-stack">
+        <div class="field">
+            <label for="currentPassword">Current Password</label>
+            <input type="password" id="currentPassword" class="input-lg" required />
+        </div>
+        <div class="field">
+            <label for="newPassword">New Password</label>
+            <input type="password" id="newPassword" class="input-lg" minlength="6" required />
+        </div>
+        <div class="field">
+            <label for="confirmPassword">Confirm New Password</label>
+            <input type="password" id="confirmPassword" class="input-lg" required />
+        </div>
+        <div>
+            <button type="submit" class="button-primary">Update Password</button>
+        </div>
+        <div id="password-message" class="helper" style="margin-top: 10px;"></div>
+    </form>
+  </div>
 
       <!-- Wishlist Section -->
       <div id="wishlist-section" style="margin-bottom: 30px;">
@@ -72,89 +104,150 @@
     <!-- The <script src="/js/profile.js"></script> line has been REMOVED -->
 
     <script>
-      // --- ALL OF YOUR FRONTEND JAVASCRIPT LOGIC IS NOW HERE ---
+  // --- THIS IS THE COMPLETE AND CORRECTED FRONTEND SCRIPT ---
 
-      // This code runs in the user's WEB BROWSER after the page has loaded.
-      document.addEventListener("DOMContentLoaded", () => {
-        // Select all the HTML elements from this page
-        const viewDetailsDiv = document.getElementById("view-details");
-        const editDetailsForm = document.getElementById("edit-details-form");
-        const editDetailsBtn = document.getElementById("edit-details-btn");
-        const cancelEditBtn = document.getElementById("cancel-edit-btn");
+  document.addEventListener("DOMContentLoaded", () => {
+    // --- Selectors for Personal Information ---
+    const viewDetailsDiv = document.getElementById("view-details");
+    const editDetailsForm = document.getElementById("edit-details-form");
+    const editDetailsBtn = document.getElementById("edit-details-btn");
+    const cancelEditBtn = document.getElementById("cancel-edit-btn");
 
-        const firstNameView = document.getElementById("firstNameView");
-        const lastNameView = document.getElementById("lastNameView");
-        const emailView = document.getElementById("emailView");
+    const firstNameView = document.getElementById("firstNameView");
+    const lastNameView = document.getElementById("lastNameView");
+    const phoneView = document.getElementById("phoneView"); // ADDED
+    const emailView = document.getElementById("emailView");
+    
+    const firstNameEdit = document.getElementById("firstNameEdit");
+    const lastNameEdit = document.getElementById("lastNameEdit");
+    const phoneEdit = document.getElementById("phoneEdit"); // ADDED
+    const emailEdit = document.getElementById("emailEdit"); // ADDED
+
+    // --- Selectors for Password Change ---
+    const passwordChangeForm = document.getElementById("password-change-form");
+    const currentPasswordInput = document.getElementById("currentPassword");
+    const newPasswordInput = document.getElementById("newPassword");
+    const confirmPasswordInput = document.getElementById("confirmPassword");
+    const passwordMessage = document.getElementById("password-message");
+
+    // --- Function to display the user's data on the page ---
+    const populateUserData = (user) => {
+      // Update the "view" section
+      firstNameView.textContent = user.first_name || "N/A";
+      lastNameView.textContent = user.last_name || "N/A";
+      phoneView.textContent = user.phone || "N/A"; // ADDED
+      emailView.textContent = user.email || "N/A";
+      
+      // Pre-fill the "edit" form
+      firstNameEdit.value = user.first_name || "";
+      lastNameEdit.value = user.last_name || "";
+      phoneEdit.value = user.phone || ""; // ADDED
+      emailEdit.value = user.email || ""; // ADDED
+    };
+
+    // --- Function to fetch user data from the server ---
+    const fetchUserProfile = async () => {
+      try {
+        const response = await fetch("/api/profile");
+        if (!response.ok) {
+          throw new Error("Could not load profile. Please log in again.");
+        }
+        const user = await response.json();
+        populateUserData(user);
+      } catch (error) {
+        console.error("Fetch Error:", error);
+        document.getElementById("personal-info").innerHTML = `<p style="color:red;">${error.message}</p>`;
+      }
+    };
+
+    // --- Event Listener for Personal Info Form ---
+    editDetailsForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      // UPDATED: Collect all fields from the form
+      const updatedData = {
+        firstName: firstNameEdit.value.trim(),
+        lastName: lastNameEdit.value.trim(),
+        phone: phoneEdit.value.trim(),
+        email: emailEdit.value.trim(),
+      };
+
+      try {
+        const response = await fetch("/api/profile", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(updatedData),
+        });
+
+        const result = await response.json(); // Always parse the JSON response
+        if (!response.ok) {
+          // Use the specific error message from the backend
+          throw new Error(result.error || "Failed to save changes.");
+        }
         
-        const firstNameEdit = document.getElementById("firstNameEdit");
-        const lastNameEdit = document.getElementById("lastNameEdit");
+        alert("Profile updated successfully!");
+        await fetchUserProfile(); // Reload the data to show changes
+        viewDetailsDiv.style.display = "block";
+        editDetailsForm.style.display = "none";
+      } catch (error) {
+        console.error("Update Error:", error);
+        alert(`Update Failed: ${error.message}`); // Show the specific error
+      }
+    });
 
-        // Function to display the user's data on the page
-        const populateUserData = (user) => {
-          firstNameView.textContent = user.first_name || "N/A";
-          lastNameView.textContent = user.last_name || "N/A";
-          emailView.textContent = user.email || "N/A";
-          firstNameEdit.value = user.first_name || "";
-          lastNameEdit.value = user.last_name || "";
-        };
+    // --- NEW Event Listener for Password Change Form ---
+    passwordChangeForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        passwordMessage.textContent = ''; // Clear previous messages
+        passwordMessage.className = 'helper'; // Reset styles
 
-        // This function ASKS THE SERVER for the user's data
-        const fetchUserProfile = async () => {
-          try {
-            const response = await fetch("/api/profile"); // Calls your backend API
+        const currentPassword = currentPasswordInput.value;
+        const newPassword = newPasswordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
 
-            if (!response.ok) {
-              throw new Error("Could not load profile. Please log in again.");
-            }
-            const user = await response.json();
-            populateUserData(user); // Display the data on the page
-          } catch (error) {
-            console.error("Fetch Error:", error);
-            document.getElementById("personal-info").innerHTML = `<p style="color:red;">${error.message}</p>`;
-          }
-        };
+        // Client-side validation
+        if (newPassword !== confirmPassword) {
+            passwordMessage.textContent = 'New passwords do not match.';
+            passwordMessage.classList.add('error');
+            return;
+        }
 
-        // --- Event Listeners for buttons ---
-
-        editDetailsBtn.addEventListener("click", () => {
-          viewDetailsDiv.style.display = "none";
-          editDetailsForm.style.display = "block";
-        });
-
-        cancelEditBtn.addEventListener("click", () => {
-          viewDetailsDiv.style.display = "block";
-          editDetailsForm.style.display = "none";
-        });
-
-        editDetailsForm.addEventListener("submit", async (event) => {
-          event.preventDefault();
-          const updatedData = {
-            firstName: firstNameEdit.value.trim(),
-            lastName: lastNameEdit.value.trim(),
-          };
-
-          try {
-            const response = await fetch("/api/profile", {
-              method: "PUT", // Calls the PUT route on your backend
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(updatedData),
+        try {
+            // Send the request to the new backend endpoint
+            const response = await fetch('/api/profile/change-password', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ currentPassword, newPassword })
             });
 
-            if (!response.ok) throw new Error("Failed to save changes.");
+            const result = await response.json();
+            if (!response.ok) {
+              throw new Error(result.error || "An unknown error occurred.");
+            }
             
-            alert("Profile updated successfully!");
-            await fetchUserProfile(); // Reload the data
-            viewDetailsDiv.style.display = "block";
-            editDetailsForm.style.display = "none";
-          } catch (error) {
-            console.error("Update Error:", error);
-            alert(error.message);
-          }
-        });
+            passwordMessage.textContent = result.message;
+            passwordMessage.classList.add('success');
+            passwordChangeForm.reset(); // Clear the form fields on success
+        } catch (error) {
+            passwordMessage.textContent = error.message;
+            passwordMessage.classList.add('error');
+        }
+    });
 
-        // --- Initial Call ---
-        fetchUserProfile();
-      });
+
+    // --- Other Event Listeners ---
+    editDetailsBtn.addEventListener("click", () => {
+      viewDetailsDiv.style.display = "none";
+      editDetailsForm.style.display = "block";
+    });
+
+    cancelEditBtn.addEventListener("click", () => {
+      viewDetailsDiv.style.display = "block";
+      editDetailsForm.style.display = "none";
+    });
+
+    // --- Initial Call ---
+    fetchUserProfile();
+  });
     </script>
 
     <script>

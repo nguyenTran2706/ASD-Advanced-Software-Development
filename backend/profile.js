@@ -1,87 +1,90 @@
 const express = require('express');
 const router = express.Router();
-
-// Correctly import the database connection by navigating up one directory ('../')
-// from the 'backend' folder to the project root where 'database.js' is located.
 const db = require('../database.js');
+const crypto = require('crypto'); // We need crypto for the password change
 
 const isAuthenticated = (req, res, next) => {
-  console.log('[PROFILE.JS] isAuthenticated middleware running...');
-  console.log('[PROFILE.JS] Current session object:', req.session);
-  console.log(`[PROFILE.JS] Checking for session.userId. Found: ${req.session.userId}`);
-  
+  // ... (this middleware remains the same)
   if (req.session && req.session.userId) {
     return next();
   } else {
-    console.log('[PROFILE.JS] FAILED: No userId in session. Blocking request.');
     res.status(401).json({ error: "Unauthorized. You must be logged in." });
   }
 };
 
-/**
- * --- API ROUTES ---
- */
-
-/**
- * @route   GET /api/profile
- * @desc    Get the profile information for the currently logged-in user.
- * @access  Private (requires login)
- */
+// --- Your GET route remains the same ---
 router.get('/', isAuthenticated, (req, res) => {
-  // Get the user ID from the session that was set during login
-  const userId = req.session.userId;
-
-  // SQL query to select the user's data, excluding sensitive info like password hashes
-  const sql = "SELECT id, first_name, last_name, email FROM users WHERE id = ?";
-  
-  // Execute the query on the database
-  db.get(sql, [userId], (err, row) => {
-    if (err) {
-      // If a database error occurs, log it on the server and send a generic error
-      console.error("Database error on GET /api/profile:", err.message);
-      return res.status(500).json({ error: "A database error occurred while fetching the profile." });
-    }
-    
-    if (!row) {
-      // If no user is found with that ID, send a 404 Not Found error
-      return res.status(404).json({ error: "User profile not found." });
-    }
-    
-    // If successful, send the user's data back to the frontend as JSON
+  // We'll add 'phone' to the fields we retrieve
+  const sql = "SELECT id, first_name, last_name, email, phone FROM users WHERE id = ?";
+  db.get(sql, [req.session.userId], (err, row) => {
+    if (err) return res.status(500).json({ error: "Database error." });
+    if (!row) return res.status(404).json({ error: "User not found." });
     res.json(row);
   });
 });
 
-/**
- * @route   PUT /api/profile
- * @desc    Update the profile information for the currently logged-in user.
- * @access  Private (requires login)
- */
+
+// --- UPDATED 'Update Profile' Route ---
 router.put('/', isAuthenticated, (req, res) => {
   const userId = req.session.userId;
+  // Get the new fields from the request body
+  const { firstName, lastName, phone, email } = req.body;
 
-  // Get the updated first name and last name from the request body sent by the frontend form
-  const { firstName, lastName } = req.body;
-
-  // Basic validation to ensure the required data was sent
-  if (!firstName || !lastName) {
-    return res.status(400).json({ error: "First name and last name are required fields." });
+  if (!firstName || !lastName || !email) {
+    return res.status(400).json({ error: "First name, last name, and email are required." });
   }
 
-  // SQL query to update the user's details in the database
-  const sql = `UPDATE users SET first_name = ?, last_name = ? WHERE id = ?`;
+  const sql = `UPDATE users SET first_name = ?, last_name = ?, phone = ?, email = ? WHERE id = ?`;
   
-  // Execute the update query
-  db.run(sql, [firstName, lastName, userId], function(err) {
+  db.run(sql, [firstName, lastName, phone, email, userId], function(err) {
     if (err) {
+      // Gracefully handle the case where the new email is already taken
+      if (err.message.includes("UNIQUE constraint failed")) {
+        return res.status(409).json({ error: "This email address is already registered." });
+      }
       console.error("Database error on PUT /api/profile:", err.message);
-      return res.status(500).json({ error: "A database error occurred while updating the profile." });
+      return res.status(500).json({ error: "Failed to update profile." });
     }
-    
-    // Send a success message back to the frontend
     res.json({ message: "Profile updated successfully!" });
   });
 });
 
-// Export the router so it can be imported and used by app.js
+
+// --- NEW 'Change Password' Route ---
+router.put('/change-password', isAuthenticated, (req, res) => {
+    const userId = req.session.userId;
+    const { currentPassword, newPassword } = req.body;
+
+    if (!currentPassword || !newPassword) {
+        return res.status(400).json({ error: 'All password fields are required.' });
+    }
+    if (newPassword.length < 6) {
+        return res.status(400).json({ error: 'New password must be at least 6 characters.' });
+    }
+
+    // Step 1: Get the current user's salt and hash from the DB
+    const sqlSelect = "SELECT password_salt, password_hash FROM users WHERE id = ?";
+    db.get(sqlSelect, [userId], (err, user) => {
+        if (err) return res.status(500).json({ error: "Server error." });
+
+        // Step 2: Verify the 'currentPassword' is correct
+        const candidateHash = crypto.scryptSync(currentPassword, user.password_salt, 64);
+        const storedHash = Buffer.from(user.password_hash, "hex");
+        if (!crypto.timingSafeEqual(storedHash, candidateHash)) {
+            return res.status(401).json({ error: "Incorrect current password." });
+        }
+
+        // Step 3: If correct, create a new salt and hash for the 'newPassword'
+        const newSalt = crypto.randomBytes(16).toString("hex");
+        const newHash = crypto.scryptSync(newPassword, newSalt, 64).toString("hex");
+
+        // Step 4: Update the database with the new salt and hash
+        const sqlUpdate = "UPDATE users SET password_salt = ?, password_hash = ? WHERE id = ?";
+        db.run(sqlUpdate, [newSalt, newHash, userId], (err) => {
+            if (err) return res.status(500).json({ error: "Failed to update password." });
+            res.json({ message: "Password changed successfully!" });
+        });
+    });
+});
+
 module.exports = router;
