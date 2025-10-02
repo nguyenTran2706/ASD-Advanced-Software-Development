@@ -10,6 +10,8 @@ const propertiesRoute = require("./backend/properties");
 const listingsRoute = require("./backend/listings");
 const enquiriesRoute = require("./backend/enquiries");
 const profileApiRoutes = require('./backend/profile');
+const inspectionsRouter = require("./backend/inspections");
+
 
 // Middleware
 app.use(express.json());
@@ -37,11 +39,13 @@ app.use("/api/properties", propertiesRoute);
 app.use("/api/listings", listingsRoute);
 app.use("/api/enquires", enquiriesRoute)
 app.use('/api/profile', profileApiRoutes);
+app.use("/api/inspections", inspectionsRouter);
+
 
 
 // Serve frontend index.html on root
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "frontend", "index.html"));
+  res.sendFile(path.join(__dirname, "frontend", "index.html"));
 });
 
 app.use("/api/listings", require("./backend/listings"));
@@ -49,7 +53,7 @@ app.use("/api/listings", require("./backend/listings"));
 // Start server
 const PORT = 3000;
 app.listen(PORT, () =>
-    console.log(`🚀 Server running at http://localhost:${PORT}`)
+  console.log(`🚀 Server running at http://localhost:${PORT}`)
 );
 
 
