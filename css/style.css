@@ -1891,41 +1891,261 @@ form button {
   font-size: 14px;
 }
 
-/* 1. The main container for the dropdown */
-.dropdown {
-  position: relative; /* This is crucial for positioning the dropdown content */
-  display: inline-block;
+/* === Agent Filters === */
+.filters-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
 }
-
-/* 2. The dropdown content (the part that is hidden by default) */
-.dropdown-content {
-  display: none; /* This hides the menu initially */
-  position: absolute; /* Positions the menu relative to the .dropdown container */
-  background-color: #ffffff; /* A clean white background */
-  min-width: 180px; /* Adjust width as needed */
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.15); /* Adds a subtle shadow */
-  border: 1px solid #e5e7eb; /* A light border */
-  border-radius: 8px; /* Rounded corners */
-  z-index: 10; /* Ensures the dropdown appears above other content */
-  padding: 8px 0; /* Adds some vertical padding */
-}
-
-/* 3. The links inside the dropdown menu */
-.dropdown-content a {
-  color: #111827; /* Dark text color for readability */
-  padding: 10px 16px; /* Spacing for each link */
-  text-decoration: none; /* Removes the default underline */
-  display: block; /* Makes the entire area clickable, not just the text */
-  font-weight: 500; /* Normal font weight */
+.chip {
+  padding: 6px 14px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  background: #fff;
   font-size: 14px;
+  cursor: pointer;
+}
+.chip.active {
+  border-color: #047857;
+  color: #047857;
+  font-weight: 600;
+}
+.dropdown-chip select {
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  outline: none;
+}
+.agent-card {
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  background: #fff;
+}
+.agent-tags .tag {
+  display: inline-block;
+  background: #f0f0f0;
+  border-radius: 12px;
+  padding: 4px 8px;
+  font-size: 12px;
+  margin: 2px;
 }
 
-/* 4. Change the background color of links on hover */
-.dropdown-content a:hover {
-  background-color: #f3f4f6; /* A light grey background on hover */
+
+.agent-hero-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
+    }
+
+.agent-hero-left {
+  flex: 1;
 }
 
-/* 5. The magic part: Show the dropdown menu when hovering over the container */
-.dropdown:hover .dropdown-content {
-  display: block; /* This makes the menu visible on hover */
+.agent-hero-right {
+  flex: 1;
+  display: flex;
+  justify-content: center;
 }
+
+.agent-hero-img {
+  max-width: 400px;
+  height: auto;
+  object-fit: contain;
+}
+
+.agent-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px; /* FIX: stop overlap with subtitle */
+}
+
+.agent-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.agent-card {
+  flex: 1 1 calc(50% - 20px); /* 2 cards per row */
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 20px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.agent-card-body {
+  display: flex;
+  gap: 20px;
+}
+
+.agent-left {
+  display: flex;
+  gap: 10px;
+  flex: 1;
+}
+
+.agent-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.agent-middle {
+  flex: 2;
+}
+
+.agent-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.btn-ghost-full,
+.btn-primary-full {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary-full {
+  background: #047857;
+  color: #fff;
+}
+
+.btn-ghost-full {
+  background: transparent;
+  border: 1px solid #ccc;
+}
+
+.agent-tags .tag {
+  display: inline-block;
+  background: #f3f4f6;
+  border-radius: 6px;
+  padding: 2px 8px;
+  margin: 2px;
+  font-size: 12px;
+}
+
+
+
+.agent-review-block {
+  margin-top: 10px;
+  color: #374151;
+}
+
+.agent-review-stars {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.agent-review-quote {
+  font-style: italic;
+  margin-bottom: 10px;
+  color: #4b5563;
+}
+
+.agent-review-photos {
+  display: flex;
+  gap: 10px;
+}
+
+.agent-review-photos img.review-thumb {
+  width: 80px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
+
+:root {
+      --brand:#047857;
+      --card:#fff;
+      --muted:#64748b;
+      --text:#111827;
+      --border:#e5e7eb;
+      --pill:#f3f4f6;
+      --danger:#ef4444;
+    }
+    body { background:#f7f8fb; }
+
+    .container-xl { max-width:1100px; margin:20px auto; padding:0 16px; }
+
+    /* Header block */
+    .agent-head {
+      display:grid; grid-template-columns: 1fr auto; gap:16px; align-items:center;
+      margin-top:6px;
+    }
+    .agent-id {
+      display:flex; align-items:center; gap:14px;
+    }
+    .agent-avatar-lg {
+      width:64px; height:64px; border-radius:50%; object-fit:cover; border:2px solid #eef2f7;
+    }
+    .agent-name { font-size:26px; font-weight:700; margin:0; color:var(--text); }
+    .agent-sub { margin:2px 0 0; color:var(--muted); }
+    .agent-stars { color:#f59e0b; font-weight:700; }
+    .agent-stars a { color:var(--muted); text-decoration:none; font-weight:500; margin-left:6px; }
+    .agent-actions {
+      display:flex; gap:10px; flex-wrap:wrap;
+    }
+    .btn {
+      display:inline-flex; align-items:center; justify-content:center; gap:8px;
+      padding:10px 14px; border-radius:10px; font-weight:600; cursor:pointer; border:1px solid var(--border); background:#fff; color:#1f2937;
+    }
+    .btn-primary { background:var(--brand); color:#fff; border:none; }
+    .btn-ghost { background:#fff; color:#1f2937; }
+    .btn:focus { outline:2px solid #c7eadb; outline-offset:2px; }
+
+    /* 2 col layout */
+    .grid-2 {
+      display:grid; grid-template-columns: 1fr 320px; gap:16px; margin-top:18px;
+    }
+
+    .card { background:var(--card); border:1px solid var(--border); border-radius:12px; box-shadow: 0 10px 24px rgba(0,0,0,.05); }
+    .card.p { padding:16px; }
+
+    /* Snapshot */
+    .snapshot { display:grid; grid-template-columns: repeat(4, 1fr); gap:12px; }
+    .snap { background:#f9fafb; border:1px solid var(--border); border-radius:12px; padding:12px; }
+    .snap .v { font-size:20px; font-weight:700; color:var(--text); }
+    .snap .l { font-size:12px; color:var(--muted); }
+
+    /* Review block */
+    .review-block { margin-top:8px; }
+    .review-stars { font-weight:700; color:#111827; }
+    .review-quote { margin:6px 0 10px; color:#4b5563; font-style:italic; }
+    .review-photos { display:flex; gap:10px; flex-wrap:wrap; }
+    .review-photos img {
+      width:92px; height:64px; object-fit:cover; border-radius:8px; border:1px solid var(--border);
+    }
+
+    /* Properties */
+    .props-head { display:flex; align-items:center; justify-content:space-between; margin:10px 0; }
+    .thumbs { display:grid; grid-template-columns: repeat(4, 1fr); gap:10px; }
+    .thumbs img { width:100%; height:120px; object-fit:cover; border-radius:10px; border:1px solid var(--border); }
+
+    /* Right rail */
+    .mini-agent { display:flex; align-items:center; gap:10px; }
+    .mini-name { font-weight:700; margin:0; }
+    .rail-actions { display:grid; gap:8px; margin-top:10px; }
+
+    @media (max-width: 1000px) {
+      .grid-2 { grid-template-columns: 1fr; }
+      .snapshot { grid-template-columns: repeat(2, 1fr); }
+      .thumbs { grid-template-columns: repeat(2, 1fr); }
+    }
+
+
+
+
