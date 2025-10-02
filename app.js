@@ -2,14 +2,25 @@
 const express = require("express");
 const path = require("path");
 const app = express();
+const session = require("express-session");
 
 // Import routes
+const authRoutes = require("./backend/auth.js");
 const propertiesRoute = require("./backend/properties");
 const listingsRoute = require("./backend/listings");
 const enquiriesRoute = require("./backend/enquiries");
+const profileApiRoutes = require('./backend/profile');
 
 // Middleware
 app.use(express.json());
+app.use(
+  session({
+    secret: "a-very-strong-and-secret-key-for-my-app",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false },
+  })
+);
 app.use(express.static(path.join(__dirname)));
 
 // Serve static frontend and css
@@ -21,9 +32,11 @@ app.use(express.static("public"));
 app.use("/Assets", express.static(path.join(__dirname, "Assets")));
 
 // API routes
+app.use("/api/auth", authRoutes);
 app.use("/api/properties", propertiesRoute);
 app.use("/api/listings", listingsRoute);
 app.use("/api/enquires", enquiriesRoute)
+app.use('/api/profile', profileApiRoutes);
 
 
 // Serve frontend index.html on root

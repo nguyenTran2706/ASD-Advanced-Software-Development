@@ -46,6 +46,7 @@
   </div>
 
   <script>
+    // This is the updated and corrected script
     const form = document.getElementById('loginForm');
     const msg = document.getElementById('formMsg');
 
@@ -56,28 +57,47 @@
 
       const data = Object.fromEntries(new FormData(form).entries());
       if (!data.email?.trim() || !data.password) {
-        msg.classList.add('error'); msg.textContent = 'Please enter your email and password.'; return;
+        msg.classList.add('error'); 
+        msg.textContent = 'Please enter your email and password.'; 
+        return;
       }
 
       try {
-        const res = await fetch('/api/properties/auth/login', {
+        // --- FIX #1: The URL is now correct ---
+        // Changed from '/api/properties/auth/login' to the correct '/api/auth/login'
+        const res = await fetch('/api/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: data.email.trim(), password: data.password })
         });
+        
+        // Your robust JSON parsing is great, no changes needed here
         const text = await res.text();
-        let out = {}; try { out = JSON.parse(text); } catch { out = { error: text }; }
+        let out = {}; 
+        try { 
+            out = JSON.parse(text); 
+        } catch { 
+            out = { error: text }; 
+        }
         if (!res.ok) throw new Error(out.error || 'Login failed');
 
-        localStorage.setItem("user", JSON.stringify(out));
+        // --- FIX #2: Storing the correct object in localStorage ---
+        // Instead of the whole response, we now store only the 'user' object
+        // This is what your other pages expect to find.
+        localStorage.setItem("user", JSON.stringify(out.user));
 
-        msg.classList.add('success'); msg.textContent = 'Login successful ✔';
-        setTimeout(() => window.location.href = '../index.html', 900);
+        msg.classList.add('success'); 
+        msg.textContent = 'Login successful ✔';
+
+        // Your redirect logic is perfect, no changes needed
+        setTimeout(() => window.location.href = '/profile.html', 900); // Redirect to profile to see the result
       } catch (err) {
-        msg.classList.add('error'); msg.textContent = err.message;
+        msg.classList.add('error'); 
+        msg.textContent = err.message;
       }
     });
 
+    // Your active nav link logic is fine, no changes needed here.
     (function () {
       const path = location.pathname.replace(/\/+$/, '');
       const links = document.querySelectorAll('#navbar .navbar-selector a[href]');

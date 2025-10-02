@@ -116,6 +116,25 @@
                 document.getElementById("logoutBtn").addEventListener("click", () => { localStorage.removeItem("user"); location.reload(); });
             } catch (_) { }
         })();
+        (async function () {
+        try {
+          const res = await fetch("index.html");
+          const html = await res.text();
+          const doc = new DOMParser().parseFromString(html, "text/html");
+          const navShell = doc.querySelector(".nav-shell");
+          // Find the nav bar's inline script in index.html
+          const navScriptText = Array.from(doc.querySelectorAll('script:not([src])'))
+                                     .find(s => s.innerText.includes('// -------- Auth area'))
+                                     ?.innerText;
+          
+          document.querySelector(".nav-shell").replaceWith(navShell);
+          if (navScriptText) {
+            eval(navScriptText); // Re-run the auth/nav script
+          }
+        } catch(e) {
+          console.error("Could not load navigation bar.", e);
+        }
+      })();
 
         const $ = s => document.querySelector(s);
         const listEl = $('#propList');
@@ -230,6 +249,7 @@
             history.replaceState(null, '', '?' + qs.toString());
         }
 
+        
         // events
         $('#propGo').addEventListener('click', () => { pushState(); render(); });
         qEl.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); pushState(); render(); } });
@@ -246,6 +266,8 @@
                 btn.setAttribute('aria-expanded', String(isOpen));
             });
         })();
+
+        
         render();
     </script>
 </body>

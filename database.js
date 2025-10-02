@@ -22,16 +22,6 @@ db.serialize(() => {
   `);
 
   db.run(`
-    CREATE TABLE IF NOT EXISTS properties (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      title TEXT NOT NULL,
-      price REAL NOT NULL,
-      description TEXT,
-      image TEXT
-    )
-  `);
-
-  db.run(`
   CREATE TABLE IF NOT EXISTS enquiries (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     property_id INTEGER,
