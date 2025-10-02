@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Book Inspection</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/style.css" />
+</head>
+
+<body>
+    <header class="nav-shell">
+        <div class="nav-top">
+            <button id="menuToggle" class="menu-btn" aria-expanded="false" aria-controls="navLinks"><span
+                    class="menu-icon"></span><span class="menu-text">Menu</span></button>
+            <a href="index.html" class="brand"><img src="/Assets/Logo.png" alt="logo" style="height:40px" /></a>
+            <div class="navbar-buttons" id="navbarUser"></div>
+        </div>
+        <div id="navLinks" class="nav-links">
+            <nav id="navbar" class="navbar-selector">
+                <a href="index.html">Home</a><a href="buy.html">Buy</a><a href="rent.html">Rent</a><a
+                    href="sold.html">Sold</a>
+                <a href="findAgent.html">Find Agent</a><a href="news.html">News</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="book-wrap">
+        <div class="auth-card-lg">
+            <h1 class="auth-title">Book an inspection</h1>
+            <div class="back-links">
+                <a href="buy.html" class="back-link"> Back to Buy</a>
+                <a href="rent.html" class="back-link"> Back to Rent</a>
+            </div>
+            <p class="auth-subtitle" id="propLine"></p>
+
+            <form id="bookForm" class="form-stack" novalidate>
+                <div class="field">
+                    <label for="fullName">Full name</label>
+                    <input id="fullName" required />
+                    <div class="fine" id="errName"></div>
+                </div>
+
+                <div class="field">
+                    <label for="email">Email</label>
+                    <input id="email" type="email" required />
+                    <div class="fine" id="errEmail"></div>
+                </div>
+
+                <div class="field">
+                    <label for="phone">Phone</label>
+                    <input id="phone" inputmode="tel" />
+                    <div class="fine" id="errPhone"></div>
+                </div>
+
+                <div class="field">
+                    <label for="date">Choose date</label>
+                    <input id="date" type="date" required />
+                    <div class="fine">Available slots (1-hour) for the selected date:</div>
+
+                    <!-- TIME SLOTS directly below the date -->
+                    <div id="slots" class="slot-grid"></div>
+                    <div class="fine" id="errSlot"></div>
+                </div>
+
+                <div class="field">
+                    <label for="notes">Note (optional)</label>
+                    <textarea id="notes" rows="3" maxlength="300"
+                        placeholder="Any access notes or preferences"></textarea>
+                    <div class="fine" id="errNotes"></div>
+                </div>
+
+                <button class="btn-primary-full" id="submitBtn" type="submit">Confirm booking</button>
+                <div id="formMsg" class="helper" aria-live="polite"></div>
+            </form>
+
+        </div>
+    </main>
+
+    <div class="site-footer-spacer"></div>
+
+    <script>
+        // Basic navbar user (reuse)
+        (function navbar() {
+            const navbarUser = document.getElementById("navbarUser");
+            try {
+                const user = JSON.parse(localStorage.getItem("user") || "null");
+                if (user) {
+                    const displayName = (user.first_name || "").trim() || user.email || "User";
+                    navbarUser.innerHTML = `
+          <span style="margin-right:10px; color:#047857; font-weight:600;">Welcome, ${displayName}</span>
+          <button class="button-secondary" id="logoutBtn">Logout</button>
+        `;
+                    document.getElementById("logoutBtn").addEventListener("click", () => {
+                        localStorage.removeItem("user");
+                        location.reload();
+                    });
+                } else {
+                    navbarUser.innerHTML =
+                        '<a class="button-primary" href="signUp.html" style="text-decoration:none;color:#fff">Sign Up</a> ' +
+                        '<a class="button-primary" href="login.html" style="text-decoration:none;color:#fff">Login</a>';
+                }
+            } catch (e) { }
+        })();
+
+        const params = new URLSearchParams(location.search);
+        const propertyId = Number(params.get('propertyId') || 0);
+        const address = decodeURIComponent(params.get('address') || '');
+        const price = decodeURIComponent(params.get('price') || '');
+
+        document.getElementById('propLine').textContent =
+            address ? `${address}${price ? ' — ' + price : ''}` : 'Selected property';
+
+        // Date min = tomorrow
+        const dateInput = document.getElementById('date');
+        const today = new Date();
+        today.setDate(today.getDate() + 1);
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        dateInput.min = `${yyyy}-${mm}-${dd}`;
+        dateInput.value = dateInput.min;
+
+        let selectedTime = ''; // 'HH:MM'
+
+        // Render & load slots
+        async function loadSlots() {
+            const slotsEl = document.getElementById('slots');
+            slotsEl.innerHTML = 'Loading...';
+
+            try {
+                const resp = await fetch(`/api/inspections/slots?propertyId=${propertyId}&date=${dateInput.value}`);
+                const data = await resp.json().catch(() => ({}));
+
+                if (!resp.ok) {
+                    slotsEl.innerHTML = data?.error || 'Could not load slots.';
+                    return;
+                }
+                if (!Array.isArray(data)) {
+                    slotsEl.innerHTML = 'No slots available.';
+                    return;
+                }
+
+                slotsEl.innerHTML = '';
+                data.forEach(s => {
+                    const start = new Date(s.start);
+                    const end = new Date(s.end);
+                    const label =
+                        start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) +
+                        ' - ' +
+                        end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.textContent = label;
+                    btn.className = 'slot';
+                    if (s.booked) btn.setAttribute('disabled', 'disabled');
+
+                    btn.addEventListener('click', () => {
+                        if (btn.disabled) return;
+                        selectedTime = start.toTimeString().slice(0, 5);
+                        document.querySelectorAll('.slot').forEach(x => x.classList.remove('active'));
+                        btn.classList.add('active');
+                        clearFieldError('errSlot');
+                    });
+
+                    slotsEl.appendChild(btn);
+                });
+
+                if (!selectedTime) {
+                    const first = slotsEl.querySelector('.slot:not([disabled])');
+                    if (first) first.click();
+                }
+            } catch {
+                slotsEl.innerHTML = 'Network error while loading slots.';
+            }
+        }
+
+        dateInput.addEventListener('change', loadSlots);
+        loadSlots();
+
+        // ---- Validation helpers ----
+        function setFieldError(inputEl, errElId, msg) {
+            const errEl = document.getElementById(errElId);
+            if (inputEl) inputEl.classList.add('is-invalid');
+            if (errEl) { errEl.classList.add('error'); errEl.textContent = msg || ''; }
+        }
+        function clearFieldError(errElId, inputEl) {
+            const errEl = document.getElementById(errElId);
+            if (errEl) { errEl.classList.remove('error'); errEl.textContent = ''; }
+            if (inputEl) inputEl.classList.remove('is-invalid');
+        }
+        function clearAllErrors() {
+            ['errName', 'errEmail', 'errPhone', 'errSlot', 'errNotes'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) { el.textContent = ''; el.classList.remove('error'); }
+            });
+            ['fullName', 'email', 'phone', 'notes'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.remove('is-invalid');
+            });
+            const msg = document.getElementById('formMsg');
+            msg.classList.remove('error', 'success');
+            msg.textContent = '';
+        }
+
+        // ---- Submit handler with strict validation ----
+        document.getElementById('bookForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            clearAllErrors();
+
+            const msg = document.getElementById('formMsg');
+            const btn = document.getElementById('submitBtn');
+
+            const nameEl = document.getElementById('fullName');
+            const emailEl = document.getElementById('email');
+            const phoneEl = document.getElementById('phone');
+            const notesEl = document.getElementById('notes');
+
+            const fullName = nameEl.value.trim();
+            const email = emailEl.value.trim();
+            const phone = phoneEl.value.trim();
+            const notes = notesEl.value.trim();
+            const date = dateInput.value;
+
+            let valid = true;
+            const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+            if (!fullName) { setFieldError(nameEl, 'errName', 'Full name is required.'); valid = false; }
+            if (!emailOk) { setFieldError(emailEl, 'errEmail', 'Valid email is required.'); valid = false; }
+            if (phone && !/^\d+$/.test(phone)) { setFieldError(phoneEl, 'errPhone', 'Phone must contain only digits.'); valid = false; }
+            if (!date) { setFieldError(null, 'errSlot', 'Please choose a date.'); valid = false; }
+            if (!selectedTime) { setFieldError(null, 'errSlot', 'Please choose a time slot.'); valid = false; }
+            if (notes.length > 300) { setFieldError(notesEl, 'errNotes', 'Message must be ≤ 300 characters.'); valid = false; }
+
+            if (!valid) return;
+
+            try {
+                btn.disabled = true;
+                const resp = await fetch('/api/inspections', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ propertyId, fullName, email, phone, notes, date, time: selectedTime })
+                });
+
+                if (resp.status === 201) {
+                    msg.classList.add('success');
+                    msg.textContent = '✅ Inspection booked successfully.';
+                    e.target.reset();
+                    selectedTime = '';
+                    loadSlots();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    setTimeout(() => {
+                        window.location.href = 'index.html';       // or '/index.html' if you prefer absolute
+                    }, 1200); // 1.2s so the user sees the success line
+                } else {
+                    const data = await resp.json().catch(() => ({}));
+                    msg.classList.add('error');
+                    msg.textContent = data?.error || 'Booking failed.';
+                    if (resp.status === 409) loadSlots(); // slot conflict → refresh
+                }
+            } catch {
+                msg.classList.add('error');
+                msg.textContent = 'Network error. Please try again.';
+            } finally {
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+
+</html>
