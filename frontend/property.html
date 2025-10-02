@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -58,7 +59,7 @@
         el.innerHTML = `<span style="margin-right:10px;color:#047857;font-weight:600;">Welcome, ${name}</span>
         <button class="button-secondary" id="logoutBtn">Logout</button>`;
         document.getElementById('logoutBtn').onclick = () => { localStorage.removeItem('user'); location.reload(); };
-      } catch (_) {}
+      } catch (_) { }
     })();
 
     /* Active nav highlighting */
@@ -77,9 +78,9 @@
 
     const resultsPath = document.getElementById('resultsPath');
     resultsPath.textContent =
-      status === 'buy'  ? 'For sale' :
-      status === 'rent' ? 'For rent' :
-      status === 'sold' ? 'Recently sold' : 'Property';
+      status === 'buy' ? 'For sale' :
+        status === 'rent' ? 'For rent' :
+          status === 'sold' ? 'Recently sold' : 'Property';
 
     // Back button
     document.getElementById('backBtn').onclick = () => {
@@ -109,53 +110,79 @@
       const main = `<img id="mainImg" src="${all[0]}" alt="${p.address || 'Property photo'}">`;
       const thumbs = all.length > 1
         ? `<div class="thumb-row">` + all.map((src, i) =>
-            `<img src="${src}" alt="photo ${i+1}" onclick="document.getElementById('mainImg').src='${src}'">`
-          ).join('') + `</div>`
+          `<img src="${src}" alt="photo ${i + 1}" onclick="document.getElementById('mainImg').src='${src}'">`
+        ).join('') + `</div>`
         : '';
       return `<div class="prop-gallery">${main}${thumbs}</div>`;
     }
 
     function infoHTML(p) {
       const addr = [p.address || '', [p.suburb, p.state].filter(Boolean).join(', '), p.postcode || '']
-        .join(' ').replace(/\s+/g,' ').trim();
+        .join(' ').replace(/\s+/g, ' ').trim();
       return `
-        <div class="prop-panel">
-          <div class="pill">${p.type || 'Property'}</div>
-          <h1 class="prop-title">${priceLabel(p)}</h1>
-          <div class="prop-sub">${addr}</div>
-          <div class="specs">
-            <span>🛏 <span class="value">${p.bedrooms ?? 0}</span></span>
-            <span>🛁 <span class="value">${p.bathrooms ?? 0}</span></span>
-            <span>🚗 <span class="value">${p.carspaces ?? 0}</span></span>
-          </div>
-          <div class="divider"></div>
-          <div>
-            <span class="label">Status</span>
-            <div class="value" style="text-transform:capitalize">${p.status || status || ''}</div>
-          </div>
-          ${p.description ? `<div><span class="label">Description</span><div>${p.description}</div></div>` : ''}
-          <div class="divider"></div>
-          <div class="cta-row">
-            <a class="btn-primary-full" href="/enquire.html?suburb=${encodeURIComponent(p.suburb || '')}">Enquire</a>
-            <button class="btn-ghost-full" onclick="saveListing(${p.id})">Save</button>
-          </div>
-          <p class="muted">ID: ${p.id ?? ''}</p>
+      <div class="prop-panel">
+        <div class="pill">${p.type || 'Property'}</div>
+        <h1 class="prop-title">${priceLabel(p)}</h1>
+        <div class="prop-sub">${addr}</div>
+        <div class="specs">
+          <span>🛏 <span class="value">${p.bedrooms ?? 0}</span></span>
+          <span>🛁 <span class="value">${p.bathrooms ?? 0}</span></span>
+          <span>🚗 <span class="value">${p.carspaces ?? 0}</span></span>
         </div>
-      `;
+        <div class="divider"></div>
+        <div>
+          <span class="label">Status</span>
+          <div class="value" style="text-transform:capitalize">${p.status || status || ''}</div>
+        </div>
+        <div class="divider"></div>
+        <div class="cta-row">
+          <a class="btn-primary-full" href="/enquire.html?suburb=${encodeURIComponent(p.suburb || '')}">Enquire</a>
+          <button class="btn-ghost-full" onclick="saveListing(${p.id})">Save</button>
+        </div>
+        <p class="muted">ID: ${p.id ?? ''}</p>
+      </div>
+    `;
     }
 
     function render(p) {
       document.getElementById('detail').innerHTML = `
-        ${galleryHTML(p)}
-        ${infoHTML(p)}
-      `;
+    ${galleryHTML(p)}
+    ${infoHTML(p)}
+
+    <!-- ===== Property Meta (Highlights • Description • Features • Agent Card) ===== -->
+    <section id="prop-highlights" class="card-section" hidden>
+      <h3 class="card-title">Property highlights</h3>
+      <ul id="prop-highlights-list" class="highlights"></ul>
+    </section>
+
+    <section id="prop-longdesc" class="card-section" hidden>
+      <h3 class="visually-hidden">Description</h3>
+      <div id="prop-longdesc-body" class="long-text clamp-6"></div>
+      <button id="prop-longdesc-toggle" class="linklike" type="button">Read more</button>
+    </section>
+
+    <section id="prop-features" class="card-section" hidden>
+      <h3 class="card-title">Property features</h3>
+      <div id="prop-features-grid" class="features-grid"></div>
+    </section>
+
+    <aside id="prop-agent" class="card-section agent-card" hidden></aside>
+    <!-- ===== /Property Meta ===== -->
+  `;
+
       // update breadcrumb with property type/address
       const crumb = [];
       if (p.type) crumb.push(p.type);
       if (p.suburb) crumb.push(p.suburb);
       document.getElementById('resultsPath').textContent =
         crumb.length ? crumb.join(' • ') : document.getElementById('resultsPath').textContent;
+
+      // NEW: build highlights/description/features/agent
+      if (typeof renderPropertyMeta === 'function') {
+        renderPropertyMeta(p);
+      }
     }
+
 
     function showError(msg) {
       const box = document.getElementById('errorBox');
@@ -184,10 +211,158 @@
         if (!arr.includes(id)) arr.push(id);
         localStorage.setItem(key, JSON.stringify(arr));
         alert('Saved!');
-      } catch (_) {}
+      } catch (_) { }
     }
 
     load();
   </script>
+  <script>
+    /* ===== Property Meta (Highlights • Long Description • Features • Agent Card)
+       Works even if there is NO manual meta. Exposes window.renderPropertyMeta(p)
+       and expects the four containers already in your render(p) HTML:
+       - #prop-highlights / #prop-highlights-list
+       - #prop-longdesc / #prop-longdesc-body / #prop-longdesc-toggle
+       - #prop-features / #prop-features-grid
+       - #prop-agent
+    */
+    (function () {
+      const $ = id => document.getElementById(id);
+      const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+      const s = (...bits) => bits.filter(Boolean).join(' ').replace(/\s+/g, ' ').trim();
+
+      // Optional hand-authored per-listing content. Add entries as you like.
+      const MANUAL_META = {
+        // 65: {
+        //   highlights: ['Bright north-east aspect','Open-plan living & dining','Modern kitchen'],
+        //   longDesc: `Positioned for convenience in the heart of Marrickville ...`,
+        //   features: ['Built-in wardrobes','Ensuite: 1','Open car spaces: 1'],
+        //   agent: 'ken'
+        // }
+      };
+
+      // Your 3 agents (use any details you like here)
+      const AGENTS = {
+        ken: { name: 'Ken (Hiroyoshi) Miyagawa', agency: 'Richard Matthews Real Estate', phone: '04780178…', rating: '5.0 (18 reviews)', address: '183 The Boulevarde, STRATHFIELD, NSW 2135', badge: 'Get your property appraised' },
+        adrian: { name: 'Adrian William', agency: 'Adrian William', phone: '02 9000 0000', rating: '5.0 (1093 reviews)', address: 'Canterbury', badge: 'Request a free appraisal' },
+        denny: { name: 'Denny Barros', agency: 'Adrian William', phone: '02 8000 0000', rating: '5.0 (48 reviews)', address: 'Canterbury', badge: 'Request a free appraisal' }
+      };
+      const AGENT_KEYS = Object.keys(AGENTS);
+
+      function buildHighlights(p, m) {
+        if (m?.highlights?.length) return m.highlights.slice(0, 6);
+        const out = [];
+        if (p.type) out.push(`${p.type} with functional layout`);
+        if (p.bedrooms > 0) out.push(`${p.bedrooms} bedroom${p.bedrooms > 1 ? 's' : ''}`);
+        if (p.bathrooms > 0) out.push(`${p.bathrooms} bathroom${p.bathrooms > 1 ? 's' : ''}`);
+        if (p.carspaces > 0) out.push(`${p.carspaces} car space${p.carspaces > 1 ? 's' : ''}`);
+        if (p.suburb) out.push(`Convenient ${p.suburb} location`);
+        out.push('Open-plan living/dining', 'Close to shops, schools & transport');
+        return Array.from(new Set(out)).slice(0, 5);
+      }
+
+      function buildLongDesc(p, m) {
+        if (m?.longDesc) return m.longDesc;
+        return `
+      ${s('Situated in', p.suburb ? `the heart of ${p.suburb},` : 'a convenient locale,')}
+      this ${p.type || 'property'} offers a practical layout and light-filled interiors.
+      Features include ${p.bedrooms || 0} bedroom${p.bedrooms > 1 ? 's' : ''},
+      ${p.bathrooms || 0} bathroom${p.bathrooms > 1 ? 's' : ''}${p.carspaces ? ` and ${p.carspaces} car space${p.carspaces > 1 ? 's' : ''}` : ''}.
+      With easy access to local amenities, this home suits buyers and investors alike.
+    `;
+      }
+
+      function buildFeatures(p, m) {
+        if (m?.features?.length) return m.features.slice(0, 12);
+        const out = [];
+        if (p.bedrooms) out.push(`Bedrooms: ${p.bedrooms}`);
+        if (p.bathrooms) out.push(`Bathrooms: ${p.bathrooms}`);
+        out.push(`Parking: ${p.carspaces || 0}`);
+        if (p.type) out.push(`Property type: ${p.type}`);
+        if (p.suburb) out.push(`Suburb: ${p.suburb}`);
+        out.push('Built-in wardrobes', 'Open-plan living');
+        return out;
+      }
+
+      function chooseAgent(p, m) {
+        if (m?.agent && AGENTS[m.agent]) return m.agent;
+        if (typeof p.id === 'number') return AGENT_KEYS[p.id % AGENT_KEYS.length];
+        return pick(AGENT_KEYS);
+      }
+
+      function agentHTML(key, p) {
+        const a = AGENTS[key];
+        if (!a) return '';
+        const suburb = p.suburb ? ` • ${p.suburb}` : '';
+        return `
+      <div class="agent-card">
+        <div class="agent-card__header">
+          <div class="avatar"></div>
+          <div class="agent-card__text">
+            <div class="agent-card__name">${a.name}</div>
+            <div class="agent-card__rating">⭐ ${a.rating}</div>
+            <div class="agent-card__agency">${a.agency}${suburb}</div>
+            <div class="agent-card__addr">${a.address}</div>
+          </div>
+        </div>
+        <div class="agent-actions">
+          <a class="btn-primary-sm" href="/enquire.html?suburb=${encodeURIComponent(p.suburb || '')}">${a.badge}</a>
+          <a class="btn-sm" href="/enquire.html?suburb=${encodeURIComponent(p.suburb || '')}">Get in touch</a>
+        </div>
+      </div>
+    `;
+      }
+
+      function renderPropertyMeta(p) {
+        console.log('[property-meta] rendering for id=', p?.id); // breadcrumb for you
+
+        const m = MANUAL_META[p?.id];
+
+        // Highlights
+        const highlights = buildHighlights(p, m);
+        const hlSec = $('prop-highlights'), hlList = $('prop-highlights-list');
+        if (hlSec && hlList && highlights.length) {
+          hlList.innerHTML = highlights.map(h => `<li>${h}</li>`).join('');
+          hlSec.hidden = false;
+        }
+
+        // Long description with toggle
+        const desc = buildLongDesc(p, m);
+        const dSec = $('prop-longdesc'), dBody = $('prop-longdesc-body'), dToggle = $('prop-longdesc-toggle');
+        if (dSec && dBody && desc) {
+          dBody.innerHTML = `<p>${desc.replace(/\n+/g, '</p><p>')}</p>`;
+          dSec.hidden = false;
+          if (dToggle) {
+            let open = false;
+            dToggle.addEventListener('click', () => {
+              open = !open;
+              dBody.classList.toggle('clamp-6', !open);
+              dToggle.textContent = open ? 'Read less' : 'Read more';
+            });
+          }
+        }
+
+        // Features
+        const feats = buildFeatures(p, m);
+        const fSec = $('prop-features'), fGrid = $('prop-features-grid');
+        if (fSec && fGrid && feats.length) {
+          fGrid.innerHTML = feats.map(f => `<div class="feature-pill">${f}</div>`).join('');
+          fSec.hidden = false;
+        }
+
+        // Agent card
+        const agentKey = chooseAgent(p, m);
+        const aSec = $('prop-agent');
+        if (aSec) {
+          aSec.innerHTML = agentHTML(agentKey, p);
+          aSec.hidden = false;
+        }
+      }
+
+      // expose globally (your render(p) already calls this)
+      window.renderPropertyMeta = renderPropertyMeta;
+    })();
+  </script>
+
 </body>
+
 </html>
