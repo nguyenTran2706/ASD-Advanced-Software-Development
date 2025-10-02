@@ -135,6 +135,27 @@ db.get("SELECT COUNT(*) AS c FROM listings", [], (err, row) => {
     ],
   ];
 
+  // === Inspections table (property inspection bookings) ===
+  db.serialize(() => {
+    db.run(`
+    CREATE TABLE IF NOT EXISTS inspections (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      property_id INTEGER NOT NULL,
+      full_name TEXT NOT NULL,
+      email TEXT NOT NULL,
+      phone TEXT,
+      notes TEXT,
+      start_time TEXT NOT NULL,  -- ISO string (UTC or local), e.g. 2025-10-02T10:00:00
+      end_time   TEXT NOT NULL,
+      created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+      UNIQUE(property_id, start_time) -- prevent double-booking same slot
+    )
+  `);
+
+    db.run(`CREATE INDEX IF NOT EXISTS idx_inspections_property ON inspections(property_id)`);
+    db.run(`CREATE INDEX IF NOT EXISTS idx_inspections_date ON inspections(start_time)`);
+  });
+
   rows.forEach((r) => seed.run(r));
   seed.finalize(() => console.log("Seeded demo listings ✅"));
 });
