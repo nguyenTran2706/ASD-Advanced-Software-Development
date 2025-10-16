@@ -54,6 +54,27 @@ router.get("/slots", (req, res) => {
     );
 });
 
+// GET /api/inspections/user/:email - Fetch all inspections for a user
+router.get("/user/:email", (req, res) => {
+    const { email } = req.params;
+    if (!email) {
+        return res.status(400).json({ error: "Email is required." });
+    }
+
+    db.all(
+        `SELECT i.*, p.address, p.suburb, p.state, p.price, p.type, p.bedrooms, p.bathrooms, p.carspaces
+         FROM inspections i
+         LEFT JOIN listings p ON i.property_id = p.id
+         WHERE i.email = ?
+         ORDER BY i.start_time DESC`,
+        [email],
+        (err, rows) => {
+            if (err) return res.status(500).json({ error: "Database error." });
+            res.json(rows || []);
+        }
+    );
+});
+
 // POST /api/inspections  (JSON: { propertyId, fullName, email, phone?, notes?, date, time })
 router.post("/", (req, res) => {
     const { propertyId, fullName, email, phone, notes, date, time } = req.body || {};

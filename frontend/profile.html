@@ -81,22 +81,22 @@
   </div>
 
       <!-- Wishlist Section -->
-      <div id="wishlist-section" style="margin-bottom: 30px;">
-        <h2 class="optimization-h1" style="color: #000; font-size: 24px; margin-bottom: 20px;">
+      <div id="wishlist-section" class="auth-card-lg" style="max-width: 100%; margin-bottom: 30px;">
+        <h2 class="h2" style="font-size: 24px; margin-bottom: 20px;">
           My Wishlist
         </h2>
-        <div id="wishlist-container" class="container-layout">
-          <p>Your wishlist is empty.</p>
+        <div id="wishlist-container" class="wishlist-layout">
+          <p>Loading wishlist...</p>
         </div>
       </div>
 
       <!-- Inspection Bookings Section -->
-      <div id="inspections-section">
-        <h2 class="optimization-h1" style="color: #000; font-size: 24px; margin-bottom: 20px;">
+      <div id="inspections-section" class="auth-card-lg" style="max-width: 100%;">
+        <h2 class="h2" style="font-size: 24px; margin-bottom: 20px;">
           My Inspection Bookings
         </h2>
         <div id="inspections-container">
-          <p>You have no upcoming inspections.</p>
+          <p>Loading inspections...</p>
         </div>
       </div>
     </div>
@@ -248,6 +248,186 @@
     // --- Initial Call ---
     fetchUserProfile();
   });
+    </script>
+
+    <!-- Load wishlist helper functions -->
+    <script src="/js/wishlist.js"></script>
+
+    <script>
+      // --- Wishlist and Inspections Display ---
+      document.addEventListener("DOMContentLoaded", () => {
+        const wishlistContainer = document.getElementById("wishlist-container");
+        const inspectionsContainer = document.getElementById("inspections-container");
+
+        // Helper function to escape HTML
+        function escapeHtml(str = "") {
+          return String(str).replace(
+            /[&<>"']/g,
+            (s) =>
+              ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;",
+              }[s])
+          );
+        }
+
+        // --- Load and Display Wishlist ---
+        function loadWishlist() {
+          const items = getWishlist(); // From wishlist.js
+
+          if (!items.length) {
+            wishlistContainer.innerHTML = `<p style="padding:16px; color:#666;">Your wishlist is empty. Browse properties to add them to your wishlist.</p>`;
+            return;
+          }
+
+          wishlistContainer.innerHTML = items
+            .map((l) => {
+              const cover = l.image || (l.images && l.images[0]) || "/Assets/placeholder.png";
+              const statusTag = l.status === "rent" ? "For Rent" : l.status === "buy" ? "For Sale" : l.status || "";
+              const payload = encodeURIComponent(JSON.stringify(l));
+
+              return `
+                <div class="container" data-id="${l.id ?? ""}">
+                  <div class="property-image">
+                    <div class="property-pill"><p>${escapeHtml(statusTag)}</p></div>
+                    <div class="property-details">
+                      <p>${escapeHtml(l.suburb || "")}, ${escapeHtml(l.state || "")}</p>
+                      <div class="property-details-icons">
+                        <div class="icon-text"><p>${escapeHtml(l.bedrooms ?? 0)}</p><img src="/Assets/bed.png" alt="bed" /></div>
+                        <div class="icon-text"><p>${escapeHtml(l.bathrooms ?? 0)}</p><img src="/Assets/shower.png" alt="bath" /></div>
+                        <div class="icon-text"><p>${escapeHtml(l.carspaces ?? 0)}</p><img src="/Assets/car.png" alt="car" /></div>
+                      </div>
+                    </div>
+                    <img src="${escapeHtml(cover)}" alt="property" />
+                  </div>
+                  <div class="love">
+                    <div class="text-love">
+                      <p>${escapeHtml(l.address || "")}</p>
+                      <div class="unit-tag">
+                        <img src="/Assets/dot-grey.png" alt="dot" />
+                        <p>${escapeHtml(l.type || "")}</p>
+                      </div>
+                    </div>
+                    <img class="love-icon" data-listing="${payload}" src="/Assets/ri_heart-fill.png" alt="Remove from wishlist" style="cursor:pointer;" />
+                  </div>
+                </div>
+              `;
+            })
+            .join("");
+        }
+
+        // Handle wishlist heart icon clicks (remove from wishlist)
+        wishlistContainer.addEventListener("click", (e) => {
+          const el = e.target.closest(".love-icon");
+          if (!el) return;
+
+          let listing;
+          try {
+            listing = JSON.parse(decodeURIComponent(el.dataset.listing || "{}"));
+          } catch {
+            listing = {};
+          }
+
+          removeFromWishlist(listing); // From wishlist.js
+          loadWishlist();
+        });
+
+        // --- Load and Display Inspections ---
+        async function loadInspections() {
+          try {
+            const user = getUser(); // From wishlist.js
+            if (!user || !user.email) {
+              inspectionsContainer.innerHTML = `<p style="padding:16px; color:#666;">Please log in to view your inspection bookings.</p>`;
+              return;
+            }
+
+            const response = await fetch(`/api/inspections/user/${encodeURIComponent(user.email)}`);
+            if (!response.ok) {
+              throw new Error("Failed to load inspections");
+            }
+
+            const inspections = await response.json();
+
+            if (!inspections.length) {
+              inspectionsContainer.innerHTML = `<p style="padding:16px; color:#666;">You have no inspection bookings yet.</p>`;
+              return;
+            }
+
+            inspectionsContainer.innerHTML = `
+              <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse;">
+                  <thead>
+                    <tr style="background-color: #f3f4f6; border-bottom: 2px solid #e5e7eb;">
+                      <th style="padding: 12px; text-align: left; font-weight: 600;">Property</th>
+                      <th style="padding: 12px; text-align: left; font-weight: 600;">Date & Time</th>
+                      <th style="padding: 12px; text-align: left; font-weight: 600;">Details</th>
+                      <th style="padding: 12px; text-align: left; font-weight: 600;">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${inspections
+                      .map((insp) => {
+                        const startTime = new Date(insp.start_time);
+                        const now = new Date();
+                        const isPast = startTime < now;
+                        const status = isPast ? "Completed" : "Upcoming";
+                        const statusColor = isPast ? "#6b7280" : "#047857";
+
+                        const dateStr = startTime.toLocaleDateString("en-AU", {
+                          weekday: "short",
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        });
+                        const timeStr = startTime.toLocaleTimeString("en-AU", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        });
+
+                        return `
+                          <tr style="border-bottom: 1px solid #e5e7eb;">
+                            <td style="padding: 12px;">
+                              <div style="font-weight: 500;">${escapeHtml(insp.address || "N/A")}</div>
+                              <div style="font-size: 14px; color: #6b7280;">${escapeHtml(insp.suburb || "")}, ${escapeHtml(insp.state || "")}</div>
+                              <div style="font-size: 12px; color: #9ca3af;">${escapeHtml(insp.type || "")} • ${insp.bedrooms || 0} bed • ${insp.bathrooms || 0} bath</div>
+                            </td>
+                            <td style="padding: 12px;">
+                              <div style="font-weight: 500;">${dateStr}</div>
+                              <div style="font-size: 14px; color: #6b7280;">${timeStr}</div>
+                            </td>
+                            <td style="padding: 12px;">
+                              <div style="font-size: 14px;">
+                                <div><strong>Name:</strong> ${escapeHtml(insp.full_name)}</div>
+                                <div><strong>Phone:</strong> ${escapeHtml(insp.phone || "N/A")}</div>
+                                ${insp.notes ? `<div style="margin-top: 4px; font-style: italic; color: #6b7280;">"${escapeHtml(insp.notes)}"</div>` : ""}
+                              </div>
+                            </td>
+                            <td style="padding: 12px;">
+                              <span style="padding: 4px 12px; border-radius: 12px; font-size: 13px; font-weight: 500; background-color: ${statusColor}20; color: ${statusColor};">
+                                ${status}
+                              </span>
+                            </td>
+                          </tr>
+                        `;
+                      })
+                      .join("")}
+                  </tbody>
+                </table>
+              </div>
+            `;
+          } catch (error) {
+            console.error("Error loading inspections:", error);
+            inspectionsContainer.innerHTML = `<p style="padding:16px; color:#dc2626;">Failed to load inspection bookings. Please try again later.</p>`;
+          }
+        }
+
+        // Load both sections
+        loadWishlist();
+        loadInspections();
+      });
     </script>
 
     <script>
