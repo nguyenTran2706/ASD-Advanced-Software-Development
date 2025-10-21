@@ -251,15 +251,16 @@
           <span>🚗 ${escapeHtml(p.carspaces ?? 0)}</span>
         </div>
         <div class="prop-actions">
-          <button class="btn-primary-full">Enquire</button>
-          <a class="btn btn-primary"
+          <a class="btn-primary-full" 
+             href="enquire.html?suburb=${encodeURIComponent(p.suburb || '')}"
+             style="text-decoration: none;">Enquire</a>
+          <a class="btn-primary-full"
              href="bookInspection.html?propertyId=${
                p.id
              }&address=${encodeURIComponent(
           p.address || ""
-        )}&price=${encodeURIComponent(p.price || "")}">
-             Book inspection
-          </a>
+        )}&price=${encodeURIComponent(p.price || '')}"
+             style="text-decoration: none;">Book inspection</a>
 
           <span class="spacer"></span>
 

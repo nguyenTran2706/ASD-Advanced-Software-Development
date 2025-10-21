@@ -150,7 +150,13 @@
               <span>🚗 ${p.carspaces ?? 0}</span>
             </div>
             <div class="prop-actions">
-              <button class="btn-ghost-full">View details</button>
+              <a class="btn-primary-full" 
+                 href="enquire.html?suburb=${p.suburb||''}"
+                 style="text-decoration: none;">Enquire</a>
+              <button class="btn-ghost-full" 
+                      onclick="event.stopPropagation(); location.href='property.html?id=${p.id}&status=sold'">
+                View details
+              </button>
             </div>
           </div>
         </article>`;
