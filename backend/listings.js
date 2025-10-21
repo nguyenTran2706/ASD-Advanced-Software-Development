@@ -74,12 +74,20 @@ router.get("/", (req, res) => {
     }
   }
 
+  //changed so on index.html we will shwo rent/buy sinetad of sold first
+
   const sql = `
     SELECT id, status, address, suburb, postcode, state, price,
            bedrooms, bathrooms, carspaces, type, image, images, createdAt
     FROM listings
     ${where.length ? "WHERE " + where.join(" AND ") : ""}
     ORDER BY
+      CASE
+        WHEN LOWER(status) = 'buy'  THEN 0  -- Buy first
+        WHEN LOWER(status) = 'rent' THEN 1  -- Rent next
+        WHEN LOWER(status) = 'sold' THEN 2  -- Sold last
+        ELSE 3
+      END,
       CASE WHEN createdAt IS NOT NULL THEN datetime(createdAt) END DESC,
       id DESC
     LIMIT ? OFFSET ?
