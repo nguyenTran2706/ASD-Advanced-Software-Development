@@ -7,6 +7,7 @@
   <title>Property details</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 
 <body>
@@ -50,6 +51,7 @@
 
   <div class="site-footer-spacer"></div>
 
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
     /* Logged-in banner */
     (function () {
@@ -168,6 +170,19 @@
 
     <aside id="prop-agent" class="card-section agent-card" hidden></aside>
     <!-- ===== /Property Meta ===== -->
+
+    <!-- ===== Property Map ===== -->
+    <section id="prop-map-section" class="card-section">
+      <h3 class="card-title">Location & Directions</h3>
+      <div class="map-controls">
+        <input id="propMapOrigin" class="map-input" type="text" placeholder="From (your location)" />
+        <button id="propMapLocate" class="button-secondary">Get Directions</button>
+        <button id="propMapOpen" class="button-primary">Open in Maps</button>
+      </div>
+      <div id="prop-map"></div>
+      <div class="fine">Powered by OpenStreetMap • Nominatim geocoding</div>
+    </section>
+    <!-- ===== /Property Map ===== -->
   `;
 
       // update breadcrumb with property type/address
@@ -180,6 +195,11 @@
       // NEW: build highlights/description/features/agent
       if (typeof renderPropertyMeta === 'function') {
         renderPropertyMeta(p);
+      }
+
+      // Load property on map
+      if (typeof window.loadPropertyMap === 'function') {
+        window.loadPropertyMap(p);
       }
     }
 
@@ -360,6 +380,150 @@
 
       // expose globally (your render(p) already calls this)
       window.renderPropertyMeta = renderPropertyMeta;
+    })();
+
+    // -------- Property Map & Directions --------
+    (function () {
+      let map = null;
+      let propertyMarker = null;
+      let currentProperty = null;
+
+      function initMap() {
+        if (!window.L) return;
+        
+        const mapEl = document.getElementById('prop-map');
+        if (!mapEl) return;
+
+        // Default to Sydney if no property loaded yet
+        const sydney = [-33.8688, 151.2093];
+        map = L.map('prop-map').setView(sydney, 13);
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+      }
+
+      async function geocode(q) {
+        const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}&limit=1`;
+        const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+        if (!res.ok) throw new Error('Failed to geocode');
+        const data = await res.json();
+        return Array.isArray(data) && data[0] ? data[0] : null;
+      }
+
+      function setPropertyMarker(lat, lon, address) {
+        if (!map) return;
+        
+        if (propertyMarker) map.removeLayer(propertyMarker);
+        
+        const latLng = L.latLng(lat, lon);
+        const icon = L.icon({
+          iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+          iconSize: [25, 41],
+          iconAnchor: [12, 41],
+          popupAnchor: [0, -36],
+          shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+          shadowSize: [41, 41]
+        });
+
+        propertyMarker = L.marker(latLng, { icon }).bindPopup(address || 'Property Location');
+        propertyMarker.addTo(map);
+        map.setView(latLng, 15);
+      }
+
+      async function loadPropertyMap(property) {
+        if (!map || !property) return;
+        
+        currentProperty = property;
+        
+        // Build full address
+        const addressParts = [
+          property.address,
+          property.suburb,
+          property.state,
+          property.postcode
+        ].filter(Boolean);
+        
+        const fullAddress = addressParts.join(', ');
+        if (!fullAddress) return;
+
+        try {
+          const result = await geocode(fullAddress);
+          if (result) {
+            setPropertyMarker(Number(result.lat), Number(result.lon), fullAddress);
+          }
+        } catch (e) {
+          console.error('Failed to geocode property address:', e);
+        }
+      }
+
+      // Event listeners
+      document.addEventListener('DOMContentLoaded', () => {
+        initMap();
+        
+        const locateBtn = document.getElementById('propMapLocate');
+        const openBtn = document.getElementById('propMapOpen');
+        const originInput = document.getElementById('propMapOrigin');
+
+        if (locateBtn) {
+          locateBtn.addEventListener('click', async () => {
+            if (!currentProperty) return;
+            
+            const origin = (originInput?.value || '').trim();
+            if (!origin) {
+              alert('Please enter your starting location');
+              return;
+            }
+
+            try {
+              const originResult = await geocode(origin);
+              if (!originResult) {
+                alert('Could not find your starting location');
+                return;
+              }
+
+              // Open Google Maps with directions
+              const propertyAddress = [
+                currentProperty.address,
+                currentProperty.suburb,
+                currentProperty.state,
+                currentProperty.postcode
+              ].filter(Boolean).join(', ');
+
+              const url = new URL('https://www.google.com/maps/dir/');
+              const params = new URLSearchParams({ api: '1' });
+              params.set('origin', origin);
+              params.set('destination', propertyAddress);
+              url.search = params.toString();
+              window.open(url.toString(), '_blank');
+            } catch (e) {
+              console.error(e);
+              alert('Could not get directions');
+            }
+          });
+        }
+
+        if (openBtn) {
+          openBtn.addEventListener('click', () => {
+            if (!currentProperty) return;
+            
+            const propertyAddress = [
+              currentProperty.address,
+              currentProperty.suburb,
+              currentProperty.state,
+              currentProperty.postcode
+            ].filter(Boolean).join(', ');
+
+            const url = new URL('https://www.google.com/maps/search/');
+            url.search = new URLSearchParams({ q: propertyAddress }).toString();
+            window.open(url.toString(), '_blank');
+          });
+        }
+      });
+
+      // Expose function to load property data
+      window.loadPropertyMap = loadPropertyMap;
     })();
   </script>
 

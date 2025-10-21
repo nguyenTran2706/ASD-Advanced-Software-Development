@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Real Estate News - MyHome</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  </head>
+
+  <body>
+    <header class="nav-shell">
+      <div class="nav-top">
+        <button
+          id="menuToggle"
+          class="menu-btn"
+          aria-expanded="false"
+          aria-controls="navLinks"
+        >
+          <span class="menu-icon"></span>
+          <span class="menu-text">Menu</span>
+        </button>
+
+        <a href="index.html" class="brand">
+          <img src="/Assets/Logo.png" alt="logo" style="height: 40px" />
+        </a>
+
+        <div class="navbar-buttons" id="navbarUser">
+          <a
+            class="button-primary"
+            href="signUp.html"
+            style="text-decoration: none; color: #fff"
+            >Sign Up</a
+          >
+          <a
+            class="button-primary"
+            href="login.html"
+            style="text-decoration: none; color: #fff"
+            >Login</a
+          >
+        </div>
+      </div>
+
+      <div id="navLinks" class="nav-links">
+        <nav id="navbar" class="navbar-selector">
+          <a href="buy.html">Buy</a>
+          <a href="rent.html">Rent</a>
+          <a href="sold.html">Sold</a>
+          <a href="findAgent.html">Find Agent</a>
+          <a href="news.html">News</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <div id="news-hero-section">
+      <div class="news-hero-center">
+        <div class="news-hero-text">
+          <p class="h1">Stay Updated with Real Estate News</p>
+          <p class="sub-header">
+            Get the latest insights, market trends, and property news to make informed decisions
+          </p>
+        </div>
+
+        <div class="news-search-section">
+          <div class="search-box">
+            <div class="search-placeholder">
+              <img src="/Assets/search.png" alt="searchicon" />
+              <input
+                type="text"
+                id="newsSearchInput"
+                placeholder="Search news articles, topics, or keywords"
+                style="
+                  border: none;
+                  outline: none;
+                  width: 300px;
+                  font-size: 16px;
+                "
+              />
+            </div>
+            <div
+              class="button-primary-round"
+              id="newsSearchBtn"
+              style="border-radius: 40px"
+            >
+              Search News
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Featured News Section -->
+    <div id="featured-news">
+      <div class="optimization-text">
+        <p class="optimization-h1">Featured News</p>
+        <p class="optimization-subheader">
+          Discover the most important real estate stories and market updates
+        </p>
+      </div>
+
+      <div class="featured-news-layout">
+        <div class="featured-news-main">
+          <div class="featured-news-card">
+            <img src="/Assets/news1.png" alt="Featured News" class="featured-news-image" />
+            <div class="featured-news-content">
+              <div class="news-category">Market Update</div>
+              <h3 class="featured-news-title">Sydney Property Market Shows Strong Recovery in Q4</h3>
+              <p class="featured-news-excerpt">
+                The latest data reveals a significant uptick in property sales across Sydney, 
+                with median prices increasing by 8.5% compared to the previous quarter. 
+                Experts attribute this growth to improved economic conditions and increased buyer confidence.
+              </p>
+              <div class="news-meta">
+                <span class="news-date">2 hours ago</span>
+                <span class="news-author">By Sarah Johnson</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="featured-news-sidebar">
+          <div class="news-card-small">
+            <img src="/Assets/news2.png" alt="News" />
+            <div class="news-card-content">
+              <div class="news-category-small">Policy</div>
+              <h4 class="news-title-small">New First Home Buyer Scheme Announced</h4>
+              <span class="news-date-small">4 hours ago</span>
+            </div>
+          </div>
+          <div class="news-card-small">
+            <img src="/Assets/news3.png" alt="News" />
+            <div class="news-card-content">
+              <div class="news-category-small">Investment</div>
+              <h4 class="news-title-small">Commercial Real Estate Investment Trends</h4>
+              <span class="news-date-small">6 hours ago</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Latest News Section -->
+    <div id="latest-news">
+      <div class="optimization-text">
+        <p class="optimization-h1">Latest News</p>
+        <p class="optimization-subheader">
+          Stay informed with the most recent real estate news and market insights
+        </p>
+      </div>
+
+      <div class="news-filters">
+        <div class="filter-chips">
+          <span class="filter-chip active" data-category="all">All News</span>
+          <span class="filter-chip" data-category="market">Market Updates</span>
+          <span class="filter-chip" data-category="policy">Policy & Regulations</span>
+          <span class="filter-chip" data-category="investment">Investment</span>
+          <span class="filter-chip" data-category="tips">Buying Tips</span>
+        </div>
+      </div>
+
+      <div class="berita-layout" id="newsArticles">
+        <div class="berita" data-category="market">
+          <img src="/Assets/berita1.png" alt="News Article" />
+          <div class="berita-text">
+            <div class="news-category-small">Market Update</div>
+            <p>
+              Melbourne property prices continue to rise as demand outstrips supply. 
+              The latest CoreLogic data shows a 12% increase in median house prices 
+              across the metropolitan area.
+            </p>
+            <p class="duration-text">1 day ago</p>
+          </div>
+        </div>
+        <div class="berita" data-category="policy">
+          <img src="/Assets/berita2.png" alt="News Article" />
+          <div class="berita-text">
+            <div class="news-category-small">Policy</div>
+            <p>
+              Government announces new stamp duty concessions for first-time buyers 
+              purchasing properties under $800,000. The changes take effect from 
+              January 1st, 2025.
+            </p>
+            <p class="duration-text">2 days ago</p>
+          </div>
+        </div>
+        <div class="berita" data-category="investment">
+          <img src="/Assets/berita3.png" alt="News Article" />
+          <div class="berita-text">
+            <div class="news-category-small">Investment</div>
+            <p>
+              Brisbane emerges as the top investment destination for 2025, with 
+              strong rental yields and capital growth potential. Experts predict 
+              continued growth in the Queensland capital.
+            </p>
+            <p class="duration-text">3 days ago</p>
+          </div>
+        </div>
+        <div class="berita" data-category="tips">
+          <img src="/Assets/berita4.png" alt="News Article" />
+          <div class="berita-text">
+            <div class="news-category-small">Buying Tips</div>
+            <p>
+              Essential checklist for first-time home buyers: From pre-approval 
+              to settlement, here's everything you need to know before making 
+              your first property purchase.
+            </p>
+            <p class="duration-text">4 days ago</p>
+          </div>
+        </div>
+        <div class="berita" data-category="market">
+          <img src="/Assets/berita1.png" alt="News Article" />
+          <div class="berita-text">
+            <div class="news-category-small">Market Update</div>
+            <p>
+              Perth property market shows signs of recovery with increased 
+              auction clearance rates and growing buyer interest in suburban areas.
+            </p>
+            <p class="duration-text">5 days ago</p>
+          </div>
+        </div>
+        <div class="berita" data-category="investment">
+          <img src="/Assets/berita2.png" alt="News Article" />
+          <div class="berita-text">
+            <div class="news-category-small">Investment</div>
+            <p>
+              Regional property markets outperform capital cities as remote work 
+              trends continue to drive demand for lifestyle properties.
+            </p>
+            <p class="duration-text">1 week ago</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="controller">
+        <img src="/Assets/left-arrow.png" alt="Previous" id="prevNews" />
+        <div class="dots-layout" id="newsDots">
+          <img src="/Assets/choosen-dot.png" alt="dot" />
+          <img src="/Assets/unchoosen-dot.png" alt="dot" />
+          <img src="/Assets/unchoosen-dot.png" alt="dot" />
+          <img src="/Assets/unchoosen-dot.png" alt="dot" />
+          <img src="/Assets/unchoosen-dot.png" alt="dot" />
+        </div>
+        <img src="/Assets/right-arrow.png" alt="Next" id="nextNews" />
+      </div>
+    </div>
+
+    <!-- Newsletter Signup Section -->
+    <div id="newsletter-section">
+      <div class="newsletter-content">
+        <h3 class="newsletter-title">Stay Updated</h3>
+        <p class="newsletter-subtitle">Get the latest real estate news delivered to your inbox</p>
+        <div class="newsletter-form">
+          <input
+            type="email"
+            id="newsletterEmail"
+            placeholder="Enter your email address"
+            class="newsletter-input"
+          />
+          <button class="button-primary" id="newsletterSubscribe">Subscribe</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Map and Directions Section -->
+    <section id="news-map-wrap">
+      <div class="optimization-text">
+        <p class="optimization-h1">Explore on the map</p>
+        <p class="optimization-subheader">Search any address and get directions</p>
+      </div>
+
+      <div class="map-controls">
+        <input id="mapOrigin" class="map-input" type="text" placeholder="From (origin address)" />
+        <input id="mapDestination" class="map-input" type="text" placeholder="To (destination address)" />
+        <button id="mapLocateDest" class="button-secondary">Locate</button>
+        <button id="mapDirections" class="button-primary">Open Directions</button>
+      </div>
+
+      <div id="news-map"></div>
+      <div class="fine">Powered by OpenStreetMap • Nominatim geocoding</div>
+    </section>
+
+    <script src="/js/wishlist.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+      // -------- Helpers --------
+      function escapeHtml(str = "") {
+        return String(str).replace(
+          /[&<>"']/g,
+          (s) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            }[s])
+        );
+      }
+
+      // -------- Nav: burger + active link --------
+      (function () {
+        const shell = document.querySelector(".nav-shell");
+        const btn = document.getElementById("menuToggle");
+        if (btn && shell) {
+          btn.addEventListener("click", () => {
+            const isOpen = shell.classList.toggle("open");
+            btn.setAttribute("aria-expanded", String(isOpen));
+          });
+        }
+
+        const path = location.pathname.replace(/\/+$/, "");
+        document.querySelectorAll("#navbar a[href]").forEach((a) => {
+          const href = a.getAttribute("href") || "";
+          const isHome =
+            (path === "" || path === "/") &&
+            (href === "index.html" || href === "/index.html");
+          if (
+            isHome ||
+            path.endsWith(href) ||
+            (href.startsWith("/") && path === href)
+          ) {
+            a.classList.add("nav-active");
+          }
+        });
+      })();
+
+      // -------- Auth area (creates dropdown for logged-in user) --------
+      (function () {
+        const navbarUser = document.getElementById("navbarUser");
+        try {
+          const user = JSON.parse(localStorage.getItem("user") || "null");
+          if (!user) return; // Exit if no user is logged in
+
+          // Combine first name and last name for a full name display
+          const firstName = user.first_name || "";
+          const lastName = user.last_name || "";
+          const displayName = `${firstName} ${lastName}`.trim() || user.email;
+
+          // This new HTML structure includes the dropdown menu
+          navbarUser.innerHTML = `
+      <div style="display:flex; align-items:center; gap:16px; color:#047857; font-weight:600;">
+        
+        <!-- Dropdown container -->
+        <div class="dropdown">
+          
+          <!-- This is the visible text that triggers the dropdown on hover -->
+          <span style="cursor: pointer;">Welcome, ${escapeHtml(
+            displayName
+          )}</span>
+          
+          <!-- This is the hidden dropdown content -->
+          <div class="dropdown-content">
+            <a href="profile.html">My Profile</a>
+            <a href="wishlist.html">My Wishlist</a>
+          </div>
+
+        </div>
+
+        <button class="button-secondary" id="logoutBtn">Logout</button>
+      </div>
+    `;
+
+          // The only event listener needed now is for the logout button
+          document.getElementById("logoutBtn").addEventListener("click", () => {
+            localStorage.removeItem("user");
+            window.location.reload(); // Reload the page to reset the state
+          });
+        } catch (err) {
+          console.error("Failed to initialize user navbar:", err);
+        }
+      })();
+
+      // -------- News Search --------
+      (function () {
+        const searchBtn = document.getElementById("newsSearchBtn");
+        const searchInput = document.getElementById("newsSearchInput");
+
+        function performSearch() {
+          const query = searchInput.value.trim();
+          if (query) {
+            // Filter news articles based on search query
+            const articles = document.querySelectorAll('.berita');
+            articles.forEach(article => {
+              const text = article.textContent.toLowerCase();
+              const matches = text.includes(query.toLowerCase());
+              article.style.display = matches ? 'flex' : 'none';
+            });
+          } else {
+            // Show all articles if search is empty
+            const articles = document.querySelectorAll('.berita');
+            articles.forEach(article => {
+              article.style.display = 'flex';
+            });
+          }
+        }
+
+        if (searchBtn) searchBtn.addEventListener("click", performSearch);
+        if (searchInput) {
+          searchInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              performSearch();
+            }
+          });
+        }
+      })();
+
+      // -------- News Filter --------
+      (function () {
+        const filterChips = document.querySelectorAll('.filter-chip');
+        const newsArticles = document.querySelectorAll('.berita');
+
+        filterChips.forEach(chip => {
+          chip.addEventListener('click', () => {
+            // Remove active class from all chips
+            filterChips.forEach(c => c.classList.remove('active'));
+            // Add active class to clicked chip
+            chip.classList.add('active');
+
+            const category = chip.dataset.category;
+            
+            newsArticles.forEach(article => {
+              if (category === 'all' || article.dataset.category === category) {
+                article.style.display = 'flex';
+              } else {
+                article.style.display = 'none';
+              }
+            });
+          });
+        });
+      })();
+
+      // -------- News Carousel --------
+      (function () {
+        let currentSlide = 0;
+        const articles = document.querySelectorAll('.berita');
+        const dots = document.querySelectorAll('#newsDots img');
+        const prevBtn = document.getElementById('prevNews');
+        const nextBtn = document.getElementById('nextNews');
+        const articlesPerSlide = 4;
+
+        function updateCarousel() {
+          // Hide all articles
+          articles.forEach((article, index) => {
+            if (index >= currentSlide * articlesPerSlide && 
+                index < (currentSlide + 1) * articlesPerSlide) {
+              article.style.display = 'flex';
+            } else {
+              article.style.display = 'none';
+            }
+          });
+
+          // Update dots
+          dots.forEach((dot, index) => {
+            if (index === currentSlide) {
+              dot.src = '/Assets/choosen-dot.png';
+            } else {
+              dot.src = '/Assets/unchoosen-dot.png';
+            }
+          });
+        }
+
+        function nextSlide() {
+          const maxSlides = Math.ceil(articles.length / articlesPerSlide);
+          currentSlide = (currentSlide + 1) % maxSlides;
+          updateCarousel();
+        }
+
+        function prevSlide() {
+          const maxSlides = Math.ceil(articles.length / articlesPerSlide);
+          currentSlide = currentSlide === 0 ? maxSlides - 1 : currentSlide - 1;
+          updateCarousel();
+        }
+
+        if (nextBtn) nextBtn.addEventListener('click', nextSlide);
+        if (prevBtn) prevBtn.addEventListener('click', prevSlide);
+
+        // Initialize carousel
+        updateCarousel();
+      })();
+
+      // -------- Newsletter Subscription --------
+      (function () {
+        const subscribeBtn = document.getElementById('newsletterSubscribe');
+        const emailInput = document.getElementById('newsletterEmail');
+
+        if (subscribeBtn && emailInput) {
+          subscribeBtn.addEventListener('click', () => {
+            const email = emailInput.value.trim();
+            if (email && email.includes('@')) {
+              alert('Thank you for subscribing to our newsletter!');
+              emailInput.value = '';
+            } else {
+              alert('Please enter a valid email address.');
+            }
+          });
+        }
+      })();
+
+      // -------- Map & Directions (Leaflet + Nominatim) --------
+      (function () {
+        const mapEl = document.getElementById('news-map');
+        if (!mapEl || !window.L) return;
+
+        const sydney = [-33.8688, 151.2093];
+        const map = L.map('news-map').setView(sydney, 11);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        let originMarker = null;
+        let destinationMarker = null;
+        const bounds = L.latLngBounds([]);
+
+        function setMarker(kind, lat, lon, label) {
+          const latLng = L.latLng(lat, lon);
+          const icon = L.icon({
+            iconUrl: kind === 'origin' ? 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png' : 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [0, -36],
+            shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+            shadowSize: [41, 41]
+          });
+
+          const marker = L.marker(latLng, { icon }).bindPopup(label || kind);
+          marker.addTo(map).openPopup();
+
+          if (kind === 'origin') {
+            if (originMarker) map.removeLayer(originMarker);
+            originMarker = marker;
+          } else {
+            if (destinationMarker) map.removeLayer(destinationMarker);
+            destinationMarker = marker;
+          }
+
+          bounds.extend(latLng);
+          if (bounds.isValid()) map.fitBounds(bounds.pad(0.25));
+        }
+
+        async function geocode(q) {
+          const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}&limit=1`;
+          const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+          if (!res.ok) throw new Error('Failed to geocode');
+          const data = await res.json();
+          return Array.isArray(data) && data[0] ? data[0] : null;
+        }
+
+        async function locate(kind, inputEl) {
+          const q = (inputEl?.value || '').trim();
+          if (!q) return;
+          try {
+            const hit = await geocode(q);
+            if (!hit) { alert('Address not found'); return; }
+            setMarker(kind, Number(hit.lat), Number(hit.lon), hit.display_name);
+          } catch (e) {
+            console.error(e);
+            alert('Could not locate that address');
+          }
+        }
+
+        const originInput = document.getElementById('mapOrigin');
+        const destInput = document.getElementById('mapDestination');
+        const locateBtn = document.getElementById('mapLocateDest');
+        const dirBtn = document.getElementById('mapDirections');
+
+        if (locateBtn) locateBtn.addEventListener('click', async () => {
+          await locate('origin', originInput);
+          await locate('destination', destInput);
+        });
+
+        if (dirBtn) dirBtn.addEventListener('click', () => {
+          const origin = (originInput?.value || '').trim();
+          const dest = (destInput?.value || '').trim();
+          if (!dest) { alert('Enter destination'); return; }
+          const url = new URL('https://www.google.com/maps/dir/');
+          const params = new URLSearchParams({ api: '1' });
+          if (origin) params.set('origin', origin);
+          params.set('destination', dest);
+          url.search = params.toString();
+          window.open(url.toString(), '_blank');
+        });
+
+        // Initialize with Sydney CBD as destination example
+        destInput && (destInput.value = 'Sydney CBD');
+      })();
+    </script>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-cols">
+          <div class="footer-col footer-brand">
+            <div class="brand">
+              <img
+                src="/Assets/Logo.png"
+                alt="MyHome logo"
+                class="footer-logo"
+              />
+            </div>
+          </div>
+
+          <div class="footer-col">
+            <h4 class="footer-title">Product</h4>
+            <a href="#">How it works</a>
+            <a href="#">Who we help</a>
+            <a href="#">Features</a>
+            <a href="#">Pricing</a>
+          </div>
+
+          <div class="footer-col">
+            <h4 class="footer-title">Resources</h4>
+            <a href="#">Get Help</a>
+            <a href="#">Partnership</a>
+            <a href="#">Blog</a>
+            <a href="#">Legal</a>
+          </div>
+
+          <div class="footer-col">
+            <h4 class="footer-title">About</h4>
+            <a href="#">About</a>
+            <a href="#">Sponsorship</a>
+            <a href="#">Hardship</a>
+            <a href="#">Contact</a>
+          </div>
+
+          <div class="footer-col footer-connect">
+            <h4 class="footer-title">Connect with us</h4>
+            <div class="footer-socials">
+              <a href="#" aria-label="Facebook" class="icon">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="18"
+                  height="18"
+                  aria-hidden="true"
+                >
+                  <image
+                    href="/Assets/facebook.png"
+                    xlink:href="/Assets/facebook-app-symbol.png"
+                    width="18"
+                    height="18"
+                  />
+                </svg>
+              </a>
+
+              <a href="#" aria-label="YouTube" class="icon">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="18"
+                  height="18"
+                  aria-hidden="true"
+                >
+                  <image
+                    href="/Assets/youtube.png"
+                    xlink:href="/Assets/youtube.png"
+                    width="18"
+                    height="18"
+                  />
+                </svg>
+              </a>
+              <a href="#" aria-label="Twitter" class="icon">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="18"
+                  height="18"
+                  aria-hidden="true"
+                >
+                  <image
+                    href="/Assets/twitter.png"
+                    xlink:href="/Assets/twitter.png"
+                    width="18"
+                    height="18"
+                  />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <hr class="footer-divider" />
+        <div class="footer-bottom">
+          <div>Copyright 2025 · MyHome</div>
+          <div class="footer-legal">
+            <a href="#">Terms of Service</a>
+            <a href="#">Privacy Policy</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
