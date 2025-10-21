@@ -368,10 +368,10 @@
 
         async function loadListings() {
           try {
-            const res = await fetch("/api/listings");
+            const res = await fetch("/api/listings?limit=12");
             if (!res.ok) throw new Error("Failed to load listings");
             const listings = await res.json();
-            const visible = (listings.results || []).slice(0, 4);
+            const visible = (listings.results || []).slice(0, 12);
 
             container.innerHTML = visible
               .map((l) => {
@@ -408,7 +408,7 @@
                       )}</p><img src="/Assets/car.png" alt="car" /></div>
                     </div>
                   </div>
-                  <img src="${escapeHtml(cover)}" alt="property" />
+                  <img src="${escapeHtml(cover)}" alt="property" style="width: 100%; height: 100%; object-fit: cover;" />
                 </div>
                 <div class="love">
                   <div class="text-love">
