@@ -287,15 +287,21 @@ form button {
 }
 
 /* ---- Responsive grid for property cards ---- */
+.listings-wrapper {
+  width: 100%;
+  overflow: hidden;
+}
+
 .container-layout {
   display: grid;
   gap: 20px;
   grid-template-columns: repeat(4, minmax(0, 1fr));
+  transition: transform 0.3s ease;
 }
 
 @media (max-width: 1280px) {
   .container-layout {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 
@@ -307,7 +313,7 @@ form button {
 
 @media (max-width: 600px) {
   .container-layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -324,6 +330,14 @@ form button {
   width: 100%;
   aspect-ratio: 4 / 3;
   overflow: hidden;
+  border-radius: 12px;
+}
+
+.property-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .love {
@@ -373,23 +387,104 @@ form button {
   gap: 40px;
 }
 
+.news-wrapper {
+  width: 100%;
+  overflow: hidden;
+}
+
 .news-layout {
-  display: flex;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   align-self: stretch;
+  transition: transform 0.5s ease;
+}
+
+.news-layout img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 12px;
 }
 
 .controller {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 20px;
+  margin-top: 20px;
+}
+
+.arrow-btn {
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  width: 40px;
+  height: 40px;
+}
+
+.arrow-btn:hover {
+  transform: scale(1.1);
+  opacity: 0.8;
+}
+
+.arrow-btn:active {
+  transform: scale(0.95);
 }
 
 .dots-layout {
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+.dot-indicator {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.dot-indicator:hover {
+  transform: scale(1.2);
+}
+
+/* Responsive adjustments for arrows and news */
+@media (max-width: 920px) {
+  .news-layout {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .arrow-btn {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+@media (max-width: 600px) {
+  .news-layout {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .controller {
+    gap: 12px;
+  }
+
+  .arrow-btn {
+    width: 28px;
+    height: 28px;
+  }
+
+  .dots-layout {
+    gap: 8px;
+  }
+
+  .dot-indicator {
+    width: 8px;
+    height: 8px;
+  }
+
+  #optimization,
+  #newest-development {
+    padding: 20px;
+  }
 }
 
 #latest-news {
@@ -3171,9 +3266,11 @@ body {
   align-items: center;
   gap: 8px;
 }
+
 .prop-actions .spacer {
   flex: 1 1 auto;
 }
+
 .prop-actions .love-icon {
   width: 28px;
   height: 28px;
@@ -3448,7 +3545,7 @@ body {
   .featured-news-layout {
     grid-template-columns: 1fr;
   }
-  
+
   .news-search-section {
     width: 100%;
     max-width: 500px;
@@ -3460,25 +3557,25 @@ body {
     height: 400px;
     padding: 20px;
   }
-  
+
   .news-hero-text .h1 {
     font-size: 36px;
   }
-  
+
   .news-hero-text .sub-header {
     font-size: 18px;
   }
-  
+
   .newsletter-form {
     flex-direction: column;
   }
-  
+
   .filter-chips {
     justify-content: flex-start;
     overflow-x: auto;
     padding-bottom: 8px;
   }
-  
+
   .filter-chip {
     white-space: nowrap;
     flex-shrink: 0;
@@ -3604,7 +3701,7 @@ body {
 .state-property-marker {
   background-color: #dc2626 !important;
   border: 3px solid white !important;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.4) !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4) !important;
 }
 
 /* State Legend */
@@ -3643,7 +3740,7 @@ body {
   height: 16px;
   border-radius: 50%;
   border: 2px solid white;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   flex-shrink: 0;
 }
 
@@ -3652,21 +3749,21 @@ body {
     padding: 20px;
     margin: 0;
   }
-  
+
   .map-controls {
     flex-direction: column;
     gap: 8px;
   }
-  
+
   .map-input {
     min-width: auto;
     width: 100%;
   }
-  
+
   #news-map {
     height: 400px;
   }
-  
+
   .optimization-h1 {
     font-size: 24px;
   }
