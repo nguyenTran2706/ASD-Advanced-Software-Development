@@ -1893,7 +1893,6 @@ form button {
   font-size: 14px;
 }
 
-
 .card-section {
   background: #fff;
   border: 1px solid #e5e7eb;
@@ -2155,7 +2154,7 @@ form button {
   border-radius: 999px;
   padding: 4px 10px;
   font-weight: 600;
-  font-size: .9rem;
+  font-size: 0.9rem;
 }
 
 /* cards */
@@ -2277,7 +2276,7 @@ form button {
 }
 
 .card--raised {
-  box-shadow: 0 8px 30px rgba(0, 0, 0, .06);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
 }
 
 /* --- agent card --- */
@@ -2330,7 +2329,7 @@ form button {
 
 .agent__meta {
   color: #6b7280;
-  font-size: .92rem;
+  font-size: 0.92rem;
 }
 
 .chip {
@@ -2339,7 +2338,7 @@ form button {
   border: 1px solid #e5e7eb;
   border-radius: 999px;
   padding: 4px 10px;
-  font-size: .9rem;
+  font-size: 0.9rem;
 }
 
 .agent__agency {
@@ -2353,7 +2352,7 @@ form button {
 
 .agent__agency-address {
   color: #6b7280;
-  font-size: .92rem;
+  font-size: 0.92rem;
 }
 
 .agent__actions {
@@ -2379,7 +2378,7 @@ form button {
 }
 
 .btn-primary:hover {
-  filter: brightness(.95);
+  filter: brightness(0.95);
 }
 
 /* Read-more clamp (10 lines by default) */
@@ -2643,7 +2642,6 @@ form button {
   margin: 2px;
 }
 
-
 .agent-hero-inner {
   display: flex;
   align-items: center;
@@ -2748,8 +2746,6 @@ form button {
   margin: 2px;
   font-size: 12px;
 }
-
-
 
 .agent-review-block {
   margin-top: 10px;
@@ -2917,7 +2913,7 @@ body {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 12px;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, .05);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05);
 }
 
 .card.p {
@@ -3110,13 +3106,13 @@ body {
 }
 
 .slot[disabled] {
-  opacity: .5;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
 .slot.active {
   border-color: #047857;
-  box-shadow: 0 0 0 2px rgba(4, 120, 87, .15) inset;
+  box-shadow: 0 0 0 2px rgba(4, 120, 87, 0.15) inset;
 }
 
 .helper {
@@ -3160,11 +3156,26 @@ body {
   color: #374151;
   font-weight: 600;
   text-decoration: none;
-  transition: background 0.15s ease, border-color 0.15s ease, transform 0.05s ease;
+  transition: background 0.15s ease, border-color 0.15s ease,
+    transform 0.05s ease;
 }
 
 .back-link:hover {
   background: #f3f4f6;
   border-color: #d1d5db;
   transform: translateY(-1px);
+}
+
+.prop-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.prop-actions .spacer {
+  flex: 1 1 auto;
+}
+.prop-actions .love-icon {
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
 }

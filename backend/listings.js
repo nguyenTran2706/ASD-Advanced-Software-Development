@@ -8,39 +8,14 @@ const router = express.Router();
  * GET /api/listings
  * Query params (all optional):
  *   status=rent|buy|sold
- *   q=search text (suburb or postcode)
- *   minBeds=
- *   type=
- *   limit=, offset=
+ *   q=search text
+ *      - numeric -> price within ±10% OR postcode starts with q
+ *      - text    -> address/suburb/state contains q (also postcode contains)
+ *   minBeds=number
+ *   type=string
+ *   limit=number (default 12)
+ *   offset=number (default 0)
  */
-
-const listings = [
-  {
-    address: "123 Main St",
-    suburb: "Sydney",
-    state: "NSW",
-    type: "Apartment",
-    status: "rent",
-    bedrooms: 2,
-    bathrooms: 1,
-    carspaces: 1,
-    image: "/Assets/cream/cream1.png",
-    images: [],
-  },
-  {
-    address: "456 Park Ave",
-    suburb: "Bondi",
-    state: "NSW",
-    type: "House",
-    status: "buy",
-    bedrooms: 3,
-    bathrooms: 2,
-    carspaces: 2,
-    image: "/Assets/cream/cream2.png",
-    images: [],
-  },
-];
-
 router.get("/", (req, res) => {
   let {
     status = "",
@@ -51,47 +26,85 @@ router.get("/", (req, res) => {
     offset = "0",
   } = req.query || {};
 
-  status = String(status).toLowerCase().trim();
-  q = String(q).trim().toLowerCase();
-  type = String(type).trim();
+  const where = [];
   const params = [];
-  let where = "WHERE 1=1";
 
-  if (status && ["buy", "rent", "sold"].includes(status)) {
-    where += " AND status = ?";
-    params.push(status);
+  // Normalize
+  const statusNorm = String(status).toLowerCase().trim();
+  const qRaw = String(q).trim();
+  const typeNorm = String(type).toLowerCase().trim();
+  const minBedsNum = parseInt(minBeds, 10) || 0;
+  const limitNum = Math.max(1, parseInt(limit, 10) || 12);
+  const offsetNum = Math.max(0, parseInt(offset, 10) || 0);
+
+  // Filters
+  if (statusNorm && ["buy", "rent", "sold"].includes(statusNorm)) {
+    where.push("LOWER(status) = ?");
+    params.push(statusNorm);
   }
-  if (q) {
-    where += " AND (LOWER(suburb) LIKE ? OR postcode LIKE ?)";
-    params.push(`%${q}%`, `%${q}%`);
+
+  if (typeNorm) {
+    where.push("LOWER(type) = ?");
+    params.push(typeNorm);
   }
+
   if (minBeds) {
-    where += " AND bedrooms >= ?";
-    params.push(parseInt(minBeds, 10) || 0);
+    where.push("bedrooms >= ?");
+    params.push(minBedsNum);
   }
-  if (type) {
-    where += " AND LOWER(type) = ?";
-    params.push(String(type).toLowerCase());
+
+  // Flexible search logic
+  if (qRaw) {
+    // Numeric query (price or postcode)
+    if (/^\d+(\.\d+)?$/.test(qRaw)) {
+      const num = Number(qRaw);
+      const minPrice = Math.floor(num * 0.9);
+      const maxPrice = Math.ceil(num * 1.1);
+      where.push(
+        "(CAST(price AS INTEGER) BETWEEN ? AND ? OR CAST(postcode AS TEXT) LIKE ?)"
+      );
+      params.push(minPrice, maxPrice, `${qRaw}%`);
+    } else {
+      // Text query (address, suburb, state, or postcode)
+      const qLike = `%${qRaw.toLowerCase()}%`;
+      where.push(
+        "(LOWER(address) LIKE ? OR LOWER(suburb) LIKE ? OR LOWER(state) LIKE ? OR CAST(postcode AS TEXT) LIKE ?)"
+      );
+      params.push(qLike, qLike, qLike, qLike);
+    }
   }
+
+  //changed so on index.html we will shwo rent/buy sinetad of sold first
 
   const sql = `
-    SELECT *
+    SELECT id, status, address, suburb, postcode, state, price,
+           bedrooms, bathrooms, carspaces, type, image, images, createdAt
     FROM listings
-    ${where}
-    ORDER BY datetime(createdAt) DESC, id DESC
+    ${where.length ? "WHERE " + where.join(" AND ") : ""}
+    ORDER BY
+      CASE
+        WHEN LOWER(status) = 'buy'  THEN 0  -- Buy first
+        WHEN LOWER(status) = 'rent' THEN 1  -- Rent next
+        WHEN LOWER(status) = 'sold' THEN 2  -- Sold last
+        ELSE 3
+      END,
+      CASE WHEN createdAt IS NOT NULL THEN datetime(createdAt) END DESC,
+      id DESC
     LIMIT ? OFFSET ?
   `;
-  params.push(parseInt(limit, 10) || 12, parseInt(offset, 10) || 0);
+  params.push(limitNum, offsetNum);
 
   db.all(sql, params, (err, rows) => {
-    if (err) return res.status(500).json({ error: err.message });
+    if (err) {
+      console.error("List query failed:", err);
+      return res.status(500).json({ error: err.message });
+    }
 
-    // Parse images JSON column into an array
     const out = rows.map((r) => {
       let images = [];
       try {
         images = r.images ? JSON.parse(r.images) : [];
-      } catch (_) { }
+      } catch (_) {}
       return {
         ...r,
         images,
@@ -166,7 +179,10 @@ router.post("/", (req, res) => {
   });
 });
 
-// GET /api/listings/:id  -> return a single listing
+/**
+ * GET /api/listings/:id
+ * Return a single listing by id
+ */
 router.get("/:id", (req, res) => {
   const id = parseInt(req.params.id, 10);
   if (!id) return res.status(400).json({ error: "invalid id" });
@@ -176,7 +192,6 @@ router.get("/:id", (req, res) => {
     if (!row) return res.status(404).json({ error: "listing not found" });
 
     let images = [];
-    try { images = row.images ? JSON.parse(row.images) : []; } catch (_) { }
     try {
       images = row.images ? JSON.parse(row.images) : [];
     } catch (_) {}

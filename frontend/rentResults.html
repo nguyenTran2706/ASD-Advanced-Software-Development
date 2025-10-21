@@ -68,7 +68,7 @@
     </section>
 
     <main style="padding: 24px 32px">
-      <div id="listingContainer" class="container-layout"></div>
+      <div id="listingContainer" class="prop-grid"></div>
     </main>
 
     <div id="filterModal" class="modal" aria-hidden="true">
@@ -138,6 +138,16 @@
         );
       }
 
+      function money(n) {
+        const num = Number(n);
+        if (!Number.isFinite(num)) return "";
+        return num.toLocaleString("en-AU", {
+          style: "currency",
+          currency: "AUD",
+          maximumFractionDigits: 0,
+        });
+      }
+
       (async function () {
         try {
           const res = await fetch("index.html");
@@ -205,55 +215,61 @@
         return u.toString();
       }
 
-      function renderCard(l) {
+      function card(p) {
+        const label = money(p.price) + " / wk";
         const cover =
-          l.image || (l.images && l.images[0]) || "/Assets/placeholder.png";
-        const statusTag =
-          l.status === "rent"
-            ? "For Rent"
-            : l.status === "buy"
-            ? "For Sale"
-            : l.status || "";
-        const payload = encodeURIComponent(JSON.stringify(l));
-        const filled = inWishlist(l);
+          p.image || (p.images && p.images[0]) || "/Assets/placeholder.png";
+        const payload = encodeURIComponent(JSON.stringify(p));
+        const filled = inWishlist(p);
 
         return `
-      <div class="container" data-id="${l.id ?? ""}">
-        <div class="property-image">
-          <div class="property-pill"><p>${escapeHtml(statusTag)}</p></div>
-          <div class="property-details">
-            <p>${escapeHtml(l.suburb || "")}, ${escapeHtml(l.state || "")}</p>
-            <div class="property-details-icons">
-              <div class="icon-text"><p>${escapeHtml(
-                l.bedrooms ?? 0
-              )}</p><img src="/Assets/bed.png" alt="bed" /></div>
-              <div class="icon-text"><p>${escapeHtml(
-                l.bathrooms ?? 0
-              )}</p><img src="/Assets/shower.png" alt="bath" /></div>
-              <div class="icon-text"><p>${escapeHtml(
-                l.carspaces ?? 0
-              )}</p><img src="/Assets/car.png" alt="car" /></div>
-            </div>
-          </div>
-          <img src="${escapeHtml(cover)}" alt="property" />
+    <article class="property-card">
+      <div class="prop-photo-wrap" onclick="location.href='property.html?id=${
+        p.id
+      }&status=rent'">
+        <img class="prop-photo" src="${escapeHtml(cover)}" alt="${escapeHtml(
+          p.address || ""
+        )}">
+        <span class="prop-badge">${escapeHtml(p.type || "Property")}</span>
+      </div>
+      <div class="prop-body">
+        <div class="prop-price">${label}</div>
+        <div class="prop-address">${escapeHtml(p.address || "")}</div>
+        <div class="prop-sub">${escapeHtml(p.suburb || "")}, ${escapeHtml(
+          p.state || ""
+        )} ${escapeHtml(p.postcode || "")}</div>
+        <div class="prop-meta">
+          <span>🛏 ${escapeHtml(p.bedrooms ?? 0)}</span>
+          <span>🛁 ${escapeHtml(p.bathrooms ?? 0)}</span>
+          <span>🚗 ${escapeHtml(p.carspaces ?? 0)}</span>
         </div>
-        <div class="love">
-          <div class="text-love">
-            <p>${escapeHtml(l.address || "")}</p>
-            <div class="unit-tag">
-              <img src="/Assets/dot-grey.png" alt="dot" />
-              <p>${escapeHtml(l.type || "")}</p>
-            </div>
-          </div>
-          <img class="love-icon"
-           data-listing="${payload}"
-           src="${
-             filled ? "/Assets/ri_heart-fill.png" : "/Assets/love-icon.png"
-           }"
-           alt="Love-icon" />
+
+        <div class="prop-actions">
+          <button class="btn-primary-full">Enquire</button>
+          <a class="btn btn-primary"
+             href="bookInspection.html?propertyId=${
+               p.id
+             }&address=${encodeURIComponent(
+          p.address || ""
+        )}&price=${encodeURIComponent(p.price || "")}">
+             Book inspection
+          </a>
+
+          <span class="spacer"></span>
+
+          <!-- ❤️ wishlist icon at far right -->
+          <img
+            class="love-icon"
+            data-listing="${payload}"
+            src="${
+              filled ? "/Assets/ri_heart-fill.png" : "/Assets/love-icon.png"
+            }"
+            alt="Save to wishlist"
+          />
         </div>
       </div>
-    `;
+    </article>
+  `;
       }
 
       function rentBucketToRange(bucket) {
@@ -337,7 +353,7 @@
           container.innerHTML = "<p>No properties found.</p>";
           return;
         }
-        container.innerHTML = results.map(renderCard).join("");
+        container.innerHTML = results.map(card).join("");
 
         container.querySelectorAll(".love-icon").forEach((el) => {
           try {

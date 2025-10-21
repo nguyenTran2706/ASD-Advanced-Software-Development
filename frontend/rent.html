@@ -1,236 +1,407 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Rent Properties</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Rent Properties</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/css/style.css" />
-</head>
-
-<body>
-  <header class="nav-shell">
-    <div class="nav-top">
-      <button id="menuToggle" class="menu-btn" aria-expanded="false"><span class="menu-icon"></span><span
-          class="menu-text">Menu</span></button>
-      <a href="index.html" class="brand"><img src="/Assets/Logo.png" alt="logo" style="height:40px" /></a>
-      <div class="navbar-buttons" id="navbarUser">
-        <a class="button-primary" href="signUp.html" style="text-decoration:none;color:#fff">Sign Up</a>
-        <a class="button-primary" href="login.html" style="text-decoration:none;color:#fff">Login</a>
-      </div>
-    </div>
-    <div id="navLinks" class="nav-links">
-      <nav id="navbar" class="navbar-selector">
-        <a href="buy.html">Buy</a>
-        <a href="rent.html" class="nav-active">Rent</a>
-        <a href="sold.html">Sold</a>
-        <a href="findAgent.html">Find Agent</a>
-        <a href="news.html">News</a>
-      </nav>
-    </div>
-  </header>
-
-  <section class="prop-hero">
-    <div class="prop-hero-inner">
-      <div class="prop-search">
-        <div class="search-input-wrap">
-          <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M10 18a8 8 0 1 1 5.293-14.003A8 8 0 0 1 10 18Zm11 3-6.001-6" fill="none" stroke="currentColor"
-              stroke-width="2" stroke-linecap="round" />
-          </svg>
-          <input id="propQuery" class="agent-search-input"
-            placeholder="Search suburb or postcode (e.g., Ultimo or 2007)" autocomplete="off" />
-        </div>
-        <button id="propGo" class="agent-search-btn">Search</button>
-      </div>
-
-      <div class="prop-chips">
-        <button class="chip" onclick="location.href='buy.html'">Buy</button>
-        <button class="chip active">Rent</button>
-        <button class="chip" onclick="location.href='sold.html'">Sold</button>
-      </div>
-    </div>
-  </section>
-
-  <section class="agent-results-wrap">
-    <div class="results-header">
-      <div id="resultsPath" class="results-path">Rent properties</div>
-      <div class="filters-row">
-        <div class="chip dropdown-chip">
-          <label for="typeSel">Type</label>
-          <select id="typeSel">
-            <option value="">Any</option>
-            <option>House</option>
-            <option>Apartment</option>
-            <option>Townhouse</option>
-          </select>
-        </div>
-        <div class="chip dropdown-chip">
-          <label for="bedSel">Beds</label>
-          <select id="bedSel">
-            <option value="">Any</option>
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-          </select>
-        </div>
-        <div class="chip dropdown-chip">
-          <label for="priceSel">Price (pw)</label>
-          <select id="priceSel">
-            <option value="">Any</option>
-            <option value="0-500">Up to $500</option>
-            <option value="500-800">$500–$800</option>
-            <option value="800-1500">$800–$1,500</option>
-            <option value="1500-99999999">$1,500+</option>
-          </select>
+  <body>
+    <header class="nav-shell">
+      <div class="nav-top">
+        <button id="menuToggle" class="menu-btn" aria-expanded="false">
+          <span class="menu-icon"></span><span class="menu-text">Menu</span>
+        </button>
+        <a href="index.html" class="brand"
+          ><img src="/Assets/Logo.png" alt="logo" style="height: 40px"
+        /></a>
+        <div class="navbar-buttons" id="navbarUser">
+          <a
+            class="button-primary"
+            href="signUp.html"
+            style="text-decoration: none; color: #fff"
+            >Sign Up</a
+          >
+          <a
+            class="button-primary"
+            href="login.html"
+            style="text-decoration: none; color: #fff"
+            >Login</a
+          >
         </div>
       </div>
-    </div>
+      <div id="navLinks" class="nav-links">
+        <nav id="navbar" class="navbar-selector">
+          <a href="buy.html">Buy</a>
+          <a href="rent.html" class="nav-active">Rent</a>
+          <a href="sold.html">Sold</a>
+          <a href="findAgent.html">Find Agent</a>
+          <a href="news.html">News</a>
+        </nav>
+      </div>
+    </header>
 
-    <div id="propList" class="prop-grid"></div>
-  </section>
+    <section class="prop-hero">
+      <div class="prop-hero-inner">
+        <div class="prop-search">
+          <div class="search-input-wrap">
+            <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M10 18a8 8 0 1 1 5.293-14.003A8 8 0 0 1 10 18Zm11 3-6.001-6"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+            <input
+              id="propQuery"
+              class="agent-search-input"
+              placeholder="Search suburb or postcode (e.g., Ultimo or 2007)"
+              autocomplete="off"
+            />
+          </div>
+          <button id="propGo" class="agent-search-btn">Search</button>
+        </div>
 
-  <div class="site-footer-spacer"></div>
+        <div class="prop-chips">
+          <button class="chip" onclick="location.href='buy.html'">Buy</button>
+          <button class="chip active">Rent</button>
+          <button class="chip" onclick="location.href='sold.html'">Sold</button>
+        </div>
+      </div>
+    </section>
 
-  <script>
-    (function () {
-      const navbarUser = document.getElementById("navbarUser");
-      try {
-        const user = JSON.parse(localStorage.getItem("user") || "null");
-        if (!user) return;
-        const displayName = user.first_name?.trim() || user.email;
-        navbarUser.innerHTML = '<span style="margin-right:10px;color:#047857;font-weight:600;">Welcome, ' + displayName + '</span><button class="button-secondary" id="logoutBtn">Logout</button>';
-        document.getElementById("logoutBtn").addEventListener("click", () => { localStorage.removeItem("user"); location.reload(); });
-      } catch (_) { }
-    })();
+    <section class="agent-results-wrap">
+      <div class="results-header">
+        <div id="resultsPath" class="results-path">Rent properties</div>
+        <div class="filters-row">
+          <div class="chip dropdown-chip">
+            <label for="typeSel">Type</label>
+            <select id="typeSel">
+              <option value="">Any</option>
+              <option>House</option>
+              <option>Apartment</option>
+              <option>Townhouse</option>
+            </select>
+          </div>
+          <div class="chip dropdown-chip">
+            <label for="bedSel">Beds</label>
+            <select id="bedSel">
+              <option value="">Any</option>
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+            </select>
+          </div>
+          <div class="chip dropdown-chip">
+            <label for="priceSel">Price (pw)</label>
+            <select id="priceSel">
+              <option value="">Any</option>
+              <option value="0-500">Up to $500</option>
+              <option value="500-800">$500–$800</option>
+              <option value="800-1500">$800–$1,500</option>
+              <option value="1500-99999999">$1,500+</option>
+            </select>
+          </div>
+        </div>
+      </div>
 
-    (async function () {
-      try {
-        const res = await fetch("index.html");
-        const html = await res.text();
-        const doc = new DOMParser().parseFromString(html, "text/html");
-        const navShell = doc.querySelector(".nav-shell");
-        // Find the nav bar's inline script in index.html
-        const navScriptText = Array.from(doc.querySelectorAll('script:not([src])'))
-          .find(s => s.innerText.includes('// -------- Auth area'))
-          ?.innerText;
+      <div id="propList" class="prop-grid"></div>
+    </section>
 
-        document.querySelector(".nav-shell").replaceWith(navShell);
-        if (navScriptText) {
-          eval(navScriptText); // Re-run the auth/nav script
+    <div class="site-footer-spacer"></div>
+
+    <script src="/js/wishlist.js"></script>
+
+    <script>
+      (function () {
+        const navbarUser = document.getElementById("navbarUser");
+        try {
+          const user = JSON.parse(localStorage.getItem("user") || "null");
+          if (!user) return;
+          const displayName = user.first_name?.trim() || user.email;
+          navbarUser.innerHTML =
+            '<span style="margin-right:10px;color:#047857;font-weight:600;">Welcome, ' +
+            displayName +
+            '</span><button class="button-secondary" id="logoutBtn">Logout</button>';
+          document.getElementById("logoutBtn").addEventListener("click", () => {
+            localStorage.removeItem("user");
+            location.reload();
+          });
+        } catch (_) {}
+      })();
+
+      (async function () {
+        try {
+          const res = await fetch("index.html");
+          const html = await res.text();
+          const doc = new DOMParser().parseFromString(html, "text/html");
+          const navShell = doc.querySelector(".nav-shell");
+          // Find the nav bar's inline script in index.html
+          const navScriptText = Array.from(
+            doc.querySelectorAll("script:not([src])")
+          ).find((s) =>
+            s.innerText.includes("// -------- Auth area")
+          )?.innerText;
+
+          document.querySelector(".nav-shell").replaceWith(navShell);
+          if (navScriptText) {
+            eval(navScriptText); // Re-run the auth/nav script
+          }
+        } catch (e) {
+          console.error("Could not load navigation bar.", e);
         }
-      } catch (e) {
-        console.error("Could not load navigation bar.", e);
+      })();
+
+      const $ = (s) => document.querySelector(s);
+      const listEl = $("#propList");
+      const pathEl = $("#resultsPath");
+      const qEl = $("#propQuery");
+
+      function params() {
+        const u = new URL(location.href);
+        return {
+          q: (u.searchParams.get("q") || "").trim(),
+          type: u.searchParams.get("type") || "",
+          beds: u.searchParams.get("beds") || "",
+          price: u.searchParams.get("price") || "",
+        };
       }
-    })();
+      function setControls(p) {
+        qEl.value = p.q || "";
+        $("#typeSel").value = p.type || "";
+        $("#bedSel").value = p.beds || "";
+        $("#priceSel").value = p.price || "";
+      }
+      function inRange(price, range) {
+        if (!range) return true;
+        const [min, max] = range.split("-").map(Number);
+        return price >= min && price <= max;
+      }
 
-    const $ = s => document.querySelector(s);
-    const listEl = $('#propList');
-    const pathEl = $('#resultsPath');
-    const qEl = $('#propQuery');
+      function money(n) {
+        if (typeof n !== "number") return "";
+        return n.toLocaleString("en-AU", {
+          style: "currency",
+          currency: "AUD",
+          maximumFractionDigits: 0,
+        });
+      }
 
-    function params() {
-      const u = new URL(location.href);
-      return {
-        q: (u.searchParams.get('q') || '').trim(),
-        type: u.searchParams.get('type') || '',
-        beds: u.searchParams.get('beds') || '',
-        price: u.searchParams.get('price') || ''
-      };
-    }
-    function setControls(p) { qEl.value = p.q || ''; $('#typeSel').value = p.type || ''; $('#bedSel').value = p.beds || ''; $('#priceSel').value = p.price || ''; }
-    function inRange(price, range) { if (!range) return true; const [min, max] = range.split('-').map(Number); return price >= min && price <= max; }
+      function escapeHtml(str = "") {
+        return String(str).replace(
+          /[&<>"']/g,
+          (s) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            }[s])
+        );
+      }
 
-    function money(n) { if (typeof n !== 'number') return ''; return n.toLocaleString('en-AU', { style: 'currency', currency: 'AUD', maximumFractionDigits: 0 }); }
+      function card(p) {
+        const label = money(Number(p.price || 0)) + " / wk";
+        const cover =
+          p.image || (p.images && p.images[0]) || "/Assets/placeholder.png";
+        const payload = encodeURIComponent(JSON.stringify(p));
+        const filled = inWishlist(p);
 
-    function card(p) {
-      const label = money(Number(p.price || 0)) + ' / wk';
-      const cover = p.image || '/Assets/placeholder.png';
-      return `
-        <article class="property-card" onclick="location.href='property.html?id=${p.id}&status=rent'" style="cursor:pointer">
-          <div class="prop-photo-wrap">
-            <img class="prop-photo" src="${cover}" alt="${p.address || ''}">
-            <span class="prop-badge">${p.type || 'Property'}</span>
-          </div>
-          <div class="prop-body">
-            <div class="prop-price">${label}</div>
-            <div class="prop-address">${p.address || ''}</div>
-            <div class="prop-sub">${p.suburb || ''}, ${p.state || ''} ${p.postcode || ''}</div>
-            <div class="prop-meta">
-              <span>🛏 ${p.bedrooms ?? 0}</span>
-              <span>🛁 ${p.bathrooms ?? 0}</span>
-              <span>🚗 ${p.carspaces ?? 0}</span>
-            </div>
-            <div class="prop-actions">
-              <button class="btn-primary-full">Enquire</button>
-              <button class="btn-ghost-full">Save</button>
-              <a class="btn btn-primary"
-                href="bookInspection.html?propertyId=${p.id}&address=${encodeURIComponent(p.address)}&price=${encodeURIComponent(p.price)}">
-                Book inspection
-              </a>
+        return `
+    <article class="property-card">
+      <div class="prop-photo-wrap" onclick="location.href='property.html?id=${
+        p.id
+      }&status=rent'">
+        <img class="prop-photo" src="${escapeHtml(cover)}" alt="${escapeHtml(
+          p.address || ""
+        )}">
+        <span class="prop-badge">${escapeHtml(p.type || "Property")}</span>
+      </div>
+      <div class="prop-body">
+        <div class="prop-price">${label}</div>
+        <div class="prop-address">${escapeHtml(p.address || "")}</div>
+        <div class="prop-sub">${escapeHtml(p.suburb || "")}, ${escapeHtml(
+          p.state || ""
+        )} ${escapeHtml(p.postcode || "")}</div>
+        <div class="prop-meta">
+          <span>🛏 ${escapeHtml(p.bedrooms ?? 0)}</span>
+          <span>🛁 ${escapeHtml(p.bathrooms ?? 0)}</span>
+          <span>🚗 ${escapeHtml(p.carspaces ?? 0)}</span>
+        </div>
+        <div class="prop-actions">
+          <button class="btn-primary-full">Enquire</button>
+          <a class="btn btn-primary"
+             href="bookInspection.html?propertyId=${
+               p.id
+             }&address=${encodeURIComponent(
+          p.address || ""
+        )}&price=${encodeURIComponent(p.price || "")}">
+             Book inspection
+          </a>
 
-            </div>
-          </div>
-        </article>`;
-    }
+          <span class="spacer"></span>
 
-    //async function fetchListings(q){
-    //  const url=new URL('/api/listings', location.origin);
-    // url.searchParams.set('status','rent');
-    //   if(q) url.searchParams.set('q',q);
-    // const res=await fetch(url);
-    //if(!res.ok) throw new Error('Failed to load listings');
-    // const data=await res.json();
-    // return data.results||[];
-    //}
-    async function fetchListings(p) {
-      const url = new URL('/api/listings', location.origin);
-      url.searchParams.set('status', 'rent');
-      if (p.q) url.searchParams.set('q', p.q);
-      if (p.type) url.searchParams.set('type', p.type);
-      if (p.beds) url.searchParams.set('minBeds', p.beds);
-      url.searchParams.set('limit', '20');   // ✅ show 20 properties
-      url.searchParams.set('offset', '0');
+          <!-- Heart at far right -->
+          <img class="love-icon"
+               data-listing="${payload}"
+               src="${
+                 filled ? "/Assets/ri_heart-fill.png" : "/Assets/love-icon.png"
+               }"
+               alt="Save to wishlist" />
+        </div>
+      </div>
+    </article>
+  `;
+      }
+      async function fetchListings(p) {
+        const url = new URL("/api/listings", location.origin);
+        url.searchParams.set("status", "rent");
+        if (p.q) url.searchParams.set("q", p.q);
+        if (p.type) url.searchParams.set("type", p.type);
+        if (p.beds) url.searchParams.set("minBeds", p.beds);
+        url.searchParams.set("limit", "20"); // ✅ show 20 properties
+        url.searchParams.set("offset", "0");
 
-      const res = await fetch(url);
-      if (!res.ok) throw new Error('Failed to load listings');
-      const data = await res.json();
-      return data.results || [];
-    }
+        const res = await fetch(url);
+        if (!res.ok) throw new Error("Failed to load listings");
+        const data = await res.json();
+        return data.results || [];
+      }
 
-    async function render() {
-      const p = params(); setControls(p);
-      try {
-        let data = await fetchListings(p.q);
-        if (p.type) data = data.filter(x => (x.type || '') === p.type);
-        if (p.beds) data = data.filter(x => (x.bedrooms || 0) >= Number(p.beds));
-        if (p.price) data = data.filter(x => inRange(Number(x.price || 0), p.price));
-        pathEl.textContent = `Rent properties${p.q ? ' in ' + p.q : ''} • ${data.length} found`;
-        listEl.innerHTML = data.length ? data.map(card).join('') : '<p class="helper">No properties found. Try another suburb or clear filters.</p>';
-      } catch (e) { console.error(e); listEl.innerHTML = '<p class="helper error">Could not load properties.</p>'; }
-    }
+      async function render() {
+        const p = params();
+        setControls(p);
 
-    function pushState() {
-      const q = qEl.value.trim(); const type = $('#typeSel').value; const beds = $('#bedSel').value; const price = $('#priceSel').value;
-      const qs = new URLSearchParams({ q, type, beds, price }); history.replaceState(null, '', '?' + qs.toString());
-    }
+        try {
+          let data = await fetchListings(p);
 
-    $('#propGo').addEventListener('click', () => { pushState(); render(); });
-    qEl.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); pushState(); render(); } });
-    $('#typeSel').addEventListener('change', () => { pushState(); render(); });
-    $('#bedSel').addEventListener('change', () => { pushState(); render(); });
-    $('#priceSel').addEventListener('change', () => { pushState(); render(); });
+          if (p.type) data = data.filter((x) => (x.type || "") === p.type);
+          if (p.beds)
+            data = data.filter((x) => (x.bedrooms || 0) >= Number(p.beds));
+          if (p.price)
+            data = data.filter((x) => inRange(Number(x.price || 0), p.price));
 
-    (function () { const shell = document.querySelector('.nav-shell'); const btn = document.getElementById('menuToggle'); if (btn && shell) btn.addEventListener('click', () => { const isOpen = shell.classList.toggle('open'); btn.setAttribute('aria-expanded', String(isOpen)); }); })();
+          pathEl.textContent = `Buy properties${p.q ? " in " + p.q : ""} • ${
+            data.length
+          } found`;
 
-    render();
-  </script>
-</body>
+          listEl.innerHTML = data.length
+            ? data.map(card).join("")
+            : '<p class="helper">No properties found. Try another suburb or clear filters.</p>';
 
-<footer class="site-footer">
-  <div class="footer-inner"></div>
-</footer>
+          listEl.querySelectorAll(".love-icon").forEach((el) => {
+            try {
+              const l = JSON.parse(
+                decodeURIComponent(el.dataset.listing || "{}")
+              );
+              setHeart(el, inWishlist(l));
+            } catch {
+              setHeart(el, false);
+            }
+          });
+        } catch (e) {
+          console.error(e);
+          listEl.innerHTML =
+            '<p class="helper error">Could not load properties.</p>';
+        }
+      }
 
+      let wishlistHandlersBound = false;
+
+      function bindWishlistHandlersOnce() {
+        if (wishlistHandlersBound) return;
+        wishlistHandlersBound = true;
+
+        listEl.addEventListener("click", (e) => {
+          const el = e.target.closest(".love-icon");
+          if (!el) return;
+
+          let listing;
+          try {
+            listing = JSON.parse(
+              decodeURIComponent(el.dataset.listing || "{}")
+            );
+          } catch {
+            listing = {};
+          }
+
+          const { added } = toggleWishlist(listing);
+          setHeart(el, added);
+        });
+
+        window.addEventListener("storage", (evt) => {
+          if (!evt.key || !evt.key.startsWith("wishlist:")) return;
+          listEl.querySelectorAll(".love-icon").forEach((el) => {
+            try {
+              const l = JSON.parse(
+                decodeURIComponent(el.dataset.listing || "{}")
+              );
+              setHeart(el, inWishlist(l));
+            } catch {
+              setHeart(el, false);
+            }
+          });
+        });
+      }
+
+      function pushState() {
+        const q = qEl.value.trim();
+        const type = $("#typeSel").value;
+        const beds = $("#bedSel").value;
+        const price = $("#priceSel").value;
+        const qs = new URLSearchParams({ q, type, beds, price });
+        history.replaceState(null, "", "?" + qs.toString());
+      }
+
+      $("#propGo").addEventListener("click", () => {
+        pushState();
+        render();
+      });
+      qEl.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          pushState();
+          render();
+        }
+      });
+      $("#typeSel").addEventListener("change", () => {
+        pushState();
+        render();
+      });
+      $("#bedSel").addEventListener("change", () => {
+        pushState();
+        render();
+      });
+      $("#priceSel").addEventListener("change", () => {
+        pushState();
+        render();
+      });
+
+      (function () {
+        const shell = document.querySelector(".nav-shell");
+        const btn = document.getElementById("menuToggle");
+        if (btn && shell)
+          btn.addEventListener("click", () => {
+            const isOpen = shell.classList.toggle("open");
+            btn.setAttribute("aria-expanded", String(isOpen));
+          });
+      })();
+
+      bindWishlistHandlersOnce();
+      render();
+    </script>
+  </body>
+
+  <footer class="site-footer">
+    <div class="footer-inner"></div>
+  </footer>
 </html>
