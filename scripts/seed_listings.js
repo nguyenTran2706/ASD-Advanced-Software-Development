@@ -1,21 +1,6 @@
 // backend/seed_listings.js
 const db = require("../database");
 
-// ---- Weighted state picker (NSW/VIC show up more often)
-const STATE_BUCKET = [
-  ...Array(30).fill("NSW"), // ~37.5%
-  ...Array(25).fill("VIC"), // ~31.2%
-  ...Array(10).fill("QLD"), // ~12.5%
-  ...Array(6).fill("WA"), // ~7.5%
-  ...Array(5).fill("SA"), // ~6.2%
-  ...Array(3).fill("ACT"), // ~3.7%
-  ...Array(3).fill("TAS"), // ~3.7%
-  ...Array(2).fill("NT"), // ~2.5%
-];
-function pickState() {
-  const i = Math.floor(Math.random() * STATE_BUCKET.length);
-  return STATE_BUCKET[i];
-}
 
 // ---- Your base rows (status,address,suburb,postcode,state,price,bed,bath,car,type,image,images[])
 const baseRows = [
@@ -684,12 +669,8 @@ const baseRows = [
   ],
 ];
 
-// ---- Replace the `state` (index 4) with a weighted random state
-const rows = baseRows.map((r) => {
-  const copy = [...r];
-  copy[4] = pickState(); // overwrite state with weighted random
-  return copy;
-});
+// ---- Use baseRows directly (all properties will be NSW)
+const rows = baseRows;
 
 db.serialize(() => {
   // 1) Clear old data
@@ -712,7 +693,7 @@ db.serialize(() => {
 
   stmt.finalize((err) => {
     if (err) console.error("Seed insert failed:", err);
-    else console.log(`✅ Inserted ${rows.length} listings (states randomized)`);
+    else console.log(`✅ Inserted ${rows.length} listings (all NSW)`);
     process.exit(0);
   });
 });

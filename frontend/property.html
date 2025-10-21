@@ -49,8 +49,43 @@
     </div>
   </section>
 
+  <!-- Map and Directions Section -->
+  <section id="news-map-wrap">
+    <div class="optimization-text">
+      <p class="optimization-h1">Explore on the map</p>
+      <p class="optimization-subheader">Search any address and get directions</p>
+    </div>
+
+    <div class="map-controls">
+      <input id="mapOrigin" class="map-input" type="text" placeholder="From (origin address)" />
+      <input id="mapDestination" class="map-input" type="text" placeholder="To (destination address)" />
+      <button id="mapLocateDest" class="button-secondary">Locate</button>
+      <button id="mapDirections" class="button-primary">Open Directions</button>
+    </div>
+
+    <div id="news-map"></div>
+    
+    <!-- State Legend -->
+    <div class="state-legend">
+      <h4>State Legend</h4>
+      <div class="legend-items">
+        <div class="legend-item"><span class="legend-color" style="background-color: #dc2626;"></span>NSW</div>
+        <div class="legend-item"><span class="legend-color" style="background-color: #2563eb;"></span>VIC</div>
+        <div class="legend-item"><span class="legend-color" style="background-color: #059669;"></span>QLD</div>
+        <div class="legend-item"><span class="legend-color" style="background-color: #7c3aed;"></span>WA</div>
+        <div class="legend-item"><span class="legend-color" style="background-color: #ea580c;"></span>SA</div>
+        <div class="legend-item"><span class="legend-color" style="background-color: #0891b2;"></span>ACT</div>
+        <div class="legend-item"><span class="legend-color" style="background-color: #be123c;"></span>TAS</div>
+        <div class="legend-item"><span class="legend-color" style="background-color: #ca8a04;"></span>NT</div>
+      </div>
+    </div>
+    
+    <div class="fine">Powered by OpenStreetMap • Nominatim geocoding</div>
+  </section>
+
   <div class="site-footer-spacer"></div>
 
+  <script src="/js/wishlist.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
     /* Logged-in banner */
@@ -171,18 +206,6 @@
     <aside id="prop-agent" class="card-section agent-card" hidden></aside>
     <!-- ===== /Property Meta ===== -->
 
-    <!-- ===== Property Map ===== -->
-    <section id="prop-map-section" class="card-section">
-      <h3 class="card-title">Location & Directions</h3>
-      <div class="map-controls">
-        <input id="propMapOrigin" class="map-input" type="text" placeholder="From (your location)" />
-        <button id="propMapLocate" class="button-secondary">Get Directions</button>
-        <button id="propMapOpen" class="button-primary">Open in Maps</button>
-      </div>
-      <div id="prop-map"></div>
-      <div class="fine">Powered by OpenStreetMap • Nominatim geocoding</div>
-    </section>
-    <!-- ===== /Property Map ===== -->
   `;
 
       // update breadcrumb with property type/address
@@ -235,6 +258,17 @@
     }
 
     load();
+
+    // Mobile menu toggle
+    (function () {
+      const shell = document.querySelector(".nav-shell");
+      const btn = document.getElementById("menuToggle");
+      if (btn && shell)
+        btn.addEventListener("click", () => {
+          const isOpen = shell.classList.toggle("open");
+          btn.setAttribute("aria-expanded", String(isOpen));
+        });
+    })();
   </script>
   <script>
     /* ===== Property Meta (Highlights • Long Description • Features • Agent Card)
@@ -382,149 +416,162 @@
       window.renderPropertyMeta = renderPropertyMeta;
     })();
 
-    // -------- Property Map & Directions --------
-    (function () {
-      let map = null;
-      let propertyMarker = null;
-      let currentProperty = null;
+      // -------- Map & Directions (Leaflet + Nominatim) --------
+      (function () {
+        const mapEl = document.getElementById('news-map');
+        if (!mapEl || !window.L) return;
 
-      function initMap() {
-        if (!window.L) return;
-        
-        const mapEl = document.getElementById('prop-map');
-        if (!mapEl) return;
-
-        // Default to Sydney if no property loaded yet
         const sydney = [-33.8688, 151.2093];
-        map = L.map('prop-map').setView(sydney, 13);
-        
+        const map = L.map('news-map').setView(sydney, 11);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           maxZoom: 19,
           attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
-      }
 
-      async function geocode(q) {
-        const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}&limit=1`;
-        const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
-        if (!res.ok) throw new Error('Failed to geocode');
-        const data = await res.json();
-        return Array.isArray(data) && data[0] ? data[0] : null;
-      }
+        let originMarker = null;
+        let destinationMarker = null;
+        let propertyMarker = null;
+        const bounds = L.latLngBounds([]);
 
-      function setPropertyMarker(lat, lon, address) {
-        if (!map) return;
-        
-        if (propertyMarker) map.removeLayer(propertyMarker);
-        
-        const latLng = L.latLng(lat, lon);
-        const icon = L.icon({
-          iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-          iconSize: [25, 41],
-          iconAnchor: [12, 41],
-          popupAnchor: [0, -36],
-          shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-          shadowSize: [41, 41]
+        function setMarker(kind, lat, lon, label, state = null) {
+          const latLng = L.latLng(lat, lon);
+          
+          // Create state-specific colored marker for property
+          if (kind === 'property') {
+            // Define state colors
+            const stateColors = {
+              'NSW': '#dc2626', // Red
+              'VIC': '#2563eb', // Blue
+              'QLD': '#059669', // Green
+              'WA': '#7c3aed',  // Purple
+              'SA': '#ea580c',  // Orange
+              'ACT': '#0891b2', // Cyan
+              'TAS': '#be123c', // Rose
+              'NT': '#ca8a04'   // Yellow
+            };
+            
+            const color = stateColors[state] || '#6b7280'; // Default gray
+            const stateCode = state || 'Unknown';
+            
+            const stateIcon = L.divIcon({
+              className: 'state-property-marker',
+              html: `<div style="background-color: ${color}; width: 24px; height: 24px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; color: white; text-shadow: 1px 1px 1px rgba(0,0,0,0.5);">${stateCode}</div>`,
+              iconSize: [24, 24],
+              iconAnchor: [12, 12]
+            });
+            
+            if (propertyMarker) map.removeLayer(propertyMarker);
+            propertyMarker = L.marker(latLng, { icon: stateIcon }).bindPopup(`${label || 'Property Location'}<br><strong>State: ${stateCode}</strong>`);
+            propertyMarker.addTo(map).openPopup();
+            
+            // Center map on property
+            map.setView(latLng, 15);
+            return;
+          }
+          
+          // Regular markers for origin/destination
+          const icon = L.icon({
+            iconUrl: kind === 'origin' ? 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png' : 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [0, -36],
+            shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+            shadowSize: [41, 41]
+          });
+
+          const marker = L.marker(latLng, { icon }).bindPopup(label || kind);
+          marker.addTo(map).openPopup();
+
+          if (kind === 'origin') {
+            if (originMarker) map.removeLayer(originMarker);
+            originMarker = marker;
+          } else {
+            if (destinationMarker) map.removeLayer(destinationMarker);
+            destinationMarker = marker;
+          }
+
+          bounds.extend(latLng);
+          if (bounds.isValid()) map.fitBounds(bounds.pad(0.25));
+        }
+
+        async function geocode(q) {
+          const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}&limit=1`;
+          const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+          if (!res.ok) throw new Error('Failed to geocode');
+          const data = await res.json();
+          return Array.isArray(data) && data[0] ? data[0] : null;
+        }
+
+        async function locate(kind, inputEl) {
+          const q = (inputEl?.value || '').trim();
+          if (!q) return;
+          try {
+            const hit = await geocode(q);
+            if (!hit) { alert('Address not found'); return; }
+            setMarker(kind, Number(hit.lat), Number(hit.lon), hit.display_name);
+          } catch (e) {
+            console.error(e);
+            alert('Could not locate that address');
+          }
+        }
+
+        // Function to load property location automatically
+        async function loadPropertyLocation(property) {
+          if (!property) return;
+          
+          // Build full address from property data
+          const addressParts = [
+            property.address,
+            property.suburb,
+            property.state,
+            property.postcode
+          ].filter(Boolean);
+          
+          const fullAddress = addressParts.join(', ');
+          if (!fullAddress) return;
+
+          try {
+            const result = await geocode(fullAddress);
+            if (result) {
+              setMarker('property', Number(result.lat), Number(result.lon), fullAddress, property.state);
+              // Set the destination input to the property address
+              const destInput = document.getElementById('mapDestination');
+              if (destInput) destInput.value = fullAddress;
+            }
+          } catch (e) {
+            console.error('Failed to geocode property address:', e);
+          }
+        }
+
+        const originInput = document.getElementById('mapOrigin');
+        const destInput = document.getElementById('mapDestination');
+        const locateBtn = document.getElementById('mapLocateDest');
+        const dirBtn = document.getElementById('mapDirections');
+
+        if (locateBtn) locateBtn.addEventListener('click', async () => {
+          await locate('origin', originInput);
+          await locate('destination', destInput);
         });
 
-        propertyMarker = L.marker(latLng, { icon }).bindPopup(address || 'Property Location');
-        propertyMarker.addTo(map);
-        map.setView(latLng, 15);
-      }
+        if (dirBtn) dirBtn.addEventListener('click', () => {
+          const origin = (originInput?.value || '').trim();
+          const dest = (destInput?.value || '').trim();
+          if (!dest) { alert('Enter destination'); return; }
+          const url = new URL('https://www.google.com/maps/dir/');
+          const params = new URLSearchParams({ api: '1' });
+          if (origin) params.set('origin', origin);
+          params.set('destination', dest);
+          url.search = params.toString();
+          window.open(url.toString(), '_blank');
+        });
 
-      async function loadPropertyMap(property) {
-        if (!map || !property) return;
+        // Initialize with Sydney CBD as destination example
+        destInput && (destInput.value = 'Sydney CBD');
         
-        currentProperty = property;
-        
-        // Build full address
-        const addressParts = [
-          property.address,
-          property.suburb,
-          property.state,
-          property.postcode
-        ].filter(Boolean);
-        
-        const fullAddress = addressParts.join(', ');
-        if (!fullAddress) return;
+        // Expose function to load property data
+        window.loadPropertyMap = loadPropertyLocation;
+      })();
 
-        try {
-          const result = await geocode(fullAddress);
-          if (result) {
-            setPropertyMarker(Number(result.lat), Number(result.lon), fullAddress);
-          }
-        } catch (e) {
-          console.error('Failed to geocode property address:', e);
-        }
-      }
-
-      // Event listeners
-      document.addEventListener('DOMContentLoaded', () => {
-        initMap();
-        
-        const locateBtn = document.getElementById('propMapLocate');
-        const openBtn = document.getElementById('propMapOpen');
-        const originInput = document.getElementById('propMapOrigin');
-
-        if (locateBtn) {
-          locateBtn.addEventListener('click', async () => {
-            if (!currentProperty) return;
-            
-            const origin = (originInput?.value || '').trim();
-            if (!origin) {
-              alert('Please enter your starting location');
-              return;
-            }
-
-            try {
-              const originResult = await geocode(origin);
-              if (!originResult) {
-                alert('Could not find your starting location');
-                return;
-              }
-
-              // Open Google Maps with directions
-              const propertyAddress = [
-                currentProperty.address,
-                currentProperty.suburb,
-                currentProperty.state,
-                currentProperty.postcode
-              ].filter(Boolean).join(', ');
-
-              const url = new URL('https://www.google.com/maps/dir/');
-              const params = new URLSearchParams({ api: '1' });
-              params.set('origin', origin);
-              params.set('destination', propertyAddress);
-              url.search = params.toString();
-              window.open(url.toString(), '_blank');
-            } catch (e) {
-              console.error(e);
-              alert('Could not get directions');
-            }
-          });
-        }
-
-        if (openBtn) {
-          openBtn.addEventListener('click', () => {
-            if (!currentProperty) return;
-            
-            const propertyAddress = [
-              currentProperty.address,
-              currentProperty.suburb,
-              currentProperty.state,
-              currentProperty.postcode
-            ].filter(Boolean).join(', ');
-
-            const url = new URL('https://www.google.com/maps/search/');
-            url.search = new URLSearchParams({ q: propertyAddress }).toString();
-            window.open(url.toString(), '_blank');
-          });
-        }
-      });
-
-      // Expose function to load property data
-      window.loadPropertyMap = loadPropertyMap;
-    })();
   </script>
 
 </body>
