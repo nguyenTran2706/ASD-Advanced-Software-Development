@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title id="pageTitle">News Article - MyHome</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+
+  <body>
+    <header class="nav-shell">
+      <div class="nav-top">
+        <button
+          id="menuToggle"
+          class="menu-btn"
+          aria-expanded="false"
+          aria-controls="navLinks"
+        >
+          <span class="menu-icon"></span>
+          <span class="menu-text">Menu</span>
+        </button>
+
+        <a href="index.html" class="brand">
+          <img src="/Assets/Logo.png" alt="logo" style="height: 40px" />
+        </a>
+
+        <div class="navbar-buttons" id="navbarUser">
+          <a
+            class="button-primary"
+            href="signUp.html"
+            style="text-decoration: none; color: #fff"
+            >Sign Up</a
+          >
+          <a
+            class="button-primary"
+            href="login.html"
+            style="text-decoration: none; color: #fff"
+            >Login</a
+          >
+        </div>
+      </div>
+
+      <div id="navLinks" class="nav-links">
+        <nav id="navbar" class="navbar-selector">
+          <a href="buy.html">Buy</a>
+          <a href="rent.html">Rent</a>
+          <a href="sold.html">Sold</a>
+          <a href="findAgent.html">Find Agent</a>
+          <a href="news.html">News</a>
+        </nav>
+      </div>
+    </header>
+
+    <div class="news-detail-container">
+      <a href="news.html" class="back-to-news">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Back to News
+      </a>
+
+      <div class="news-breadcrumb">
+        <a href="index.html">Home</a>
+        <span>/</span>
+        <a href="news.html">News</a>
+        <span>/</span>
+        <span id="breadcrumbCategory">Article</span>
+      </div>
+
+      <article>
+        <div class="news-detail-header">
+          <div class="news-detail-category" id="articleCategory">Loading...</div>
+          <h1 class="news-detail-title" id="articleTitle">Loading article...</h1>
+          <p class="news-detail-excerpt" id="articleExcerpt"></p>
+          <div class="news-detail-meta">
+            <div class="news-meta-item">
+              <strong>By</strong>
+              <span id="articleAuthor">Author</span>
+            </div>
+            <div class="news-meta-item">
+              <strong>Published</strong>
+              <span id="articleDate">Date</span>
+            </div>
+            <div class="news-meta-item">
+              <strong>Reading time</strong>
+              <span id="readingTime">5 min read</span>
+            </div>
+          </div>
+        </div>
+
+        <img
+          id="articleImage"
+          class="news-detail-hero-image"
+          alt="Article hero"
+        />
+        <p class="image-caption" id="imageCaption"></p>
+
+        <div class="news-detail-content" id="articleContent">
+          <!-- Article content will be loaded here -->
+        </div>
+
+        <div class="news-detail-tags" id="articleTags">
+          <!-- Tags will be loaded here -->
+        </div>
+
+        <div class="news-share-section">
+          <span class="share-label">Share this article:</span>
+          <div class="share-buttons">
+            <button class="share-btn" onclick="shareOnFacebook()" title="Share on Facebook">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <image href="/Assets/facebook.png" width="18" height="18" />
+              </svg>
+            </button>
+            <button class="share-btn" onclick="shareOnTwitter()" title="Share on Twitter">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <image href="/Assets/twitter.png" width="18" height="18" />
+              </svg>
+            </button>
+            <button class="share-btn" onclick="shareOnLinkedIn()" title="Share on LinkedIn">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <image href="/Assets/linkedin.png" width="18" height="18" />
+              </svg>
+            </button>
+            <button class="share-btn" onclick="copyLink()" title="Copy link">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <div class="related-news">
+        <h2 class="related-news-title">Related Articles</h2>
+        <div class="related-news-grid" id="relatedNews">
+          <!-- Related news will be loaded here -->
+        </div>
+      </div>
+    </div>
+
+    <script src="/js/wishlist.js"></script>
+    <script>
+      // News data (same as in news.html)
+      const newsData = [
+        {
+          id: 1,
+          category: "Market Update",
+          title: "Sydney Property Market Shows Strong Recovery in Q4",
+          excerpt: "The latest data reveals a significant uptick in property sales across Sydney, with median prices increasing by 8.5% compared to the previous quarter.",
+          image: "/Assets/realestate1.avif",
+          author: "Sarah Johnson",
+          date: "2 hours ago",
+          fullDate: "October 22, 2025",
+          readingTime: "5 min read",
+          imageCaption: "Sydney's iconic skyline reflects the strong property market recovery",
+          content: `
+            <p>The Sydney property market has demonstrated remarkable resilience and strength in the fourth quarter, with comprehensive data revealing significant improvements across multiple indicators. Real estate experts and industry analysts are noting this as a turning point for the market.</p>
+            
+            <h2>Market Performance Highlights</h2>
+            <p>According to the latest CoreLogic data, median house prices across Greater Sydney have increased by 8.5% compared to the previous quarter. This represents the strongest quarterly growth since 2021, signaling renewed confidence among buyers and sellers alike.</p>
+            
+            <p>The recovery is being driven by several key factors, including improved economic conditions, stable interest rates, and increased buyer confidence. Property experts attribute this growth to a combination of pent-up demand and attractive market conditions.</p>
+            
+            <blockquote>"This is the most positive market sentiment we've seen in years. Buyers are returning with confidence, and we're seeing strong competition for quality properties across all price points," says Michael Chen, Senior Property Analyst at CoreLogic.</blockquote>
+            
+            <h3>Regional Performance</h3>
+            <p>While the overall market shows strong growth, performance varies across different regions. The Inner West and Eastern Suburbs have led the charge with double-digit growth, while Western Sydney has shown steady, sustainable increases.</p>
+            
+            <p>First-time buyers are particularly active in the market, taking advantage of government incentives and competitive lending rates. This demographic has been instrumental in driving transaction volumes to their highest levels in 18 months.</p>
+            
+            <h2>Expert Predictions</h2>
+            <p>Looking ahead to 2025, industry experts remain cautiously optimistic. Most analysts predict continued growth, albeit at a more moderate pace. The consensus suggests that sustainable growth in the 4-6% range annually would be healthy for the market.</p>
+            
+            <p>Investment activity has also picked up, with interstate and international investors showing renewed interest in the Sydney market. The city's strong economic fundamentals and lifestyle appeal continue to make it an attractive destination for property investment.</p>
+            
+            <h3>What This Means for Buyers and Sellers</h3>
+            <p>For buyers, the market presents opportunities but also challenges. Competition for well-located, quality properties is increasing, meaning buyers need to be prepared to act quickly. Pre-approval for finance and clear understanding of market values are more important than ever.</p>
+            
+            <p>Sellers, on the other hand, are benefiting from improved conditions. Properties are selling faster and achieving higher prices than in previous quarters. However, presentation and pricing remain crucial factors in achieving optimal results.</p>
+          `,
+          tags: ["Sydney", "Market Update", "Property Prices", "Investment", "Real Estate"]
+        },
+         {
+           id: 2,
+           category: "Policy",
+           title: "New First Home Buyer Scheme Announced",
+           excerpt: "Government announces new stamp duty concessions for first-time buyers purchasing properties under $800,000.",
+           image: "/Assets/realestate2.avif",
+          author: "David Williams",
+          date: "4 hours ago",
+          fullDate: "October 22, 2025",
+          readingTime: "4 min read",
+          imageCaption: "New government scheme aims to help first-time buyers enter the property market",
+          content: `
+            <p>In a significant move to support first-time home buyers, the government has announced a comprehensive new scheme that will provide substantial stamp duty concessions for eligible buyers purchasing properties valued under $800,000.</p>
+            
+            <h2>Key Features of the New Scheme</h2>
+            <p>The scheme, set to take effect from January 1st, 2025, represents one of the most significant policy changes in the property sector in recent years. It aims to make home ownership more accessible for thousands of Australian families.</p>
+            
+            <p>Under the new policy, eligible first-time buyers will receive up to 100% stamp duty concessions on properties valued up to $650,000, with partial concessions available for properties up to $800,000. This could save buyers tens of thousands of dollars in upfront costs.</p>
+            
+            <blockquote>"This is a game-changer for first-time buyers. It significantly reduces the barrier to entry and makes home ownership a realistic goal for many more Australians," explains Housing Minister Jennifer Thompson.</blockquote>
+            
+            <h3>Eligibility Criteria</h3>
+            <p>To qualify for the scheme, applicants must be first-time buyers, Australian citizens or permanent residents, and intending to occupy the property as their principal place of residence for at least 12 months. Income thresholds also apply, with single applicants eligible if earning under $90,000 annually, and couples under $120,000 combined.</p>
+            
+            <p>The scheme is particularly focused on helping young families and professionals enter the property market in major cities where affordability has been a significant challenge.</p>
+            
+            <h2>Industry Response</h2>
+            <p>The real estate industry has welcomed the initiative, with many agents and developers expressing optimism about its potential impact. However, some economists have raised concerns about the possibility of increased demand leading to higher property prices.</p>
+            
+            <p>"While the scheme is well-intentioned, we need to monitor its implementation carefully to ensure it achieves its goal of improving affordability without simply inflating prices," cautions Dr. Emma Roberts, Property Economist at Sydney University.</p>
+          `,
+          tags: ["Policy", "First Home Buyer", "Government", "Stamp Duty", "Affordability"]
+        },
+         {
+           id: 3,
+           category: "Investment",
+           title: "Commercial Real Estate Investment Trends",
+           excerpt: "Brisbane emerges as the top investment destination for 2025, with strong rental yields and capital growth potential.",
+           image: "/Assets/realestate3.avif",
+          author: "Lisa Anderson",
+          date: "6 hours ago",
+          fullDate: "October 22, 2025",
+          readingTime: "6 min read",
+          imageCaption: "Brisbane's commercial district shows strong investment potential",
+          content: `
+            <p>Brisbane is emerging as Australia's premier commercial real estate investment destination for 2025, with industry analysts highlighting exceptional rental yields and robust capital growth potential across multiple property sectors.</p>
+            
+            <h2>Brisbane's Investment Appeal</h2>
+            <p>The Queensland capital is experiencing a perfect storm of positive factors: strong population growth, major infrastructure projects, and the upcoming 2032 Olympic Games. These elements are combining to create unprecedented opportunities for savvy investors.</p>
+            
+            <p>Commercial property yields in Brisbane's CBD are currently averaging 6-7%, significantly higher than Sydney (5%) and Melbourne (5.5%). This yield advantage, combined with strong tenant demand, makes Brisbane particularly attractive for income-focused investors.</p>
+            
+            <blockquote>"Brisbane offers the best risk-adjusted returns in the Australian commercial property market right now. We're seeing sophisticated investors from across the country and internationally recognizing this opportunity," notes Richard Taylor, Director of Commercial Property at JLL Australia.</blockquote>
+            
+            <h3>Sector Performance</h3>
+            <p>Office space in Brisbane's CBD is experiencing particularly strong demand, with vacancy rates dropping to 8.2%, down from 12% just 18 months ago. Tech companies and financial services firms are driving much of this demand, attracted by Queensland's competitive business environment.</p>
+            
+            <p>The industrial sector is also booming, with logistics facilities near the Port of Brisbane commanding premium rents. E-commerce growth continues to fuel demand for warehouse and distribution centers, with some facilities leasing before construction completion.</p>
+            
+            <h2>Future Outlook</h2>
+            <p>Looking ahead, experts predict sustained growth in Brisbane's commercial property market. The 2032 Olympic Games preparations are expected to accelerate infrastructure development and attract international attention to the city.</p>
+            
+            <p>Investors are advised to conduct thorough due diligence and consider engaging local expertise to navigate the market effectively. While opportunities abound, understanding local market dynamics and tenant preferences remains crucial for success.</p>
+          `,
+          tags: ["Investment", "Commercial", "Brisbane", "Capital Growth", "Rental Yield"]
+        },
+         {
+           id: 4,
+           category: "Buying Tips",
+           title: "Essential Checklist for First-Time Home Buyers",
+           excerpt: "From pre-approval to settlement, here's everything you need to know before making your first property purchase.",
+           image: "/Assets/realestate4.avif",
+          author: "James Mitchell",
+          date: "4 days ago",
+          fullDate: "October 18, 2025",
+          readingTime: "8 min read",
+          imageCaption: "Your complete guide to buying your first home",
+          content: `
+            <p>Buying your first home is one of life's most significant milestones. It's an exciting journey, but it can also feel overwhelming. This comprehensive guide will walk you through every step of the process, ensuring you're well-prepared for this important decision.</p>
+            
+            <h2>Before You Start Looking</h2>
+            <p>The first and most crucial step is getting your finances in order. This means understanding your borrowing capacity, saving for a deposit, and obtaining pre-approval from a lender. Financial preparation can make or break your home-buying success.</p>
+            
+            <h3>1. Save Your Deposit</h3>
+            <p>Most lenders require a minimum deposit of 20% of the property's value to avoid paying Lenders Mortgage Insurance (LMI). However, some schemes allow deposits as low as 5%. Calculate what you can realistically save and set a timeline.</p>
+            
+            <h3>2. Get Pre-Approved</h3>
+            <p>Obtaining finance pre-approval gives you a clear budget and shows sellers you're a serious buyer. Shop around with different lenders to find the best interest rates and terms. Don't just focus on the rate—consider fees, features, and flexibility.</p>
+            
+            <blockquote>"Pre-approval is your ticket to the negotiating table. Without it, sellers may not take your offer seriously, especially in competitive markets," advises mortgage broker Rebecca Zhang.</blockquote>
+            
+            <h2>The Property Search</h2>
+            <p>Once your finances are sorted, the fun part begins—finding your perfect home. But it's important to be strategic and patient during this phase.</p>
+            
+            <h3>3. Define Your Must-Haves</h3>
+            <p>Create a list of non-negotiables versus nice-to-haves. Consider factors like location, proximity to work, schools, public transport, and future growth potential. Be realistic about compromises you're willing to make.</p>
+            
+            <h3>4. Research the Market</h3>
+            <p>Attend open homes, study recent sales data, and understand price trends in your target areas. Knowledge is power when it comes time to make an offer. Use online tools and consult with local agents to build market intelligence.</p>
+            
+            <h2>Making an Offer and Inspection</h2>
+            <p>Found a property you love? Before committing, conduct thorough due diligence.</p>
+            
+            <h3>5. Building and Pest Inspection</h3>
+            <p>Never skip this step. A professional inspection can reveal hidden problems that could cost you thousands down the track. Budget $400-$600 for a comprehensive report.</p>
+            
+            <h3>6. Review the Contract</h3>
+            <p>Have a solicitor or conveyancer review the contract of sale before you sign. They'll identify any issues with the terms and ensure your interests are protected.</p>
+            
+            <h2>Settlement and Beyond</h2>
+            <p>After your offer is accepted, there's still work to do before the keys are yours.</p>
+            
+            <h3>7. Arrange Insurance</h3>
+            <p>Organize building insurance from the exchange of contracts. Your lender will require this, and it protects your investment from day one.</p>
+            
+            <h3>8. Final Inspection</h3>
+            <p>Conduct a final walk-through before settlement to ensure the property's condition hasn't changed and all agreed-upon items are included.</p>
+            
+            <p>Remember, buying a home is a marathon, not a sprint. Take your time, do your research, and don't be afraid to ask questions. With proper preparation and patience, you'll find the perfect property to call home.</p>
+          `,
+          tags: ["Buying Tips", "First Home Buyer", "Property Guide", "Finance", "Checklist"]
+        },
+         {
+           id: 5,
+           category: "Market Update",
+           title: "Melbourne Property Prices Continue to Rise",
+           excerpt: "Melbourne property prices continue to rise as demand outstrips supply. The latest CoreLogic data shows a 12% increase in median house prices.",
+           image: "/Assets/realestate5.avif",
+          author: "Catherine Brown",
+          date: "1 day ago",
+          fullDate: "October 21, 2025",
+          readingTime: "5 min read",
+          imageCaption: "Melbourne's property market shows no signs of slowing down",
+          content: `
+            <p>Melbourne's property market continues its upward trajectory, with the latest CoreLogic data revealing a substantial 12% increase in median house prices across the metropolitan area over the past 12 months.</p>
+            
+            <h2>Supply and Demand Imbalance</h2>
+            <p>The primary driver of this price growth is a significant imbalance between supply and demand. The number of properties available for sale has dropped to historic lows, while buyer interest remains robust across all segments of the market.</p>
+            
+            <p>This supply shortage is particularly acute in Melbourne's inner and middle-ring suburbs, where competition among buyers has intensified significantly. Properties in these areas are regularly selling above reserve prices at auction.</p>
+            
+            <blockquote>"We're seeing unprecedented levels of buyer competition. It's not unusual for quality properties to attract 50+ groups through open homes and receive multiple offers," reports Tom Harrison, Director at Nelson Alexander Real Estate.</blockquote>
+            
+            <h3>Suburb Spotlight</h3>
+            <p>While the overall market is strong, some suburbs are standout performers. Areas like Brunswick, Fitzroy, and Richmond have seen price increases exceeding 15%, driven by their proximity to the CBD and lifestyle amenities.</p>
+            
+            <p>Outer suburbs are also performing well, with growth areas like Werribee and Cranbourne attracting first-home buyers and investors seeking affordability and future growth potential.</p>
+            
+            <h2>Looking Ahead</h2>
+            <p>Real estate analysts predict Melbourne's property market will remain strong throughout 2025, although the pace of growth may moderate as affordability becomes a constraint for some buyers.</p>
+          `,
+          tags: ["Melbourne", "Market Update", "Property Prices", "Supply Demand", "Real Estate"]
+        },
+         {
+           id: 6,
+           category: "Investment",
+           title: "Regional Property Markets Outperform Capital Cities",
+           excerpt: "Regional property markets outperform capital cities as remote work trends continue to drive demand for lifestyle properties.",
+           image: "/Assets/realestate6.avif",
+          author: "Mark Stevens",
+          date: "1 week ago",
+          fullDate: "October 15, 2025",
+          readingTime: "6 min read",
+          imageCaption: "Regional areas offer lifestyle and investment opportunities",
+          content: `
+            <p>Australia's regional property markets are experiencing unprecedented growth, with many areas now outperforming their capital city counterparts. This shift represents a fundamental change in how Australians view work and lifestyle priorities.</p>
+            
+            <h2>The Remote Work Revolution</h2>
+            <p>The widespread adoption of remote and hybrid work arrangements has enabled people to prioritize lifestyle over proximity to traditional employment centers. This flexibility has unlocked demand in regional areas that offer better value, larger properties, and enhanced quality of life.</p>
+            
+            <p>Coastal towns, tree-change destinations, and regional cities within a few hours of major capitals are experiencing the strongest growth. These areas combine accessibility with lifestyle benefits that are increasingly valued by buyers and renters alike.</p>
+            
+            <blockquote>"We're seeing a permanent shift in buyer preferences. People are realizing they don't need to sacrifice lifestyle for career opportunities. Regional areas that were once considered too remote are now highly desirable," explains regional property specialist Dr. Amanda Foster.</blockquote>
+            
+            <h3>Top Performing Regional Markets</h3>
+            <p>The Byron Bay hinterland, Ballarat, Geelong, and the Southern Highlands have emerged as star performers, with annual growth rates exceeding 20% in some cases. These markets offer different appeals but share common characteristics: good infrastructure, community amenities, and natural beauty.</p>
+            
+            <h2>Investment Opportunities</h2>
+            <p>For investors, regional markets present compelling opportunities. Rental yields are often superior to capital cities, while capital growth prospects remain strong. The key is identifying areas with solid economic fundamentals and growing populations.</p>
+            
+            <p>However, investors should conduct thorough research and understand that regional markets can be more sensitive to economic changes. Diversification and local knowledge are crucial for success in these markets.</p>
+          `,
+          tags: ["Regional", "Investment", "Remote Work", "Lifestyle", "Capital Growth"]
+        }
+      ];
+
+      // Helper function
+      function escapeHtml(str = "") {
+        return String(str).replace(
+          /[&<>"']/g,
+          (s) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            }[s])
+        );
+      }
+
+      // Load article from URL parameter or localStorage
+      function loadArticle() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const articleId = parseInt(urlParams.get('id'));
+        
+        if (!articleId) {
+          document.getElementById('articleContent').innerHTML = '<p>Article not found. <a href="news.html">Return to news</a></p>';
+          return;
+        }
+
+        const article = newsData.find(a => a.id === articleId);
+        
+        if (!article) {
+          document.getElementById('articleContent').innerHTML = '<p>Article not found. <a href="news.html">Return to news</a></p>';
+          return;
+        }
+
+        // Populate article details
+        document.getElementById('pageTitle').textContent = `${article.title} - MyHome`;
+        document.getElementById('breadcrumbCategory').textContent = article.category;
+        document.getElementById('articleCategory').textContent = article.category;
+        document.getElementById('articleTitle').textContent = article.title;
+        document.getElementById('articleExcerpt').textContent = article.excerpt;
+        document.getElementById('articleAuthor').textContent = article.author;
+        document.getElementById('articleDate').textContent = article.fullDate;
+        document.getElementById('readingTime').textContent = article.readingTime;
+        document.getElementById('articleImage').src = article.image;
+        document.getElementById('articleImage').alt = article.title;
+        document.getElementById('imageCaption').textContent = article.imageCaption || '';
+        document.getElementById('articleContent').innerHTML = article.content;
+
+        // Populate tags
+        const tagsContainer = document.getElementById('articleTags');
+        tagsContainer.innerHTML = article.tags.map(tag => 
+          `<span class="news-tag">${escapeHtml(tag)}</span>`
+        ).join('');
+
+        // Load related articles (different category or random)
+        loadRelatedArticles(article);
+      }
+
+      function loadRelatedArticles(currentArticle) {
+        const relatedContainer = document.getElementById('relatedNews');
+        
+        // Get articles from same category or random articles, excluding current
+        let relatedArticles = newsData
+          .filter(a => a.id !== currentArticle.id)
+          .sort((a, b) => {
+            // Prioritize same category
+            const aMatch = a.category === currentArticle.category ? 1 : 0;
+            const bMatch = b.category === currentArticle.category ? 1 : 0;
+            return bMatch - aMatch;
+          })
+          .slice(0, 3);
+
+        relatedContainer.innerHTML = relatedArticles.map(article => `
+          <div class="related-news-card" onclick="window.location.href='newsDetail.html?id=${article.id}'">
+            <img src="${escapeHtml(article.image)}" alt="${escapeHtml(article.title)}" />
+            <div class="related-news-card-content">
+              <div class="news-category-small">${escapeHtml(article.category)}</div>
+              <h3>${escapeHtml(article.title)}</h3>
+              <p>${escapeHtml(article.excerpt)}</p>
+              <span class="news-date-small">${escapeHtml(article.date)}</span>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // Share functions
+      function shareOnFacebook() {
+        const url = encodeURIComponent(window.location.href);
+        window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
+      }
+
+      function shareOnTwitter() {
+        const url = encodeURIComponent(window.location.href);
+        const text = encodeURIComponent(document.getElementById('articleTitle').textContent);
+        window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, '_blank');
+      }
+
+      function shareOnLinkedIn() {
+        const url = encodeURIComponent(window.location.href);
+        window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank');
+      }
+
+      function copyLink() {
+        navigator.clipboard.writeText(window.location.href).then(() => {
+          alert('Link copied to clipboard!');
+        }).catch(err => {
+          console.error('Failed to copy link:', err);
+        });
+      }
+
+      // Navigation
+      (function () {
+        const shell = document.querySelector(".nav-shell");
+        const btn = document.getElementById("menuToggle");
+        if (btn && shell) {
+          btn.addEventListener("click", () => {
+            const isOpen = shell.classList.toggle("open");
+            btn.setAttribute("aria-expanded", String(isOpen));
+          });
+        }
+
+        const path = location.pathname.replace(/\/+$/, "");
+        document.querySelectorAll("#navbar a[href]").forEach((a) => {
+          const href = a.getAttribute("href") || "";
+          if (href === "news.html") {
+            a.classList.add("nav-active");
+          }
+        });
+      })();
+
+      // Auth area
+      (function () {
+        const navbarUser = document.getElementById("navbarUser");
+        try {
+          const user = JSON.parse(localStorage.getItem("user") || "null");
+          if (!user) return;
+
+          const firstName = user.first_name || "";
+          const lastName = user.last_name || "";
+          const displayName = `${firstName} ${lastName}`.trim() || user.email;
+
+          navbarUser.innerHTML = `
+            <div style="display:flex; align-items:center; gap:16px; color:#047857; font-weight:600;">
+              <div class="dropdown">
+                <span style="cursor: pointer;">Welcome, ${escapeHtml(displayName)}</span>
+                <div class="dropdown-content">
+                  <a href="profile.html">My Profile</a>
+                  <a href="wishlist.html">My Wishlist</a>
+                </div>
+              </div>
+              <button class="button-secondary" id="logoutBtn">Logout</button>
+            </div>
+          `;
+
+          document.getElementById("logoutBtn").addEventListener("click", () => {
+            localStorage.removeItem("user");
+            window.location.reload();
+          });
+        } catch (err) {
+          console.error("Failed to initialize user navbar:", err);
+        }
+      })();
+
+      // Load article on page load
+      loadArticle();
+    </script>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-cols">
+          <div class="footer-col footer-brand">
+            <div class="brand">
+              <img
+                src="/Assets/Logo.png"
+                alt="MyHome logo"
+                class="footer-logo"
+              />
+            </div>
+          </div>
+
+          <div class="footer-col">
+            <h4 class="footer-title">Product</h4>
+            <a href="#">How it works</a>
+            <a href="#">Who we help</a>
+            <a href="#">Features</a>
+            <a href="#">Pricing</a>
+          </div>
+
+          <div class="footer-col">
+            <h4 class="footer-title">Resources</h4>
+            <a href="#">Get Help</a>
+            <a href="#">Partnership</a>
+            <a href="#">Blog</a>
+            <a href="#">Legal</a>
+          </div>
+
+          <div class="footer-col">
+            <h4 class="footer-title">About</h4>
+            <a href="#">About</a>
+            <a href="#">Sponsorship</a>
+            <a href="#">Hardship</a>
+            <a href="#">Contact</a>
+          </div>
+
+          <div class="footer-col footer-connect">
+            <h4 class="footer-title">Connect with us</h4>
+            <div class="footer-socials">
+              <a href="#" aria-label="Facebook" class="icon">
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                  <image href="/Assets/facebook.png" width="18" height="18" />
+                </svg>
+              </a>
+              <a href="#" aria-label="YouTube" class="icon">
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                  <image href="/Assets/youtube.png" width="18" height="18" />
+                </svg>
+              </a>
+              <a href="#" aria-label="Twitter" class="icon">
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                  <image href="/Assets/twitter.png" width="18" height="18" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <hr class="footer-divider" />
+        <div class="footer-bottom">
+          <div>Copyright 2025 · MyHome</div>
+          <div class="footer-legal">
+            <a href="#">Terms of Service</a>
+            <a href="#">Privacy Policy</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+

@@ -86,7 +86,7 @@
             <div
               class="button-primary-round"
               id="newsSearchBtn"
-              style="border-radius: 40px"
+              style="border-radius: 40px; cursor: pointer;"
             >
               Search News
             </div>
@@ -104,44 +104,8 @@
         </p>
       </div>
 
-      <div class="featured-news-layout">
-        <div class="featured-news-main">
-          <div class="featured-news-card">
-            <img src="/Assets/news1.png" alt="Featured News" class="featured-news-image" />
-            <div class="featured-news-content">
-              <div class="news-category">Market Update</div>
-              <h3 class="featured-news-title">Sydney Property Market Shows Strong Recovery in Q4</h3>
-              <p class="featured-news-excerpt">
-                The latest data reveals a significant uptick in property sales across Sydney, 
-                with median prices increasing by 8.5% compared to the previous quarter. 
-                Experts attribute this growth to improved economic conditions and increased buyer confidence.
-              </p>
-              <div class="news-meta">
-                <span class="news-date">2 hours ago</span>
-                <span class="news-author">By Sarah Johnson</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="featured-news-sidebar">
-          <div class="news-card-small">
-            <img src="/Assets/news2.png" alt="News" />
-            <div class="news-card-content">
-              <div class="news-category-small">Policy</div>
-              <h4 class="news-title-small">New First Home Buyer Scheme Announced</h4>
-              <span class="news-date-small">4 hours ago</span>
-            </div>
-          </div>
-          <div class="news-card-small">
-            <img src="/Assets/news3.png" alt="News" />
-            <div class="news-card-content">
-              <div class="news-category-small">Investment</div>
-              <h4 class="news-title-small">Commercial Real Estate Investment Trends</h4>
-              <span class="news-date-small">6 hours ago</span>
-            </div>
-          </div>
-        </div>
+      <div class="featured-news-layout" id="featuredNewsContainer">
+        <!-- Featured news will be loaded dynamically -->
       </div>
     </div>
 
@@ -157,96 +121,23 @@
       <div class="news-filters">
         <div class="filter-chips">
           <span class="filter-chip active" data-category="all">All News</span>
-          <span class="filter-chip" data-category="market">Market Updates</span>
-          <span class="filter-chip" data-category="policy">Policy & Regulations</span>
-          <span class="filter-chip" data-category="investment">Investment</span>
-          <span class="filter-chip" data-category="tips">Buying Tips</span>
+          <span class="filter-chip" data-category="Market Update">Market Updates</span>
+          <span class="filter-chip" data-category="Policy">Policy & Regulations</span>
+          <span class="filter-chip" data-category="Investment">Investment</span>
+          <span class="filter-chip" data-category="Buying Tips">Buying Tips</span>
         </div>
       </div>
 
       <div class="berita-layout" id="newsArticles">
-        <div class="berita" data-category="market">
-          <img src="/Assets/berita1.png" alt="News Article" />
-          <div class="berita-text">
-            <div class="news-category-small">Market Update</div>
-            <p>
-              Melbourne property prices continue to rise as demand outstrips supply. 
-              The latest CoreLogic data shows a 12% increase in median house prices 
-              across the metropolitan area.
-            </p>
-            <p class="duration-text">1 day ago</p>
-          </div>
-        </div>
-        <div class="berita" data-category="policy">
-          <img src="/Assets/berita2.png" alt="News Article" />
-          <div class="berita-text">
-            <div class="news-category-small">Policy</div>
-            <p>
-              Government announces new stamp duty concessions for first-time buyers 
-              purchasing properties under $800,000. The changes take effect from 
-              January 1st, 2025.
-            </p>
-            <p class="duration-text">2 days ago</p>
-          </div>
-        </div>
-        <div class="berita" data-category="investment">
-          <img src="/Assets/berita3.png" alt="News Article" />
-          <div class="berita-text">
-            <div class="news-category-small">Investment</div>
-            <p>
-              Brisbane emerges as the top investment destination for 2025, with 
-              strong rental yields and capital growth potential. Experts predict 
-              continued growth in the Queensland capital.
-            </p>
-            <p class="duration-text">3 days ago</p>
-          </div>
-        </div>
-        <div class="berita" data-category="tips">
-          <img src="/Assets/berita4.png" alt="News Article" />
-          <div class="berita-text">
-            <div class="news-category-small">Buying Tips</div>
-            <p>
-              Essential checklist for first-time home buyers: From pre-approval 
-              to settlement, here's everything you need to know before making 
-              your first property purchase.
-            </p>
-            <p class="duration-text">4 days ago</p>
-          </div>
-        </div>
-        <div class="berita" data-category="market">
-          <img src="/Assets/berita1.png" alt="News Article" />
-          <div class="berita-text">
-            <div class="news-category-small">Market Update</div>
-            <p>
-              Perth property market shows signs of recovery with increased 
-              auction clearance rates and growing buyer interest in suburban areas.
-            </p>
-            <p class="duration-text">5 days ago</p>
-          </div>
-        </div>
-        <div class="berita" data-category="investment">
-          <img src="/Assets/berita2.png" alt="News Article" />
-          <div class="berita-text">
-            <div class="news-category-small">Investment</div>
-            <p>
-              Regional property markets outperform capital cities as remote work 
-              trends continue to drive demand for lifestyle properties.
-            </p>
-            <p class="duration-text">1 week ago</p>
-          </div>
-        </div>
+        <!-- News articles will be loaded dynamically -->
       </div>
 
       <div class="controller">
-        <img src="/Assets/left-arrow.png" alt="Previous" id="prevNews" />
+        <img src="/Assets/left-arrow.png" alt="Previous" id="prevNews" style="cursor: pointer;" />
         <div class="dots-layout" id="newsDots">
-          <img src="/Assets/choosen-dot.png" alt="dot" />
-          <img src="/Assets/unchoosen-dot.png" alt="dot" />
-          <img src="/Assets/unchoosen-dot.png" alt="dot" />
-          <img src="/Assets/unchoosen-dot.png" alt="dot" />
-          <img src="/Assets/unchoosen-dot.png" alt="dot" />
+          <!-- Dots will be generated dynamically -->
         </div>
-        <img src="/Assets/right-arrow.png" alt="Next" id="nextNews" />
+        <img src="/Assets/right-arrow.png" alt="Next" id="nextNews" style="cursor: pointer;" />
       </div>
     </div>
 
@@ -289,6 +180,94 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
+      // -------- News Data Structure --------
+      const newsData = [
+        {
+          id: 1,
+          category: "Market Update",
+          title: "Sydney Property Market Shows Strong Recovery in Q4",
+          excerpt: "The latest data reveals a significant uptick in property sales across Sydney, with median prices increasing by 8.5% compared to the previous quarter. Experts attribute this growth to improved economic conditions and increased buyer confidence.",
+          image: "/Assets/realestate1.avif",
+          author: "Sarah Johnson",
+          date: "2 hours ago",
+          fullDate: "October 22, 2025",
+          readingTime: "5 min read",
+          imageCaption: "Sydney's iconic skyline reflects the strong property market recovery",
+          content: `Full article content here...`,
+          tags: ["Sydney", "Market Update", "Property Prices", "Investment", "Real Estate"]
+        },
+        {
+          id: 2,
+          category: "Policy",
+          title: "New First Home Buyer Scheme Announced",
+          excerpt: "Government announces new stamp duty concessions for first-time buyers purchasing properties under $800,000. The changes take effect from January 1st, 2025.",
+          image: "/Assets/realestate2.avif",
+          author: "David Williams",
+          date: "4 hours ago",
+          fullDate: "October 22, 2025",
+          readingTime: "4 min read",
+          imageCaption: "New government scheme aims to help first-time buyers enter the property market",
+          content: `Full article content here...`,
+          tags: ["Policy", "First Home Buyer", "Government", "Stamp Duty", "Affordability"]
+        },
+        {
+          id: 3,
+          category: "Investment",
+          title: "Commercial Real Estate Investment Trends",
+          excerpt: "Brisbane emerges as the top investment destination for 2025, with strong rental yields and capital growth potential. Experts predict continued growth in the Queensland capital.",
+          image: "/Assets/realestate3.avif",
+          author: "Lisa Anderson",
+          date: "6 hours ago",
+          fullDate: "October 22, 2025",
+          readingTime: "6 min read",
+          imageCaption: "Brisbane's commercial district shows strong investment potential",
+          content: `Full article content here...`,
+          tags: ["Investment", "Commercial", "Brisbane", "Capital Growth", "Rental Yield"]
+        },
+        {
+          id: 4,
+          category: "Buying Tips",
+          title: "Essential Checklist for First-Time Home Buyers",
+          excerpt: "From pre-approval to settlement, here's everything you need to know before making your first property purchase.",
+          image: "/Assets/realestate4.avif",
+          author: "James Mitchell",
+          date: "4 days ago",
+          fullDate: "October 18, 2025",
+          readingTime: "8 min read",
+          imageCaption: "Your complete guide to buying your first home",
+          content: `Full article content here...`,
+          tags: ["Buying Tips", "First Home Buyer", "Property Guide", "Finance", "Checklist"]
+        },
+        {
+          id: 5,
+          category: "Market Update",
+          title: "Melbourne Property Prices Continue to Rise",
+          excerpt: "Melbourne property prices continue to rise as demand outstrips supply. The latest CoreLogic data shows a 12% increase in median house prices across the metropolitan area.",
+          image: "/Assets/realestate5.avif",
+          author: "Catherine Brown",
+          date: "1 day ago",
+          fullDate: "October 21, 2025",
+          readingTime: "5 min read",
+          imageCaption: "Melbourne's property market shows no signs of slowing down",
+          content: `Full article content here...`,
+          tags: ["Melbourne", "Market Update", "Property Prices", "Supply Demand", "Real Estate"]
+        },
+        {
+          id: 6,
+          category: "Investment",
+          title: "Regional Property Markets Outperform Capital Cities",
+          excerpt: "Regional property markets outperform capital cities as remote work trends continue to drive demand for lifestyle properties.",
+          image: "/Assets/realestate6.avif",
+          author: "Mark Stevens",
+          date: "1 week ago",
+          fullDate: "October 15, 2025",
+          readingTime: "6 min read",
+          imageCaption: "Regional areas offer lifestyle and investment opportunities",
+          content: `Full article content here...`,
+          tags: ["Regional", "Investment", "Remote Work", "Lifestyle", "Capital Growth"]
+        }
+      ];
+
       // -------- Helpers --------
       function escapeHtml(str = "") {
         return String(str).replace(
@@ -302,6 +281,118 @@
               "'": "&#39;",
             }[s])
         );
+      }
+
+      function navigateToArticle(articleId) {
+        window.location.href = `newsDetail.html?id=${articleId}`;
+      }
+
+      // -------- Load Featured News --------
+      function loadFeaturedNews() {
+        const container = document.getElementById('featuredNewsContainer');
+        const featured = newsData[0]; // Main featured article
+        const sidebar = newsData.slice(1, 3); // Two sidebar articles
+
+        container.innerHTML = `
+          <div class="featured-news-main">
+            <div class="featured-news-card" onclick="navigateToArticle(${featured.id})">
+              <img src="${escapeHtml(featured.image)}" alt="${escapeHtml(featured.title)}" class="featured-news-image" onerror="this.src='/Assets/news1.png'" />
+              <div class="featured-news-content">
+                <div class="news-category">${escapeHtml(featured.category)}</div>
+                <h3 class="featured-news-title">${escapeHtml(featured.title)}</h3>
+                <p class="featured-news-excerpt">${escapeHtml(featured.excerpt)}</p>
+                <div class="news-meta">
+                  <span class="news-date">${escapeHtml(featured.date)}</span>
+                  <span class="news-author">By ${escapeHtml(featured.author)}</span>
+                </div>
+                <button class="read-more-btn">
+                  Read More
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="featured-news-sidebar">
+            ${sidebar.map(article => `
+              <div class="news-card-small" onclick="navigateToArticle(${article.id})">
+                <img src="${escapeHtml(article.image)}" alt="${escapeHtml(article.title)}" onerror="this.src='/Assets/news2.png'" />
+                <div class="news-card-content">
+                  <div class="news-category-small">${escapeHtml(article.category)}</div>
+                  <h4 class="news-title-small">${escapeHtml(article.title)}</h4>
+                  <span class="news-date-small">${escapeHtml(article.date)}</span>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+
+      // -------- Load Latest News --------
+      let allArticles = newsData.slice(3); // Articles after featured
+      let filteredArticles = [...allArticles];
+      let currentSlide = 0;
+      const articlesPerSlide = 4;
+
+      function loadLatestNews() {
+        const container = document.getElementById('newsArticles');
+        
+        container.innerHTML = filteredArticles.map(article => `
+          <div class="berita" data-category="${escapeHtml(article.category)}" onclick="navigateToArticle(${article.id})">
+            <img src="${escapeHtml(article.image)}" alt="${escapeHtml(article.title)}" onerror="this.src='/Assets/berita1.png'" />
+            <div class="berita-text">
+              <div class="news-category-small">${escapeHtml(article.category)}</div>
+              <p>${escapeHtml(article.excerpt)}</p>
+              <p class="duration-text">${escapeHtml(article.date)}</p>
+              <button class="read-more-btn">
+                Read Full Article
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        `).join('');
+
+        updateCarousel();
+      }
+
+      // -------- Carousel Management --------
+      function updateCarousel() {
+        const articles = document.querySelectorAll('.berita');
+        const maxSlides = Math.ceil(articles.length / articlesPerSlide);
+        
+        // Update dots
+        const dotsContainer = document.getElementById('newsDots');
+        dotsContainer.innerHTML = Array.from({ length: maxSlides }, (_, i) => 
+          `<img src="/Assets/${i === currentSlide ? 'choosen-dot' : 'unchoosen-dot'}.png" alt="dot" />`
+        ).join('');
+
+        // Show/hide articles
+        articles.forEach((article, index) => {
+          if (index >= currentSlide * articlesPerSlide && 
+              index < (currentSlide + 1) * articlesPerSlide) {
+            article.style.display = 'flex';
+          } else {
+            article.style.display = 'none';
+          }
+        });
+      }
+
+      function nextSlide() {
+        const articles = document.querySelectorAll('.berita');
+        const maxSlides = Math.ceil(articles.length / articlesPerSlide);
+        currentSlide = (currentSlide + 1) % maxSlides;
+        updateCarousel();
+      }
+
+      function prevSlide() {
+        const articles = document.querySelectorAll('.berita');
+        const maxSlides = Math.ceil(articles.length / articlesPerSlide);
+        currentSlide = currentSlide === 0 ? maxSlides - 1 : currentSlide - 1;
+        updateCarousel();
       }
 
       // -------- Nav: burger + active link --------
@@ -336,41 +427,28 @@
         const navbarUser = document.getElementById("navbarUser");
         try {
           const user = JSON.parse(localStorage.getItem("user") || "null");
-          if (!user) return; // Exit if no user is logged in
+          if (!user) return;
 
-          // Combine first name and last name for a full name display
           const firstName = user.first_name || "";
           const lastName = user.last_name || "";
           const displayName = `${firstName} ${lastName}`.trim() || user.email;
 
-          // This new HTML structure includes the dropdown menu
           navbarUser.innerHTML = `
-      <div style="display:flex; align-items:center; gap:16px; color:#047857; font-weight:600;">
-        
-        <!-- Dropdown container -->
-        <div class="dropdown">
-          
-          <!-- This is the visible text that triggers the dropdown on hover -->
-          <span style="cursor: pointer;">Welcome, ${escapeHtml(
-            displayName
-          )}</span>
-          
-          <!-- This is the hidden dropdown content -->
-          <div class="dropdown-content">
-            <a href="profile.html">My Profile</a>
-            <a href="wishlist.html">My Wishlist</a>
-          </div>
+            <div style="display:flex; align-items:center; gap:16px; color:#047857; font-weight:600;">
+              <div class="dropdown">
+                <span style="cursor: pointer;">Welcome, ${escapeHtml(displayName)}</span>
+                <div class="dropdown-content">
+                  <a href="profile.html">My Profile</a>
+                  <a href="wishlist.html">My Wishlist</a>
+                </div>
+              </div>
+              <button class="button-secondary" id="logoutBtn">Logout</button>
+            </div>
+          `;
 
-        </div>
-
-        <button class="button-secondary" id="logoutBtn">Logout</button>
-      </div>
-    `;
-
-          // The only event listener needed now is for the logout button
           document.getElementById("logoutBtn").addEventListener("click", () => {
             localStorage.removeItem("user");
-            window.location.reload(); // Reload the page to reset the state
+            window.location.reload();
           });
         } catch (err) {
           console.error("Failed to initialize user navbar:", err);
@@ -383,22 +461,84 @@
         const searchInput = document.getElementById("newsSearchInput");
 
         function performSearch() {
-          const query = searchInput.value.trim();
+          const query = searchInput.value.trim().toLowerCase();
+          
           if (query) {
-            // Filter news articles based on search query
-            const articles = document.querySelectorAll('.berita');
-            articles.forEach(article => {
-              const text = article.textContent.toLowerCase();
-              const matches = text.includes(query.toLowerCase());
-              article.style.display = matches ? 'flex' : 'none';
+            // Search through all news articles (including featured ones)
+            const allNewsArticles = [...newsData];
+            filteredArticles = allNewsArticles.filter(article => {
+              const searchText = `${article.title} ${article.excerpt} ${article.category} ${article.author} ${article.tags.join(' ')}`.toLowerCase();
+              return searchText.includes(query);
+            });
+            
+            // If no results found
+            if (filteredArticles.length === 0) {
+              const container = document.getElementById('newsArticles');
+              container.innerHTML = `
+                <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px;">
+                  <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" style="margin: 0 auto 20px;">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                  </svg>
+                  <h3 style="color: #1a1a1a; font-size: 24px; margin-bottom: 12px;">No articles found</h3>
+                  <p style="color: #64748b; font-size: 16px; margin-bottom: 24px;">
+                    We couldn't find any articles matching "<strong>${escapeHtml(query)}</strong>"
+                  </p>
+                  <button class="button-primary" onclick="document.getElementById('newsSearchInput').value=''; document.getElementById('newsSearchBtn').click();">
+                    Clear Search
+                  </button>
+                </div>
+              `;
+              
+              // Hide pagination
+              document.querySelector('.controller').style.display = 'none';
+              return;
+            }
+            
+            // Show search results count
+            const latestNewsSection = document.getElementById('latest-news');
+            let resultsBadge = latestNewsSection.querySelector('.search-results-badge');
+            if (!resultsBadge) {
+              resultsBadge = document.createElement('div');
+              resultsBadge.className = 'search-results-badge';
+              const optimizationText = latestNewsSection.querySelector('.optimization-text');
+              optimizationText.appendChild(resultsBadge);
+            }
+            resultsBadge.innerHTML = `
+              <div style="display: inline-flex; align-items: center; gap: 12px; background: #f0fdf4; padding: 12px 20px; border-radius: 8px; margin-top: 12px;">
+                <span style="color: #047857; font-weight: 600;">
+                  Found ${filteredArticles.length} article${filteredArticles.length !== 1 ? 's' : ''} for "${escapeHtml(query)}"
+                </span>
+                <button onclick="document.getElementById('newsSearchInput').value=''; document.getElementById('newsSearchBtn').click();" 
+                        style="background: #047857; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600;">
+                  Clear
+                </button>
+              </div>
+            `;
+            
+            // Show pagination
+            document.querySelector('.controller').style.display = 'flex';
+            
+            // Reset active filter
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+              chip.classList.remove('active');
+              if (chip.dataset.category === 'all') {
+                chip.classList.add('active');
+              }
             });
           } else {
-            // Show all articles if search is empty
-            const articles = document.querySelectorAll('.berita');
-            articles.forEach(article => {
-              article.style.display = 'flex';
-            });
+            // Clear search - show all articles
+            filteredArticles = [...allArticles];
+            const resultsBadge = document.querySelector('.search-results-badge');
+            if (resultsBadge) resultsBadge.remove();
+            document.querySelector('.controller').style.display = 'flex';
           }
+          
+          currentSlide = 0;
+          loadLatestNews();
+          
+          // Scroll to results
+          document.getElementById('latest-news').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
         if (searchBtn) searchBtn.addEventListener("click", performSearch);
@@ -409,81 +549,52 @@
               performSearch();
             }
           });
+          
+          // Clear search on input clear
+          searchInput.addEventListener("input", (e) => {
+            if (e.target.value === '') {
+              const resultsBadge = document.querySelector('.search-results-badge');
+              if (resultsBadge) {
+                resultsBadge.remove();
+                filteredArticles = [...allArticles];
+                currentSlide = 0;
+                loadLatestNews();
+              }
+            }
+          });
         }
       })();
 
       // -------- News Filter --------
       (function () {
         const filterChips = document.querySelectorAll('.filter-chip');
-        const newsArticles = document.querySelectorAll('.berita');
 
         filterChips.forEach(chip => {
           chip.addEventListener('click', () => {
-            // Remove active class from all chips
             filterChips.forEach(c => c.classList.remove('active'));
-            // Add active class to clicked chip
             chip.classList.add('active');
 
             const category = chip.dataset.category;
             
-            newsArticles.forEach(article => {
-              if (category === 'all' || article.dataset.category === category) {
-                article.style.display = 'flex';
-              } else {
-                article.style.display = 'none';
-              }
-            });
+            if (category === 'all') {
+              filteredArticles = [...allArticles];
+            } else {
+              filteredArticles = allArticles.filter(article => article.category === category);
+            }
+            
+            currentSlide = 0;
+            loadLatestNews();
           });
         });
       })();
 
-      // -------- News Carousel --------
+      // -------- News Carousel Controls --------
       (function () {
-        let currentSlide = 0;
-        const articles = document.querySelectorAll('.berita');
-        const dots = document.querySelectorAll('#newsDots img');
         const prevBtn = document.getElementById('prevNews');
         const nextBtn = document.getElementById('nextNews');
-        const articlesPerSlide = 4;
-
-        function updateCarousel() {
-          // Hide all articles
-          articles.forEach((article, index) => {
-            if (index >= currentSlide * articlesPerSlide && 
-                index < (currentSlide + 1) * articlesPerSlide) {
-              article.style.display = 'flex';
-            } else {
-              article.style.display = 'none';
-            }
-          });
-
-          // Update dots
-          dots.forEach((dot, index) => {
-            if (index === currentSlide) {
-              dot.src = '/Assets/choosen-dot.png';
-            } else {
-              dot.src = '/Assets/unchoosen-dot.png';
-            }
-          });
-        }
-
-        function nextSlide() {
-          const maxSlides = Math.ceil(articles.length / articlesPerSlide);
-          currentSlide = (currentSlide + 1) % maxSlides;
-          updateCarousel();
-        }
-
-        function prevSlide() {
-          const maxSlides = Math.ceil(articles.length / articlesPerSlide);
-          currentSlide = currentSlide === 0 ? maxSlides - 1 : currentSlide - 1;
-          updateCarousel();
-        }
 
         if (nextBtn) nextBtn.addEventListener('click', nextSlide);
         if (prevBtn) prevBtn.addEventListener('click', prevSlide);
-
-        // Initialize carousel
-        updateCarousel();
       })();
 
       // -------- Newsletter Subscription --------
@@ -523,7 +634,7 @@
         function setMarker(kind, lat, lon, label) {
           const latLng = L.latLng(lat, lon);
           const icon = L.icon({
-            iconUrl: kind === 'origin' ? 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png' : 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+            iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
             iconSize: [25, 41],
             iconAnchor: [12, 41],
             popupAnchor: [0, -36],
@@ -589,9 +700,12 @@
           window.open(url.toString(), '_blank');
         });
 
-        // Initialize with Sydney CBD as destination example
         destInput && (destInput.value = 'Sydney CBD');
       })();
+
+      // -------- Initialize Page --------
+      loadFeaturedNews();
+      loadLatestNews();
     </script>
 
     <footer class="site-footer">
@@ -643,7 +757,6 @@
                 >
                   <image
                     href="/Assets/facebook.png"
-                    xlink:href="/Assets/facebook-app-symbol.png"
                     width="18"
                     height="18"
                   />
@@ -659,7 +772,6 @@
                 >
                   <image
                     href="/Assets/youtube.png"
-                    xlink:href="/Assets/youtube.png"
                     width="18"
                     height="18"
                   />
@@ -674,7 +786,6 @@
                 >
                   <image
                     href="/Assets/twitter.png"
-                    xlink:href="/Assets/twitter.png"
                     width="18"
                     height="18"
                   />
