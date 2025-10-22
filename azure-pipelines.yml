@@ -78,13 +78,14 @@ steps:
   inputs:
     secureFile: 'MyHome.PublishSettings'
 
-# Deploy via Publish Profile (Zip Deploy)
-- task: AzureRmWebAppDeployment@4
-  displayName: 'Deploy via Publish Profile (Zip Deploy)'
-  inputs:
-    ConnectionType: 'PublishProfile'
-    PublishProfilePath: '$(fetchPublishProfile.secureFilePath)'
-    PublishProfilePassword: '$(PUBLISH_PROFILE_PASSWORD)'   # <-- add this
-    packageForLinux: '$(Build.ArtifactStagingDirectory)/$(artifactZip)'
-    appType: 'webAppLinux'
-    DeploymentType: 'zipDeploy'
+# Deploy via cURL to the Kudu ZipDeploy API
+- script: |
+    # Extract Kudu credentials from the publish profile
+    KUDU_USER=$(xpath -q -e "//publishProfile[@publishMethod='ZipDeploy']/@userName" $(fetchPublishProfile.secureFilePath) | cut -d'"' -f2)
+    KUDU_PASS=$(xpath -q -e "//publishProfile[@publishMethod='ZipDeploy']/@userPWD" $(fetchPublishProfile.secureFilePath) | cut -d'"' -f2)
+
+    # Perform the deployment
+    curl -X POST -u "$KUDU_USER:$KUDU_PASS" \
+      --data-binary "@$(Build.ArtifactStagingDirectory)/$(artifactZip)" \
+      https://myhome-bfbxbddsaxerf2fc.scm.australiaeast-01.azurewebsites.net:443
+  displayName: 'Deploy to App Service using cURL'
