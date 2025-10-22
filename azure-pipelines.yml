@@ -48,17 +48,28 @@ steps:
 
 # ---------- Package app ----------
 - script: |
+    set -e
+    rm -rf deploy-src
     mkdir -p deploy-src
     rsync -av --delete \
       --exclude '.git' \
       --exclude 'node_modules' \
       --exclude 'test' \
       --exclude 'coverage' \
-      ./ deploy-src/
-    cd deploy-src
-    zip -r ../$(Build.ArtifactStagingDirectory)/$(artifactZip) .
-  displayName: 'Create deployment zip'
+      ./frontend/ ./backend/ ./Assets/ ./css/ \
+      deploy-src/
+  displayName: 'Stage files for deployment'
 
+# Zip them into $(Build.ArtifactStagingDirectory)/app.zip
+- task: ArchiveFiles@2
+  displayName: 'Create deployment zip'
+  inputs:
+    rootFolderOrFile: 'deploy-src'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(artifactZip)'
+    replaceExistingArchive: true
+    
 # ---------- Download the secure publish profile ----------
 # Upload your .PublishSettings XML first: Pipelines → Library → Secure files → + Secure file
 - task: DownloadSecureFile@1
