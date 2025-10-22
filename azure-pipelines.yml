@@ -1,5 +1,3 @@
-# Node.js → Test → Package → Deploy (Azure App Service Linux)
-
 trigger:
 - main
 
@@ -8,9 +6,9 @@ pool:
 
 variables:
   # ----- CHANGE THESE IF NEEDED -----
-  azureServiceConnection: 'My-Azure-RM'   # Your Azure DevOps Service Connection (ARM)
-  resourceGroup: 'my-rg'                  # Your Azure Resource Group
-  webAppName: 'MyHome'                    # Your App Service name
+  azureServiceConnection: 'My-Azure-RM'
+  resourceGroup: 'my-rg'
+  webAppName: 'MyHome'
   nodeVersion: '20.x'
   artifactZip: 'app.zip'
 
@@ -34,14 +32,6 @@ steps:
     export JEST_JUNIT_OUTPUT=$(Build.SourcesDirectory)/test-results/junit.xml
     npx jest --ci --reporters=default --reporters=jest-junit
   displayName: 'Run unit tests (Jest → JUnit)'
-
-- task: PublishTestResults@2
-  displayName: 'Publish test results'
-  inputs:
-    testResultsFormat: 'JUnit'
-    testResultsFiles: '$(Build.SourcesDirectory)/test-results/*.xml'
-    failTaskOnFailedTests: true
-  condition: succeededOrFailed()
 
 # ---------- Package for deploy (lean zip; exclude node_modules/tests/etc.) ----------
 # Stage only deployable files into a temp folder
