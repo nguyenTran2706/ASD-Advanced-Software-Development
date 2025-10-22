@@ -10,18 +10,30 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
+# --- Install Node ---
 - task: NodeTool@0
   inputs:
     versionSpec: '20.x'
   displayName: 'Install Node.js'
 
-- script:
-    npm install
-    npm test
-  displayName: 'Run Unit Tests'
+# --- Restore deps ---
+- script: npm ci
+  displayName: 'Install dependencies'
 
+# --- Run Jest with JUnit output for Azure DevOps ---
 - script: |
-    npm install
-    npm run ci:start-and-test
-    npm test  # Use a test or build script instead of starting the server
-  displayName: 'npm install and test'
+    mkdir -p $(Build.SourcesDirectory)/test-results
+    export JEST_JUNIT_OUTPUT=$(Build.SourcesDirectory)/test-results/junit.xml
+    npx jest --ci --reporters=default --reporters=jest-junit
+  displayName: 'Run unit tests (Jest → JUnit)'
+
+# --- Publish test results to the Tests tab ---
+- task: PublishTestResults@2
+  displayName: 'Publish test results'
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: '$(Build.SourcesDirectory)/test-results/*.xml'
+    searchFolder: '$(Build.SourcesDirectory)/test-results'
+    failTaskOnFailedTests: true
+  # Still publish results even if tests fail, so you can see them in the UI
+  condition: succeededOrFailed()
