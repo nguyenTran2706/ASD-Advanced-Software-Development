@@ -5,72 +5,74 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
+  # CHANGE THESE VALUES
+  azureServiceConnection: 'My-Azure-RM'
+  resourceGroup: 'my-rg'
+  webAppName: 'my-node-webapp'
   nodeVersion: '20.x'
   artifactZip: 'app.zip'
-  appName: 'myhome-bfbxbddsaxerf2fc'
-  kuduApiUrl: 'https://myhome-bfbxbddsaxerf2fc.scm.australiaeast-01.azurewebsites.net/api/zipdeploy'
 
 steps:
-# ---------- Setup Node ----------
+# --- Setup Node.js ---
 - task: NodeTool@0
   inputs:
     versionSpec: '$(nodeVersion)'
   displayName: 'Install Node.js'
 
-# ---------- Install backend dependencies ----------
-- script: |
-    cd backend
-    npm ci
-  displayName: 'Install backend dependencies'
+# --- Install deps ---
+- script: npm ci
+  displayName: 'Install dependencies'
 
-# ---------- Install test reporter (if you have Jest) ----------
-- script: |
-    cd backend
-    npm install --no-save jest-junit
+# --- Install test reporter for Azure DevOps ---
+- script: npm install --no-save jest-junit
   displayName: 'Install jest-junit reporter'
 
-# ---------- Run backend tests ----------
+# --- Run Jest tests + publish results ---
 - script: |
-    cd backend
     mkdir -p $(Build.SourcesDirectory)/test-results
     export JEST_JUNIT_OUTPUT=$(Build.SourcesDirectory)/test-results/junit.xml
-    npx jest --ci --reporters=default --reporters=jest-junit || true
-  displayName: 'Run backend tests (Jest → JUnit)'
+    npx jest --ci --reporters=default --reporters=jest-junit
+  displayName: 'Run unit tests (Jest → JUnit)'
 
-# Stage exactly what you want to deploy
+- task: PublishTestResults@2
+  displayName: 'Publish test results'
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: '$(Build.SourcesDirectory)/test-results/*.xml'
+    failTaskOnFailedTests: true
+  condition: succeededOrFailed()
+
+# --- Package app for deployment ---
 - script: |
-    set -e
-    rm -rf deploy-src
     mkdir -p deploy-src
     rsync -av --delete \
       --exclude '.git' \
       --exclude 'node_modules' \
       --exclude 'test' \
       --exclude 'coverage' \
-      ./frontend/ ./backend/ ./Assets/ ./css/ \
-      deploy-src/
-  displayName: 'Stage files for deployment'
+      ./ deploy-src/
+    cd deploy-src
+    zip -r ../$(Build.ArtifactStagingDirectory)/$(artifactZip) .
+  displayName: 'Prepare zip for deployment'
 
-# Zip them into $(Build.ArtifactStagingDirectory)/app.zip
-- task: ArchiveFiles@2
-  displayName: 'Create deployment zip'
+# --- Configure App Service build settings (so Azure builds your Node app) ---
+- task: AzureCLI@2
+  displayName: 'Configure App Service build settings'
   inputs:
-    rootFolderOrFile: 'deploy-src'
-    includeRootFolder: false
-    archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/$(artifactZip)'
-    replaceExistingArchive: true
+    azureSubscription: '$(azureServiceConnection)'
+    scriptType: bash
+    scriptLocation: inlineScript
+    inlineScript: |
+      az webapp config appsettings set \
+        --resource-group "$(resourceGroup)" \
+        --name "$(webAppName)" \
+        --settings SCM_DO_BUILD_DURING_DEPLOYMENT=true WEBSITE_NODE_DEFAULT_VERSION=$(nodeVersion)
 
-# Download the secure publish profile first (unchanged)
-- task: DownloadSecureFile@1
-  name: fetchPublishProfile
+# --- Deploy to Azure App Service ---
+- task: AzureWebApp@1
+  displayName: 'Deploy to Azure App Service'
   inputs:
-    secureFile: 'MyHome.PublishSettings'
-
-# Deploy via cURL to the Kudu ZipDeploy API
-- script: |
-    # Use the new variable that contains the full, correct URL
-    curl -X POST -u "$(KUDU_USERNAME):$(KUDU_PASSWORD)" \
-      --data-binary "@$(Build.ArtifactStagingDirectory)/$(artifactZip)" \
-      $(kuduApiUrl)
-  displayName: 'Deploy to App Service using cURL'
+    azureSubscription: '$(azureServiceConnection)'
+    appType: 'webAppLinux'
+    appName: '$(webAppName)'
+    package: '$(Build.ArtifactStagingDirectory)/$(artifactZip)'
