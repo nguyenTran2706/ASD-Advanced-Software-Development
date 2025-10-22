@@ -11,6 +11,7 @@ variables:
   nodeVersion: '20.x'
   artifactZip: 'app.zip'
   appName: 'myhome-bfbxbddsaxerf2fc'
+  kuduApiUrl: 'https://myhome-bfbxbddsaxerf2fc.scm.australiaeast-01.azurewebsites.net/api/zipdeploy'
 
 steps:
 # ---------- Setup Node ----------
@@ -74,7 +75,8 @@ steps:
 
 # Deploy via cURL to the Kudu ZipDeploy API
 - script: |
+    # Use the new variable that contains the full, correct URL
     curl -X POST -u "$(KUDU_USERNAME):$(KUDU_PASSWORD)" \
       --data-binary "@$(Build.ArtifactStagingDirectory)/$(artifactZip)" \
-      https://$(appName).scm.azurewebsites.net/api/zipdeploy
+      $(kuduApiUrl)
   displayName: 'Deploy to App Service using cURL'
