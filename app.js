@@ -12,7 +12,6 @@ const enquiriesRoute = require("./backend/enquiries");
 const profileApiRoutes = require('./backend/profile');
 const inspectionsRouter = require("./backend/inspections");
 
-
 // Middleware
 app.use(express.json());
 app.use(
@@ -51,9 +50,10 @@ app.get("/", (req, res) => {
 app.use("/api/listings", require("./backend/listings"));
 
 // Start server
-const PORT = 3000;
-app.listen(PORT, () =>
-  console.log(`🚀 Server running at http://localhost:${PORT}`)
-);
+const PORT = process.env.PORT || 3000;
+const HOST = "0.0.0.0";
+app.listen(PORT, HOST, () => {
+  console.log(`🚀 Server listening on http://${HOST}:${PORT}`);
+});
 
 module.exports = app;
