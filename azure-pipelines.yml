@@ -1,7 +1,10 @@
-# Node.js
-# Build a general Node.js project with npm.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+# Node.js CI/CD pipeline using a Publish Profile for deployment
+# -------------------------------------------------------------
+# This version:
+# 1) installs and tests Node.js
+# 2) publishes Jest results to the Azure DevOps Tests tab
+# 3) zips the app
+# 4) deploys via a Publish Profile (no Service Connection required)
 
 trigger:
 - main
@@ -9,31 +12,66 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+  nodeVersion: '20.x'
+  artifactZip: 'app.zip'
+
 steps:
-# --- Install Node ---
+# ---------- Setup Node ----------
 - task: NodeTool@0
   inputs:
-    versionSpec: '20.x'
+    versionSpec: '$(nodeVersion)'
   displayName: 'Install Node.js'
 
-# --- Restore deps ---
+# ---------- Install deps ----------
 - script: npm ci
   displayName: 'Install dependencies'
 
-# --- Run Jest with JUnit output for Azure DevOps ---
+# ---------- Install reporter for Jest test results ----------
+- script: npm install --no-save jest-junit
+  displayName: 'Install jest-junit reporter'
+
+# ---------- Run tests and publish ----------
 - script: |
     mkdir -p $(Build.SourcesDirectory)/test-results
     export JEST_JUNIT_OUTPUT=$(Build.SourcesDirectory)/test-results/junit.xml
     npx jest --ci --reporters=default --reporters=jest-junit
   displayName: 'Run unit tests (Jest → JUnit)'
 
-# --- Publish test results to the Tests tab ---
 - task: PublishTestResults@2
   displayName: 'Publish test results'
   inputs:
     testResultsFormat: 'JUnit'
     testResultsFiles: '$(Build.SourcesDirectory)/test-results/*.xml'
-    searchFolder: '$(Build.SourcesDirectory)/test-results'
     failTaskOnFailedTests: true
-  # Still publish results even if tests fail, so you can see them in the UI
   condition: succeededOrFailed()
+
+# ---------- Package app ----------
+- script: |
+    mkdir -p deploy-src
+    rsync -av --delete \
+      --exclude '.git' \
+      --exclude 'node_modules' \
+      --exclude 'test' \
+      --exclude 'coverage' \
+      ./ deploy-src/
+    cd deploy-src
+    zip -r ../$(Build.ArtifactStagingDirectory)/$(artifactZip) .
+  displayName: 'Create deployment zip'
+
+# ---------- Download the secure publish profile ----------
+# Upload your .PublishSettings XML first: Pipelines → Library → Secure files → + Secure file
+- task: DownloadSecureFile@1
+  name: fetchPublishProfile
+  inputs:
+    secureFile: 'MyHome.PublishSettings'     # match your uploaded file name
+
+# ---------- Deploy to Azure App Service ----------
+- task: AzureRmWebAppDeployment@4
+  displayName: 'Deploy via Publish Profile (Zip Deploy)'
+  inputs:
+    ConnectionType: 'PublishProfile'
+    PublishProfilePath: '$(fetchPublishProfile.secureFilePath)'
+    packageForLinux: '$(Build.ArtifactStagingDirectory)/$(artifactZip)'
+    appType: 'webAppLinux'
+    DeploymentType: 'zipDeploy'
