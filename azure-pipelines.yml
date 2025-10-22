@@ -76,12 +76,11 @@ steps:
   inputs:
     secureFile: 'MyHome.PublishSettings'
 
-# ---------- Deploy to Azure App Service (Linux) ----------
-# Uses the publish profile on a Linux agent (no service connection needed)
+# ---------- Deploy to Azure App Service ----------
 - task: AzureWebApp@1
   displayName: 'Deploy via Publish Profile (Zip Deploy)'
   inputs:
     appType: 'webAppLinux'
-    appName: ''                          # leave blank when using publishProfile
+    appName: ''   # Leave blank; publishProfile contains the site name
     package: '$(Build.ArtifactStagingDirectory)/$(artifactZip)'
     publishProfile: '$(fetchPublishProfile.secureFilePath)'
