@@ -11,8 +11,49 @@
     <link rel="stylesheet" href="/css/style.css" />
   </head>
   <body>
-    <!-- Reuse your existing header structure -->
-    <header class="nav-shell"></header>
+    <!-- Header -->
+    <header class="nav-shell">
+      <div class="nav-top">
+        <button
+          id="menuToggle"
+          class="menu-btn"
+          aria-expanded="false"
+          aria-controls="navLinks"
+        >
+          <span class="menu-icon"><span></span></span>
+          <span class="menu-text">Menu</span>
+        </button>
+
+        <a href="index.html" class="brand">
+          <img src="/Assets/Logo.png" alt="logo" style="height: 40px" />
+        </a>
+
+        <div class="navbar-buttons" id="navbarUser">
+          <a
+            class="button-primary"
+            href="signUp.html"
+            style="text-decoration: none; color: #fff"
+            >Sign Up</a
+          >
+          <a
+            class="button-primary"
+            href="login.html"
+            style="text-decoration: none; color: #fff"
+            >Login</a
+          >
+        </div>
+      </div>
+
+      <div id="navLinks" class="nav-links">
+        <nav id="navbar" class="navbar-selector">
+          <a href="buy.html">Buy</a>
+          <a href="rent.html">Rent</a>
+          <a href="sold.html">Sold</a>
+          <a href="findAgent.html">Find Agent</a>
+          <a href="news.html">News</a>
+        </nav>
+      </div>
+    </header>
 
     <div id="profile-page" style="padding: 40px">
       <h1 class="optimization-h1" style="color: #000; margin-bottom: 40px">
@@ -431,25 +472,85 @@
     </script>
 
     <script>
-      // Reuse your navigation bar logic here to ensure it appears on this page
-      (async function () {
+      /* Logged-in user banner */
+      (function () {
+        const el = document.getElementById('navbarUser');
         try {
-          const res = await fetch("index.html");
-          const html = await res.text();
-          const doc = new DOMParser().parseFromString(html, "text/html");
-          const navShell = doc.querySelector(".nav-shell");
-          // Find the nav bar's inline script in index.html
-          const navScriptText = Array.from(doc.querySelectorAll('script:not([src])'))
-                                     .find(s => s.innerText.includes('// -------- Auth area'))
-                                     ?.innerText;
-          
-          document.querySelector(".nav-shell").replaceWith(navShell);
-          if (navScriptText) {
-            eval(navScriptText); // Re-run the auth/nav script
+          const u = JSON.parse(localStorage.getItem('user') || 'null');
+          if (!u) {
+            // Not logged in - redirect to login
+            window.location.href = 'login.html';
+            return;
           }
-        } catch(e) {
-          console.error("Could not load navigation bar.", e);
+          const name = u.first_name?.trim() || u.email;
+          el.innerHTML = `<span style="margin-right:10px;color:#047857;font-weight:600;">Welcome, ${name}</span>
+          <button class="button-secondary" id="logoutBtn">Logout</button>`;
+          document.getElementById('logoutBtn').onclick = () => {
+            localStorage.removeItem('user');
+            window.location.href = 'index.html';
+          };
+        } catch (_) {
+          window.location.href = 'login.html';
         }
+      })();
+
+      /* Active nav highlighting */
+      (function () {
+        try {
+          const path = location.pathname.replace(/\/+$/, '');
+          const navLinks = document.querySelectorAll('.navbar-selector a[href]');
+          
+          navLinks.forEach(a => {
+            const href = a.getAttribute('href') || '';
+            const isHome = (path === '' || path === '/' || path.endsWith('/')) && 
+                           (href === 'index.html' || href === '/index.html' || href === '/');
+            
+            if (isHome || path.endsWith(href) || (href.startsWith('/') && path === href)) {
+              a.classList.add('nav-active');
+            }
+          });
+        } catch (err) {
+          console.error("Nav highlighting error:", err);
+        }
+      })();
+
+      /* Mobile menu toggle - Enhanced */
+      (function () {
+        const shell = document.querySelector(".nav-shell");
+        const btn = document.getElementById("menuToggle");
+        const navLinks = document.querySelectorAll(".navbar-selector a");
+        
+        if (!shell || !btn) {
+          console.error("Nav shell or menu button not found");
+          return;
+        }
+        
+        // Toggle menu on button click
+        btn.addEventListener("click", (e) => {
+          e.preventDefault();
+          const isOpen = shell.classList.toggle("open");
+          btn.setAttribute("aria-expanded", String(isOpen));
+        });
+        
+        // Close menu when clicking a nav link (better UX on mobile)
+        navLinks.forEach(link => {
+          link.addEventListener("click", () => {
+            if (shell.classList.contains("open")) {
+              shell.classList.remove("open");
+              btn.setAttribute("aria-expanded", "false");
+            }
+          });
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener("click", (e) => {
+          if (shell.classList.contains("open") && 
+              !shell.contains(e.target) && 
+              e.target !== btn) {
+            shell.classList.remove("open");
+            btn.setAttribute("aria-expanded", "false");
+          }
+        });
       })();
     </script>
   </body>

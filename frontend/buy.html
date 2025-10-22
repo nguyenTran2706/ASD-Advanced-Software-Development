@@ -20,7 +20,7 @@
           aria-expanded="false"
           aria-controls="navLinks"
         >
-          <span class="menu-icon"></span>
+          <span class="menu-icon"><span></span></span>
           <span class="menu-text">Menu</span>
         </button>
 
@@ -149,26 +149,44 @@
           });
         } catch (_) {}
       })();
-      (async function () {
-        try {
-          const res = await fetch("index.html");
-          const html = await res.text();
-          const doc = new DOMParser().parseFromString(html, "text/html");
-          const navShell = doc.querySelector(".nav-shell");
-          // Find the nav bar's inline script in index.html
-          const navScriptText = Array.from(
-            doc.querySelectorAll("script:not([src])")
-          ).find((s) =>
-            s.innerText.includes("// -------- Auth area")
-          )?.innerText;
 
-          document.querySelector(".nav-shell").replaceWith(navShell);
-          if (navScriptText) {
-            eval(navScriptText); // Re-run the auth/nav script
-          }
-        } catch (e) {
-          console.error("Could not load navigation bar.", e);
+      // Mobile menu toggle - Initialize immediately after user banner
+      (function () {
+        const shell = document.querySelector(".nav-shell");
+        const btn = document.getElementById("menuToggle");
+        const navLinks = document.querySelectorAll(".navbar-selector a");
+        
+        if (!shell || !btn) {
+          console.error("Nav shell or menu button not found");
+          return;
         }
+        
+        // Toggle menu on button click
+        btn.addEventListener("click", (e) => {
+          e.preventDefault();
+          const isOpen = shell.classList.toggle("open");
+          btn.setAttribute("aria-expanded", String(isOpen));
+        });
+        
+        // Close menu when clicking a nav link
+        navLinks.forEach(link => {
+          link.addEventListener("click", () => {
+            if (shell.classList.contains("open")) {
+              shell.classList.remove("open");
+              btn.setAttribute("aria-expanded", "false");
+            }
+          });
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener("click", (e) => {
+          if (shell.classList.contains("open") && 
+              !shell.contains(e.target) && 
+              e.target !== btn) {
+            shell.classList.remove("open");
+            btn.setAttribute("aria-expanded", "false");
+          }
+        });
       })();
 
       const $ = (s) => document.querySelector(s);
@@ -411,17 +429,6 @@
         pushState();
         render();
       });
-
-      // mobile menu toggle
-      (function () {
-        const shell = document.querySelector(".nav-shell");
-        const btn = document.getElementById("menuToggle");
-        if (btn && shell)
-          btn.addEventListener("click", () => {
-            const isOpen = shell.classList.toggle("open");
-            btn.setAttribute("aria-expanded", String(isOpen));
-          });
-      })();
 
       bindWishlistHandlersOnce();
       render();

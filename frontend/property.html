@@ -11,18 +11,39 @@
 </head>
 
 <body>
-  <!-- Header (same pattern as other pages) -->
+  <!-- Header -->
   <header class="nav-shell">
     <div class="nav-top">
-      <button id="menuToggle" class="menu-btn" aria-expanded="false" aria-controls="navLinks">
-        <span class="menu-icon"></span><span class="menu-text">Menu</span>
+      <button
+        id="menuToggle"
+        class="menu-btn"
+        aria-expanded="false"
+        aria-controls="navLinks"
+      >
+        <span class="menu-icon"><span></span></span>
+        <span class="menu-text">Menu</span>
       </button>
-      <a href="index.html" class="brand"><img src="/Assets/Logo.png" alt="logo" style="height:40px" /></a>
+
+      <a href="index.html" class="brand">
+        <img src="/Assets/Logo.png" alt="logo" style="height: 40px" />
+      </a>
+
       <div class="navbar-buttons" id="navbarUser">
-        <a class="button-primary" href="signUp.html" style="text-decoration:none;color:#fff">Sign Up</a>
-        <a class="button-primary" href="login.html" style="text-decoration:none;color:#fff">Login</a>
+        <a
+          class="button-primary"
+          href="signUp.html"
+          style="text-decoration: none; color: #fff"
+          >Sign Up</a
+        >
+        <a
+          class="button-primary"
+          href="login.html"
+          style="text-decoration: none; color: #fff"
+          >Login</a
+        >
       </div>
     </div>
+
     <div id="navLinks" class="nav-links">
       <nav id="navbar" class="navbar-selector">
         <a href="buy.html">Buy</a>
@@ -101,12 +122,24 @@
 
     /* Active nav highlighting */
     (function () {
-      const path = location.pathname.replace(/\/+$/, '');
-      document.querySelectorAll('#navbar .navbar-selector a[href], #navbar a[href]').forEach(a => {
-        const href = a.getAttribute('href') || '';
-        const isHome = (path === '' || path === '/') && (href === 'index.html' || href === '/index.html');
-        if (isHome || path.endsWith(href) || (href.startsWith('/') && path === href)) a.classList.add('nav-active');
-      });
+      try {
+        const path = location.pathname.replace(/\/+$/, '');
+        const navLinks = document.querySelectorAll('.navbar-selector a[href]');
+        
+        navLinks.forEach(a => {
+          const href = a.getAttribute('href') || '';
+          const isHome = (path === '' || path === '/' || path.endsWith('/')) && 
+                         (href === 'index.html' || href === '/index.html' || href === '/');
+          
+          if (isHome || path.endsWith(href) || (href.startsWith('/') && path === href)) {
+            a.classList.add('nav-active');
+          }
+        });
+        
+        console.log("Nav highlighting initialized");
+      } catch (err) {
+        console.error("Nav highlighting error:", err);
+      }
     })();
 
     const qs = new URLSearchParams(location.search);
@@ -257,18 +290,56 @@
       } catch (_) { }
     }
 
-    load();
-
-    // Mobile menu toggle
+    // Mobile menu toggle - Initialize FIRST
     (function () {
       const shell = document.querySelector(".nav-shell");
       const btn = document.getElementById("menuToggle");
-      if (btn && shell)
-        btn.addEventListener("click", () => {
-          const isOpen = shell.classList.toggle("open");
-          btn.setAttribute("aria-expanded", String(isOpen));
+      const navLinks = document.querySelectorAll(".navbar-selector a");
+      
+      if (!shell) {
+        console.error("Nav shell not found");
+        return;
+      }
+      
+      if (!btn) {
+        console.error("Menu toggle button not found");
+        return;
+      }
+      
+      // Toggle menu on button click
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        const isOpen = shell.classList.toggle("open");
+        btn.setAttribute("aria-expanded", String(isOpen));
+        console.log("Menu toggled:", isOpen ? "open" : "closed");
+      });
+      
+      // Close menu when clicking a nav link (better UX on mobile)
+      navLinks.forEach(link => {
+        link.addEventListener("click", () => {
+          if (shell.classList.contains("open")) {
+            shell.classList.remove("open");
+            btn.setAttribute("aria-expanded", "false");
+            console.log("Menu closed via nav link");
+          }
         });
+      });
+      
+      // Close menu when clicking outside
+      document.addEventListener("click", (e) => {
+        if (shell.classList.contains("open") && 
+            !shell.contains(e.target) && 
+            e.target !== btn) {
+          shell.classList.remove("open");
+          btn.setAttribute("aria-expanded", "false");
+          console.log("Menu closed via outside click");
+        }
+      });
+      
+      console.log("Mobile menu initialized successfully");
     })();
+
+    load();
   </script>
   <script>
     /* ===== Property Meta (Highlights • Long Description • Features • Agent Card)
