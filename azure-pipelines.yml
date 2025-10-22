@@ -74,13 +74,11 @@ steps:
 - task: DownloadSecureFile@1
   name: fetchPublishProfile
   inputs:
-    secureFile: 'MyHome.PublishSettings'
+    secureFile: 'MyHome.PublishSettings'   # must match the secure file name you uploaded
 
-# ---------- Deploy to Azure App Service ----------
+# ---------- Deploy to Azure App Service via Publish Profile ----------
 - task: AzureWebApp@1
   displayName: 'Deploy via Publish Profile (Zip Deploy)'
   inputs:
-    appType: 'webAppLinux'
-    appName: ''   # Leave blank; publishProfile contains the site name
     package: '$(Build.ArtifactStagingDirectory)/$(artifactZip)'
     publishProfile: '$(fetchPublishProfile.secureFilePath)'
