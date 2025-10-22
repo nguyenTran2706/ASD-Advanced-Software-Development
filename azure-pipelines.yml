@@ -1,3 +1,5 @@
+# Node.js → Test → Package → Deploy (Azure App Service Linux)
+
 trigger:
 - main
 
@@ -5,29 +7,28 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-  # CHANGE THESE VALUES
-  azureServiceConnection: 'My-Azure-RM'
-  resourceGroup: 'my-rg'
-  webAppName: 'my-node-webapp'
+  # ----- CHANGE THESE IF NEEDED -----
+  azureServiceConnection: 'My-Azure-RM'   # Your Azure DevOps Service Connection (ARM)
+  resourceGroup: 'my-rg'                  # Your Azure Resource Group
+  webAppName: 'MyHome'                    # Your App Service name
   nodeVersion: '20.x'
   artifactZip: 'app.zip'
 
 steps:
-# --- Setup Node.js ---
+# ---------- Node + deps ----------
 - task: NodeTool@0
   inputs:
     versionSpec: '$(nodeVersion)'
   displayName: 'Install Node.js'
 
-# --- Install deps ---
 - script: npm ci
   displayName: 'Install dependencies'
 
-# --- Install test reporter for Azure DevOps ---
+# Ensure jest-junit is available so tests show in the Tests tab
 - script: npm install --no-save jest-junit
   displayName: 'Install jest-junit reporter'
 
-# --- Run Jest tests + publish results ---
+# ---------- Tests (publish to Azure DevOps) ----------
 - script: |
     mkdir -p $(Build.SourcesDirectory)/test-results
     export JEST_JUNIT_OUTPUT=$(Build.SourcesDirectory)/test-results/junit.xml
@@ -42,20 +43,35 @@ steps:
     failTaskOnFailedTests: true
   condition: succeededOrFailed()
 
-# --- Package app for deployment ---
-- script: |
-    mkdir -p deploy-src
-    rsync -av --delete \
-      --exclude '.git' \
-      --exclude 'node_modules' \
-      --exclude 'test' \
-      --exclude 'coverage' \
-      ./ deploy-src/
-    cd deploy-src
-    zip -r ../$(Build.ArtifactStagingDirectory)/$(artifactZip) .
-  displayName: 'Prepare zip for deployment'
+# ---------- Package for deploy (lean zip; exclude node_modules/tests/etc.) ----------
+# Stage only deployable files into a temp folder
+- task: CopyFiles@2
+  displayName: 'Stage deployable files'
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)'
+    Contents: |
+      **/*
+      !.git/**
+      !.github/**
+      !node_modules/**
+      !coverage/**
+      !test/**
+      !**/*.test.*
+      !**/*.spec.*
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/package'
 
-# --- Configure App Service build settings (so Azure builds your Node app) ---
+# Zip the staged folder
+- task: ArchiveFiles@2
+  displayName: 'Create deployment zip'
+  inputs:
+    rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/package'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(artifactZip)'
+    replaceExistingArchive: true
+
+# ---------- Configure App Service build settings (Oryx) ----------
+# Ensures Azure builds your Node app on deploy and uses Node 20
 - task: AzureCLI@2
   displayName: 'Configure App Service build settings'
   inputs:
@@ -67,12 +83,14 @@ steps:
         --resource-group "$(resourceGroup)" \
         --name "$(webAppName)" \
         --settings SCM_DO_BUILD_DURING_DEPLOYMENT=true WEBSITE_NODE_DEFAULT_VERSION=$(nodeVersion)
+  condition: succeeded()   # only if earlier steps (incl. tests) succeeded
 
-# --- Deploy to Azure App Service ---
+# ---------- Deploy to Azure App Service ----------
 - task: AzureWebApp@1
-  displayName: 'Deploy to Azure App Service'
+  displayName: 'Deploy to Azure App Service (Linux)'
   inputs:
     azureSubscription: '$(azureServiceConnection)'
     appType: 'webAppLinux'
     appName: '$(webAppName)'
     package: '$(Build.ArtifactStagingDirectory)/$(artifactZip)'
+  condition: succeeded()   # deploy only if tests passed
