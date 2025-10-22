@@ -10,6 +10,7 @@ pool:
 variables:
   nodeVersion: '20.x'
   artifactZip: 'app.zip'
+  appName: 'myhome-bfbxbddsaxerf2fc'
 
 steps:
 # ---------- Setup Node ----------
@@ -40,13 +41,6 @@ steps:
     export JEST_JUNIT_OUTPUT=$(Build.SourcesDirectory)/test-results/junit.xml
     npx jest --ci --reporters=default --reporters=jest-junit || true
   displayName: 'Run backend tests (Jest → JUnit)'
-
-- task: PublishTestResults@2
-  displayName: 'Publish test results'
-  inputs:
-    testResultsFormat: 'JUnit'
-    testResultsFiles: '$(Build.SourcesDirectory)/test-results/*.xml'
-  condition: succeededOrFailed()
 
 # Stage exactly what you want to deploy
 - script: |
