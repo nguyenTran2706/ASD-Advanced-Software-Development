@@ -1,6 +1,3 @@
-# Node.js full-stack pipeline using a Publish Profile (no service connection)
-# Deploys to Azure App Service (Linux)
-
 trigger:
 - main
 
@@ -21,21 +18,18 @@ steps:
   displayName: 'Install Node.js'
 
 # ---------- Install backend dependencies ----------
-# (If your Node.js server is under /backend)
 - script: |
     cd backend
     npm ci
   displayName: 'Install backend dependencies'
 
 # ---------- Install test reporter (if you have Jest) ----------
-# Remove if you don't have tests
 - script: |
     cd backend
     npm install --no-save jest-junit
   displayName: 'Install jest-junit reporter'
 
 # ---------- Run backend tests ----------
-# Remove or modify if you have no tests
 - script: |
     cd backend
     mkdir -p $(Build.SourcesDirectory)/test-results
