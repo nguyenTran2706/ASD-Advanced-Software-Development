@@ -10,9 +10,32 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/css/style.css" />
+
+    <!-- Minimal extras used by the news cards layout -->
+    <style>
+      .carousel {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+      }
+      .carousel-track {
+        display: flex;
+        gap: 16px;
+        will-change: transform;
+        transition: transform 320ms ease;
+      }
+      .carousel-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        overflow: hidden;
+        min-width: 0;
+      }
+    </style>
   </head>
 
   <body>
+    <!-- Header -->
     <header class="nav-shell">
       <div class="nav-top">
         <button
@@ -56,6 +79,7 @@
       </div>
     </header>
 
+    <!-- Hero -->
     <div id="hero-section">
       <div class="hero-section-center">
         <div class="hero-text">
@@ -108,6 +132,7 @@
       </div>
     </div>
 
+    <!-- Optimization / Featured -->
     <div id="optimization">
       <div class="optimization-text">
         <p class="optimization-h1">
@@ -118,10 +143,10 @@
           results with Central Quita
         </p>
       </div>
-
-      <div class="container-layout" id="listingContainer"></div>
+      <div id="listingContainer" class="prop-grid"></div>
     </div>
 
+    <!-- Newest Developments (original look + controller) -->
     <div id="newest-development">
       <div class="optimization-text">
         <p class="optimization-h1">Newest Developments</p>
@@ -131,26 +156,22 @@
         </p>
       </div>
 
-      <div class="news-layout">
+      <div class="news-layout" id="devRow">
         <img src="/Assets/news1.png" alt="news" />
         <img src="/Assets/news2.png" alt="news" />
         <img src="/Assets/news3.png" alt="news" />
         <img src="/Assets/news3.png" alt="news" />
       </div>
 
-      <div class="controller">
+      <!-- ORIGINAL controller -->
+      <div class="controller" id="devCtrl">
         <img src="/Assets/left-arrow.png" alt="left" />
-        <div class="dots-layout">
-          <img src="/Assets/choosen-dot.png" alt="dot" />
-          <img src="/Assets/unchoosen-dot.png" alt="dot" />
-          <img src="/Assets/unchoosen-dot.png" alt="dot" />
-          <img src="/Assets/unchoosen-dot.png" alt="dot" />
-          <img src="/Assets/unchoosen-dot.png" alt="dot" />
-        </div>
+        <div class="dots-layout"></div>
         <img src="/Assets/right-arrow.png" alt="right" />
       </div>
     </div>
 
+    <!-- Latest News (now uses the SAME controller UI as above) -->
     <div id="latest-news">
       <div class="optimization-text">
         <p class="optimization-h1">Latest News</p>
@@ -160,73 +181,19 @@
         </p>
       </div>
 
-      <div class="berita-layout">
-        <div class="berita">
-          <img src="/Assets/berita1.png" alt="" />
-          <div class="berita-text">
-            <p>
-              Prince Hill period home sells for $2.9m after rate cut sales. this
-              lead to rising number of homeless people in Sydney
-            </p>
-            <p class="duration-text">3 days ago</p>
-          </div>
-        </div>
-        <div class="berita">
-          <img src="/Assets/berita4.png" alt="" />
-          <div class="berita-text">
-            <p>
-              Prince Hill period home sells for $2.9m after rate cut sales. this
-              lead to rising number of homeless people in Sydney
-            </p>
-            <p class="duration-text">3 days ago</p>
-          </div>
-        </div>
-        <div class="berita">
-          <img src="/Assets/berita2.png" alt="" />
-          <div class="berita-text">
-            <p>
-              Prince Hill period home sells for $2.9m after rate cut sales. this
-              lead to rising number of homeless people in Sydney
-            </p>
-            <p class="duration-text">3 days ago</p>
-          </div>
-        </div>
-        <div class="berita">
-          <img src="/Assets/berita3.png" alt="" />
-          <div class="berita-text">
-            <p>
-              Prince Hill period home sells for $2.9m after rate cut sales. this
-              lead to rising number of homeless people in Sydney
-            </p>
-            <p class="duration-text">3 days ago</p>
-          </div>
-        </div>
-        <div class="berita">
-          <img src="/Assets/berita1.png" alt="" />
-          <div class="berita-text">
-            <p>
-              Prince Hill period home sells for $2.9m after rate cut sales. this
-              lead to rising number of homeless people in Sydney
-            </p>
-            <p class="duration-text">3 days ago</p>
-          </div>
-        </div>
+      <div id="newsCarousel" class="carousel">
+        <div class="carousel-track" data-track></div>
       </div>
 
-      <div class="controller">
-        <img src="/Assets/left-arrow.png" alt="" />
-        <div class="dots-layout">
-          <img src="/Assets/choosen-dot.png" alt="" />
-          <img src="/Assets/unchoosen-dot.png" alt="" />
-          <img src="/Assets/unchoosen-dot.png" alt="" />
-          <img src="/Assets/unchoosen-dot.png" alt="" />
-          <img src="/Assets/unchoosen-dot.png" alt="" />
-        </div>
-        <img src="/Assets/right-arrow.png" alt="" />
+      <!-- Controller cloned style from Newest Developments -->
+      <div class="controller" id="newsCtrl">
+        <img src="/Assets/left-arrow.png" alt="left" />
+        <div class="dots-layout"></div>
+        <img src="/Assets/right-arrow.png" alt="right" />
       </div>
     </div>
 
-    <!-- Filter POP-UP (from your snippet) -->
+    <!-- Filter Modal -->
     <div id="filterModal" class="modal" aria-hidden="true">
       <div class="modal-content">
         <span id="closeFilter" class="close" aria-label="Close">&times;</span>
@@ -271,8 +238,10 @@
       </div>
     </div>
 
+    <!-- Wishlist utils -->
     <script src="/js/wishlist.js"></script>
 
+    <!-- Core scripts -->
     <script>
       // -------- Helpers --------
       function escapeHtml(str = "") {
@@ -316,53 +285,111 @@
         });
       })();
 
-      // -------- Auth area (creates dropdown for logged-in user) --------
+      // -------- Auth (user dropdown) --------
       (function () {
         const navbarUser = document.getElementById("navbarUser");
         try {
           const user = JSON.parse(localStorage.getItem("user") || "null");
-          if (!user) return; // Exit if no user is logged in
-
-          // Combine first name and last name for a full name display
+          if (!user) return;
           const firstName = user.first_name || "";
           const lastName = user.last_name || "";
           const displayName = `${firstName} ${lastName}`.trim() || user.email;
 
-          // This new HTML structure includes the dropdown menu
           navbarUser.innerHTML = `
-      <div style="display:flex; align-items:center; gap:16px; color:#047857; font-weight:600;">
-        
-        <!-- Dropdown container -->
-        <div class="dropdown">
-          
-          <!-- This is the visible text that triggers the dropdown on hover -->
-          <span style="cursor: pointer;">Welcome, ${escapeHtml(
-            displayName
-          )}</span>
-          
-          <!-- This is the hidden dropdown content -->
-          <div class="dropdown-content">
-            <a href="profile.html">My Profile</a>
-            <a href="wishlist.html">My Wishlist</a>
-          </div>
+            <div style="display:flex; align-items:center; gap:16px; color:#047857; font-weight:600;">
+              <div class="dropdown">
+                <span style="cursor: pointer;">Welcome, ${escapeHtml(
+                  displayName
+                )}</span>
+                <div class="dropdown-content">
+                  <a href="profile.html">My Profile</a>
+                  <a href="wishlist.html">My Wishlist</a>
+                </div>
+              </div>
+              <button class="button-secondary" id="logoutBtn">Logout</button>
+            </div>
+          `;
 
-        </div>
-
-        <button class="button-secondary" id="logoutBtn">Logout</button>
-      </div>
-    `;
-
-          // The only event listener needed now is for the logout button
           document.getElementById("logoutBtn").addEventListener("click", () => {
             localStorage.removeItem("user");
-            window.location.reload(); // Reload the page to reset the state
+            window.location.reload();
           });
         } catch (err) {
           console.error("Failed to initialize user navbar:", err);
         }
       })();
 
-      document.addEventListener("DOMContentLoaded", async function () {
+      // --- Money formatter (same as Buy Results) ---
+      function money(n) {
+        const num = Number(n);
+        if (!Number.isFinite(num)) return "";
+        return num.toLocaleString("en-AU", {
+          style: "currency",
+          currency: "AUD",
+          maximumFractionDigits: 0,
+        });
+      }
+
+      // --- Card renderer copied from Buy Results (small tweak for status) ---
+      function card(p) {
+        const label = money(p.price);
+        const cover =
+          p.image || (p.images && p.images[0]) || "/Assets/placeholder.png";
+        const payload = encodeURIComponent(JSON.stringify(p));
+        const filled = inWishlist(p); // from wishlist.js
+        const status = p.status || "buy"; // homepage may show mixed statuses
+
+        return `
+    <article class="property-card">
+      <div class="prop-photo-wrap" onclick="location.href='property.html?id=${
+        p.id
+      }&status=${encodeURIComponent(status)}'">
+        <img class="prop-photo" src="${escapeHtml(cover)}" alt="${escapeHtml(
+          p.address || ""
+        )}">
+        <span class="prop-badge">${escapeHtml(p.type || "Property")}</span>
+      </div>
+      <div class="prop-body">
+        <div class="prop-price">${label || ""}</div>
+        <div class="prop-address">${escapeHtml(p.address || "")}</div>
+        <div class="prop-sub">
+          ${escapeHtml(p.suburb || "")}, ${escapeHtml(
+          p.state || ""
+        )} ${escapeHtml(p.postcode || "")}
+        </div>
+        <div class="prop-meta">
+          <span>🛏 ${escapeHtml(p.bedrooms ?? 0)}</span>
+          <span>🛁 ${escapeHtml(p.bathrooms ?? 0)}</span>
+          <span>🚗 ${escapeHtml(p.carspaces ?? 0)}</span>
+        </div>
+
+        <div class="prop-actions">
+          <button class="btn-primary-full">Enquire</button>
+          <a class="btn btn-primary"
+             href="bookInspection.html?propertyId=${p.id}
+             &address=${encodeURIComponent(p.address || "")}
+             &price=${encodeURIComponent(p.price || "")}">
+             Book inspection
+          </a>
+
+          <span class="spacer"></span>
+
+          <img
+            class="love-icon"
+            data-listing="${payload}"
+            src="${
+              filled ? "/Assets/ri_heart-fill.png" : "/Assets/love-icon.png"
+            }"
+            alt="Save to wishlist"
+          />
+        </div>
+      </div>
+    </article>
+  `;
+      }
+
+      // --- Best optimization loader (now renders Buy Results-style cards) ---
+      document.addEventListener("DOMContentLoaded", async () => {
         const container = document.getElementById("listingContainer");
         if (!container) return;
 
@@ -370,88 +397,32 @@
           try {
             const res = await fetch("/api/listings");
             if (!res.ok) throw new Error("Failed to load listings");
-            const listings = await res.json();
-            const visible = (listings.results || []).slice(0, 4);
-
-            container.innerHTML = visible
-              .map((l) => {
-                const cover =
-                  l.image ||
-                  (l.images && l.images[0]) ||
-                  "/Assets/placeholder.png";
-                const statusTag =
-                  l.status === "rent"
-                    ? "For Rent"
-                    : l.status === "buy"
-                    ? "For Sale"
-                    : l.status || "";
-
-                return `
-              <div class="container">
-                <div class="property-image">
-                  <div class="property-pill"><p>${escapeHtml(
-                    statusTag
-                  )}</p></div>
-                  <div class="property-details">
-                    <p>${escapeHtml(l.suburb || "")}, ${escapeHtml(
-                  l.state || ""
-                )}</p>
-                    <div class="property-details-icons">
-                      <div class="icon-text"><p>${escapeHtml(
-                        l.bedrooms ?? 0
-                      )}</p><img src="/Assets/bed.png" alt="bed" /></div>
-                      <div class="icon-text"><p>${escapeHtml(
-                        l.bathrooms ?? 0
-                      )}</p><img src="/Assets/shower.png" alt="bath" /></div>
-                      <div class="icon-text"><p>${escapeHtml(
-                        l.carspaces ?? 0
-                      )}</p><img src="/Assets/car.png" alt="car" /></div>
-                    </div>
-                  </div>
-                  <img src="${escapeHtml(cover)}" alt="property" />
-                </div>
-                <div class="love">
-                  <div class="text-love">
-                    <p>${escapeHtml(l.address || "")}</p>
-                    <div class="unit-tag">
-                      <img src="/Assets/dot-grey.png" alt="dot" />
-                      <p>${escapeHtml(l.type || "")}</p>
-                    </div>
-                  </div>
-                  <img
-  class="love-icon"
-  data-listing="${encodeURIComponent(JSON.stringify(l))}"
-  src="${inWishlist(l) ? "/Assets/ri_heart-fill.png" : "/Assets/love-icon.png"}"
-  alt="Love-icon"
-/>
-                </div>
-              </div>
-            `;
-              })
-              .join("");
+            const data = await res.json();
+            const results = Array.isArray(data.results) ? data.results : [];
+            // show first 4 (same count you had before)
+            container.innerHTML = results.slice(0, 3).map(card).join("");
           } catch (err) {
             console.error(err);
             container.innerHTML = "<p>Could not load listings.</p>";
           }
+
+          // init wishlist hearts after render
+          container.querySelectorAll(".love-icon").forEach((el) => {
+            try {
+              const listing = JSON.parse(
+                decodeURIComponent(el.dataset.listing || "{}")
+              );
+              setHeart(el, inWishlist(listing));
+            } catch {
+              setHeart(el, false);
+            }
+          });
         }
 
-        loadListings();
-
-        container.querySelectorAll(".love-icon").forEach((el) => {
-          try {
-            const listing = JSON.parse(
-              decodeURIComponent(el.dataset.listing || "{}")
-            );
-            setHeart(el, inWishlist(listing));
-          } catch {
-            setHeart(el, false);
-          }
-        });
-
+        // click-to-toggle wishlist (like Buy Results)
         container.addEventListener("click", (e) => {
           const el = e.target.closest(".love-icon");
           if (!el) return;
-
           let listing;
           try {
             listing = JSON.parse(
@@ -460,12 +431,14 @@
           } catch {
             listing = {};
           }
-
           const { added } = toggleWishlist(listing);
           setHeart(el, added);
         });
+
+        await loadListings();
       });
 
+      // -------- Build results URL from top search / filters --------
       (function () {
         function getActiveTab() {
           const active = document.querySelector(
@@ -535,6 +508,7 @@
         if (applyBtn) applyBtn.addEventListener("click", go);
       })();
 
+      // -------- Tabs + Filter modal wiring --------
       (function () {
         // Tabs
         const tabs = document.querySelectorAll(
@@ -546,13 +520,11 @@
             tabs.forEach((t) => t.classList.remove("active"));
             tab.classList.add("active");
             activeTab = tab.dataset.type;
-            // Hide filter for Agent tab
             const filterBtn = document.querySelector(".button-secondary-round");
             if (filterBtn)
               filterBtn.style.display =
                 activeTab === "agent" ? "none" : "inline-flex";
             updatePriceOptions();
-            console.log("you selected:", activeTab);
           });
         });
 
@@ -562,7 +534,6 @@
         const closeBtn = document.getElementById("closeFilter");
         const priceFilter = document.getElementById("priceFilter");
         const resetBtn = document.getElementById("resetFilter");
-        const applyBtn = document.getElementById("applyFilter");
 
         const priceOptions = {
           rent: [
@@ -589,17 +560,17 @@
           if (!priceFilter) return;
           if (activeTab === "address") {
             priceFilter.innerHTML = `
-            <optgroup label="Rent">
-              ${priceOptions.address.rent
-                .map((p) => `<option value="rent-${p}">${p}</option>`)
-                .join("")}
-            </optgroup>
-            <optgroup label="Sold">
-              ${priceOptions.address.sold
-                .map((p) => `<option value="sold-${p}">${p}</option>`)
-                .join("")}
-            </optgroup>
-          `;
+              <optgroup label="Rent">
+                ${priceOptions.address.rent
+                  .map((p) => `<option value="rent-${p}">${p}</option>`)
+                  .join("")}
+              </optgroup>
+              <optgroup label="Sold">
+                ${priceOptions.address.sold
+                  .map((p) => `<option value="sold-${p}">${p}</option>`)
+                  .join("")}
+              </optgroup>
+            `;
           } else {
             priceFilter.innerHTML = priceOptions[activeTab]
               .map((p) => `<option value="${p}">${p}</option>`)
@@ -634,23 +605,277 @@
             priceFilter.value = "";
           });
         }
-
-        if (applyBtn) {
-          applyBtn.addEventListener("click", () => {
-            const filters = {
-              type: document.getElementById("typeFilter").value,
-              beds: document.getElementById("bedFilter").value,
-              price: priceFilter.value,
-              status: activeTab,
-            };
-            console.log("Applied filters:", filters);
-            modal.style.display = "none";
-            modal.setAttribute("aria-hidden", "true");
-          });
-        }
       })();
     </script>
 
+    <!-- News carousel + Newest Developments behavior (unified controller) -->
+    <script>
+      // How many items per view for news cards
+      function itemsPerView() {
+        const w = window.innerWidth;
+        if (w >= 1200) return 4;
+        if (w >= 900) return 3;
+        if (w >= 600) return 2;
+        return 1;
+      }
+
+      // Render a news card
+      function renderNewsCard(n) {
+        return `
+          <article class="carousel-card">
+            <img src="${n.image}" alt="${(n.title || "").replace(
+          /"/g,
+          "&quot;"
+        )}"
+                 style="width:100%;height:180px;object-fit:cover;display:block;">
+            <div style="padding:12px;">
+              <div style="font-weight:600;margin-bottom:6px;">${
+                n.title || ""
+              }</div>
+              <div style="color:#6b7280;font-size:14px;">${n.when || ""}</div>
+            </div>
+          </article>
+        `;
+      }
+
+      // Use the SAME controller UI (left/right images + image dots)
+      function createCarouselWithController({
+        rootId,
+        ctrlId,
+        items,
+        renderItem,
+      }) {
+        const root = document.getElementById(rootId);
+        const track = root?.querySelector("[data-track]");
+        const ctrl = document.getElementById(ctrlId);
+        if (!root || !track || !ctrl) return;
+
+        const btnPrev = ctrl.querySelector("img[alt='left']");
+        const btnNext = ctrl.querySelector("img[alt='right']");
+        const dotsWrap = ctrl.querySelector(".dots-layout");
+        if (!btnPrev || !btnNext || !dotsWrap) return;
+
+        let page = 0;
+        let perView = itemsPerView();
+        let pageCount = Math.max(1, Math.ceil(items.length / perView));
+        const GAP = 16;
+
+        function sizeCells() {
+          perView = itemsPerView();
+          pageCount = Math.max(1, Math.ceil(items.length / perView));
+          const rootWidth = root.clientWidth;
+          const cardWidth = (rootWidth - GAP * (perView - 1)) / perView;
+          [...track.children].forEach((el) => {
+            el.style.minWidth = cardWidth + "px";
+            el.style.maxWidth = cardWidth + "px";
+          });
+        }
+
+        function renderDots() {
+          const chosen = "/Assets/choosen-dot.png";
+          const unchosen = "/Assets/unchoosen-dot.png";
+          dotsWrap.innerHTML = "";
+          for (let i = 0; i < pageCount; i++) {
+            const img = document.createElement("img");
+            img.src = i === page ? chosen : unchosen;
+            img.alt = "dot";
+            img.style.cursor = "pointer";
+            img.addEventListener("click", () => goTo(i));
+            dotsWrap.appendChild(img);
+          }
+        }
+
+        function updateDots() {
+          const chosen = "/Assets/choosen-dot.png";
+          const unchosen = "/Assets/unchoosen-dot.png";
+          [...dotsWrap.children].forEach((d, i) => {
+            d.src = i === page ? chosen : unchosen;
+          });
+        }
+
+        function goTo(p, animate = true) {
+          page = Math.max(0, Math.min(pageCount - 1, p));
+          const width = track.children[0]?.getBoundingClientRect().width || 0;
+          const offset = page * (width * perView + GAP * perView);
+          track.style.transition = animate ? "transform 320ms ease" : "none";
+          track.style.transform = `translateX(-${offset}px)`;
+          updateDots();
+        }
+
+        function renderTrack() {
+          track.innerHTML = items.map(renderItem).join("");
+          sizeCells();
+          renderDots();
+          goTo(0, false);
+        }
+
+        btnNext.addEventListener("click", () => goTo(page + 1));
+        btnPrev.addEventListener("click", () => goTo(page - 1));
+
+        window.addEventListener("resize", () => {
+          const old = perView;
+          sizeCells();
+          if (perView !== old) {
+            pageCount = Math.max(1, Math.ceil(items.length / perView));
+            renderDots();
+            goTo(0, false);
+          } else {
+            goTo(page, false);
+          }
+        });
+
+        renderTrack();
+      }
+
+      // Boot the News carousel and the Newest Developments scroller
+      document.addEventListener("DOMContentLoaded", () => {
+        // --- Latest News (uses unified controller) ---
+        const newsItems = [
+          {
+            image: "/Assets/berita1.png",
+            title: "Prince Hill period home sells for $2.9m after rate cut",
+            when: "3 days ago",
+          },
+          {
+            image: "/Assets/berita4.png",
+            title: "Inner-city apartment demand keeps rising",
+            when: "5 days ago",
+          },
+          {
+            image: "/Assets/berita2.png",
+            title: "Regional markets cool as rates stabilise",
+            when: "1 week ago",
+          },
+          {
+            image: "/Assets/berita3.png",
+            title: "Auctions bounce back this spring",
+            when: "2 weeks ago",
+          },
+          {
+            image: "/Assets/berita1.png",
+            title: "Renovation surge across suburbs",
+            when: "3 weeks ago",
+          },
+        ];
+
+        createCarouselWithController({
+          rootId: "newsCarousel",
+          ctrlId: "newsCtrl",
+          items: newsItems,
+          renderItem: renderNewsCard,
+        });
+
+        // --- Newest Developments (original UI, made responsive, duplicated once) ---
+        (function () {
+          const section = document.getElementById("newest-development");
+          const track = section?.querySelector("#devRow");
+          const ctrl = section?.querySelector("#devCtrl");
+          if (!section || !track || !ctrl) return;
+
+          const btnPrev = ctrl.querySelector("img[alt='left']");
+          const btnNext = ctrl.querySelector("img[alt='right']");
+          const dotsWrap = ctrl.querySelector(".dots-layout");
+          if (!btnPrev || !btnNext || !dotsWrap) return;
+
+          const originals = [...track.querySelectorAll("img")].map((img) =>
+            img.getAttribute("src")
+          );
+          const items = [...originals, ...originals];
+
+          function renderTrack() {
+            track.innerHTML = items
+              .map((src) => `<img src="${src}" alt="news" />`)
+              .join("");
+            track.style.display = "flex";
+            track.style.gap = "20px";
+            track.style.willChange = "transform";
+            track.style.transition = "transform 320ms ease";
+          }
+
+          function perView() {
+            const w = window.innerWidth;
+            if (w >= 1200) return 4;
+            if (w >= 900) return 3;
+            if (w >= 600) return 2;
+            return 1;
+          }
+
+          let page = 0;
+          let pv = perView();
+          let pageCount = Math.max(1, Math.ceil(items.length / pv));
+          const GAP = 20;
+
+          function sizeCells() {
+            pv = perView();
+            pageCount = Math.max(1, Math.ceil(items.length / pv));
+            const rootWidth = track.clientWidth;
+            const cardWidth = (rootWidth - GAP * (pv - 1)) / pv;
+            [...track.children].forEach((el) => {
+              el.style.flex = `0 0 ${cardWidth}px`;
+              el.style.width = `${cardWidth}px`;
+              el.style.height = `auto`;
+              el.style.objectFit = `cover`;
+              el.style.borderRadius = `12px`;
+              el.style.display = `block`;
+            });
+          }
+
+          function renderDots() {
+            const chosen = "/Assets/choosen-dot.png";
+            const unchosen = "/Assets/unchoosen-dot.png";
+            dotsWrap.innerHTML = "";
+            for (let i = 0; i < pageCount; i++) {
+              const img = document.createElement("img");
+              img.src = i === page ? chosen : unchosen;
+              img.alt = "dot";
+              img.style.cursor = "pointer";
+              img.addEventListener("click", () => goTo(i));
+              dotsWrap.appendChild(img);
+            }
+          }
+
+          function updateDots() {
+            const chosen = "/Assets/choosen-dot.png";
+            const unchosen = "/Assets/unchoosen-dot.png";
+            [...dotsWrap.children].forEach((d, i) => {
+              d.src = i === page ? chosen : unchosen;
+            });
+          }
+
+          function goTo(p, animate = true) {
+            page = Math.max(0, Math.min(pageCount - 1, p));
+            const first = track.children[0];
+            if (!first) return;
+            const cellWidth = first.getBoundingClientRect().width;
+            const offset = page * (cellWidth * pv + GAP * pv);
+            track.style.transition = animate ? "transform 320ms ease" : "none";
+            track.style.transform = `translateX(-${offset}px)`;
+            updateDots();
+          }
+
+          renderTrack();
+          sizeCells();
+          renderDots();
+          goTo(0, false);
+
+          btnNext.addEventListener("click", () => goTo(page + 1));
+          btnPrev.addEventListener("click", () => goTo(page - 1));
+
+          window.addEventListener("resize", () => {
+            const prev = pv;
+            sizeCells();
+            if (pv !== prev) {
+              renderDots();
+              goTo(0, false);
+            } else {
+              goTo(page, false);
+            }
+          });
+        })();
+      });
+    </script>
+
+    <!-- Footer -->
     <footer class="site-footer">
       <div class="footer-inner">
         <div class="footer-cols">
@@ -706,7 +931,6 @@
                   />
                 </svg>
               </a>
-
               <a href="#" aria-label="YouTube" class="icon">
                 <svg
                   viewBox="0 0 24 24"
