@@ -80,12 +80,7 @@ steps:
 
 # Deploy via cURL to the Kudu ZipDeploy API
 - script: |
-    # Extract Kudu credentials from the publish profile
-    KUDU_USER=$(xpath -q -e "//publishProfile[@publishMethod='ZipDeploy']/@userName" $(fetchPublishProfile.secureFilePath) | cut -d'"' -f2)
-    KUDU_PASS=$(xpath -q -e "//publishProfile[@publishMethod='ZipDeploy']/@userPWD" $(fetchPublishProfile.secureFilePath) | cut -d'"' -f2)
-
-    # Perform the deployment
-    curl -X POST -u "$KUDU_USER:$KUDU_PASS" \
+    curl -X POST -u "$(KUDU_USERNAME):$(KUDU_PASSWORD)" \
       --data-binary "@$(Build.ArtifactStagingDirectory)/$(artifactZip)" \
-      https://myhome-bfbxbddsaxerf2fc.scm.australiaeast-01.azurewebsites.net:443
+      https://$(appName).scm.azurewebsites.net/api/zipdeploy
   displayName: 'Deploy to App Service using cURL'
