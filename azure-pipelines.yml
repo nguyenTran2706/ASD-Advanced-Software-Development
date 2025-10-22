@@ -48,32 +48,43 @@ steps:
     testResultsFiles: '$(Build.SourcesDirectory)/test-results/*.xml'
   condition: succeededOrFailed()
 
-# ---------- Package for deployment ----------
-# include backend + frontend + assets + css
+# Stage exactly what you want to deploy
 - script: |
+    set -e
+    rm -rf deploy-src
     mkdir -p deploy-src
     rsync -av --delete \
       --exclude '.git' \
       --exclude 'node_modules' \
       --exclude 'test' \
       --exclude 'coverage' \
-      ./frontend ./backend ./Assets ./css ./deploy-src/ 2>/dev/null || true
-    cd deploy-src
-    zip -r ../$(Build.ArtifactStagingDirectory)/$(artifactZip) .
-  displayName: 'Create deployment zip (frontend + backend)'
+      ./frontend/ ./backend/ ./Assets/ ./css/ \
+      deploy-src/
+  displayName: 'Stage files for deployment'
 
-# ---------- Download secure publish profile ----------
+# Zip them into $(Build.ArtifactStagingDirectory)/app.zip
+- task: ArchiveFiles@2
+  displayName: 'Create deployment zip'
+  inputs:
+    rootFolderOrFile: 'deploy-src'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(artifactZip)'
+    replaceExistingArchive: true
+
+# Download the secure publish profile first (unchanged)
 - task: DownloadSecureFile@1
   name: fetchPublishProfile
   inputs:
     secureFile: 'MyHome.PublishSettings'
-    
-# ---------- Deploy to Azure ----------
+
+# Deploy via Publish Profile (Zip Deploy)
 - task: AzureRmWebAppDeployment@4
   displayName: 'Deploy via Publish Profile (Zip Deploy)'
   inputs:
     ConnectionType: 'PublishProfile'
     PublishProfilePath: '$(fetchPublishProfile.secureFilePath)'
+    PublishProfilePassword: '$(PUBLISH_PROFILE_PASSWORD)'   # <-- add this
     packageForLinux: '$(Build.ArtifactStagingDirectory)/$(artifactZip)'
     appType: 'webAppLinux'
     DeploymentType: 'zipDeploy'
