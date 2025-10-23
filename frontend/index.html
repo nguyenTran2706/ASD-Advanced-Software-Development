@@ -1,280 +1,319 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Real Estate Listings</title>
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Real Estate Listings</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/style.css" />
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/css/style.css" />
+    <!-- Minimal extras used by the news cards layout -->
+    <style>
+      .carousel {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+      }
+      .carousel-track {
+        display: flex;
+        gap: 16px;
+        will-change: transform;
+        transition: transform 320ms ease;
+      }
+      .carousel-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        overflow: hidden;
+        min-width: 0;
+      }
+    </style>
+  </head>
 
-  <!-- Minimal extras used by the news cards layout -->
-  <style>
-    .carousel {
-      position: relative;
-      overflow: hidden;
-      width: 100%;
-    }
+  <body>
+    <!-- Header -->
+    <header class="nav-shell">
+      <div class="nav-top">
+        <button
+          id="menuToggle"
+          class="menu-btn"
+          aria-expanded="false"
+          aria-controls="navLinks"
+        >
+          <span class="menu-icon"></span>
+          <span class="menu-text">Menu</span>
+        </button>
 
-    .carousel-track {
-      display: flex;
-      gap: 16px;
-      will-change: transform;
-      transition: transform 320ms ease;
-    }
+        <a href="index.html" class="brand">
+          <img src="/Assets/Logo.png" alt="logo" style="height: 40px" />
+        </a>
 
-    .carousel-card {
-      background: #fff;
-      border: 1px solid #e5e7eb;
-      border-radius: 14px;
-      overflow: hidden;
-      min-width: 0;
-    }
-  </style>
-</head>
-
-<body>
-  <!-- Header -->
-  <header class="nav-shell">
-    <div class="nav-top">
-      <button id="menuToggle" class="menu-btn" aria-expanded="false" aria-controls="navLinks">
-        <span class="menu-icon"></span>
-        <span class="menu-text">Menu</span>
-      </button>
-
-      <a href="index.html" class="brand">
-        <img src="/Assets/Logo.png" alt="logo" style="height: 40px" />
-      </a>
-
-      <div class="navbar-buttons" id="navbarUser">
-        <a class="button-primary" href="signUp.html" style="text-decoration: none; color: #fff">Sign Up</a>
-        <a class="button-primary" href="login.html" style="text-decoration: none; color: #fff">Login</a>
-      </div>
-    </div>
-
-    <div id="navLinks" class="nav-links">
-      <nav id="navbar" class="navbar-selector">
-        <a href="buy.html">Buy</a>
-        <a href="rent.html">Rent</a>
-        <a href="sold.html">Sold</a>
-        <a href="findAgent.html">Find Agent</a>
-        <a href="news.html">News</a>
-      </nav>
-    </div>
-  </header>
-
-  <!-- Hero -->
-  <div id="hero-section">
-    <div class="hero-section-center">
-      <div class="hero-text">
-        <p class="h1">The Breakthrough Platform for Smarter Home Finding</p>
-        <p class="sub-header">
-          Streamline planning management, enhance collaboration, and deliver
-          results with MyHome
-        </p>
+        <div class="navbar-buttons" id="navbarUser">
+          <a
+            class="button-primary"
+            href="signUp.html"
+            style="text-decoration: none; color: #fff"
+            >Sign Up</a
+          >
+          <a
+            class="button-primary"
+            href="login.html"
+            style="text-decoration: none; color: #fff"
+            >Login</a
+          >
+        </div>
       </div>
 
-      <div class="search-section">
-        <div class="search-navbar">
-          <div id="searchTabs" class="search-navbar-texts">
-            <p class="search-tab active" data-type="rent">Rent</p>
-            <p class="search-tab" data-type="sold">Buy</p>
-            <p class="search-tab" data-type="address">Address</p>
-            <p class="search-tab" data-type="agent">Agent</p>
-            <p class="search-tab comingsoon">Coming Soon</p>
-          </div>
-          <div class="line"></div>
+      <div id="navLinks" class="nav-links">
+        <nav id="navbar" class="navbar-selector">
+          <a href="buy.html">Buy</a>
+          <a href="rent.html">Rent</a>
+          <a href="sold.html">Sold</a>
+          <a href="findAgent.html">Find Agent</a>
+          <a href="news.html">News</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Hero -->
+    <div id="hero-section">
+      <div class="hero-section-center">
+        <div class="hero-text">
+          <p class="h1">The Breakthrough Platform for Smarter Home Finding</p>
+          <p class="sub-header">
+            Streamline planning management, enhance collaboration, and deliver
+            results with MyHome
+          </p>
         </div>
 
-        <div class="search-box">
-          <div class="search-placeholder">
-            <img src="/Assets/search.png" alt="searchicon" />
-            <input type="text" id="searchInput" placeholder="Search suburb, postcode or state" style="
+        <div class="search-section">
+          <div class="search-navbar">
+            <div id="searchTabs" class="search-navbar-texts">
+              <p class="search-tab active" data-type="rent">Rent</p>
+              <p class="search-tab" data-type="sold">Buy</p>
+              <p class="search-tab" data-type="address">Address</p>
+              <p class="search-tab" data-type="agent">Agent</p>
+              <p class="search-tab comingsoon">Coming Soon</p>
+            </div>
+            <div class="line"></div>
+          </div>
+
+          <div class="search-box">
+            <div class="search-placeholder">
+              <img src="/Assets/search.png" alt="searchicon" />
+              <input
+                type="text"
+                id="searchInput"
+                placeholder="Search suburb, postcode or state"
+                style="
                   border: none;
                   outline: none;
                   width: 250px;
                   font-size: 16px;
-                " />
-          </div>
-          <div class="button-secondary-round" style="border-radius: 40px">
-            <img src="/Assets/filter.png" alt="filtericon" /> Filters
-          </div>
-          <div class="button-primary-round" id="searchBtn" style="border-radius: 40px">
-            Search
+                "
+              />
+            </div>
+            <div class="button-secondary-round" style="border-radius: 40px">
+              <img src="/Assets/filter.png" alt="filtericon" /> Filters
+            </div>
+            <div
+              class="button-primary-round"
+              id="searchBtn"
+              style="border-radius: 40px"
+            >
+              Search
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Optimization / Featured -->
-  <div id="optimization">
-    <div class="optimization-text">
-      <p class="optimization-h1">
-        Best optimization based on your credentials
-      </p>
-      <p class="optimization-subheader">
-        Streamline planning management, enhance collaboration, and deliver
-        results with Central Quita
-      </p>
-    </div>
-    <div id="listingContainer" class="prop-grid"></div>
-  </div>
-
-  <!-- Newest Developments (original look + controller) -->
-  <div id="newest-development">
-    <div class="optimization-text">
-      <p class="optimization-h1">Newest Developments</p>
-      <p class="optimization-subheader">
-        Streamline planning management, enhance collaboration, and deliver
-        results with Central Quita
-      </p>
+    <!-- Optimization / Featured -->
+    <div id="optimization">
+      <div class="optimization-text">
+        <p class="optimization-h1">
+          Best optimization based on your credentials
+        </p>
+        <p class="optimization-subheader">
+          Streamline planning management, enhance collaboration, and deliver
+          results with Central Quita
+        </p>
+      </div>
+      <div id="listingContainer" class="prop-grid"></div>
     </div>
 
-    <div class="news-layout" id="devRow">
-      <img src="/Assets/news1.png" alt="news" />
-      <img src="/Assets/news2.png" alt="news" />
-      <img src="/Assets/news3.png" alt="news" />
-      <img src="/Assets/news3.png" alt="news" />
-    </div>
-
-    <!-- ORIGINAL controller -->
-    <div class="controller" id="devCtrl">
-      <img src="/Assets/left-arrow.png" alt="left" />
-      <div class="dots-layout"></div>
-      <img src="/Assets/right-arrow.png" alt="right" />
-    </div>
-  </div>
-
-  <!-- Latest News (now uses the SAME controller UI as above) -->
-  <div id="latest-news">
-    <div class="optimization-text">
-      <p class="optimization-h1">Latest News</p>
-      <p class="optimization-subheader">
-        Streamline planning management, enhance collaboration, and deliver
-        results with Central Quita
-      </p>
-    </div>
-
-    <div id="newsCarousel" class="carousel">
-      <div class="carousel-track" data-track></div>
-    </div>
-
-    <!-- Controller cloned style from Newest Developments -->
-    <div class="controller" id="newsCtrl">
-      <img src="/Assets/left-arrow.png" alt="left" />
-      <div class="dots-layout"></div>
-      <img src="/Assets/right-arrow.png" alt="right" />
-    </div>
-  </div>
-
-  <!-- Filter Modal -->
-  <div id="filterModal" class="modal" aria-hidden="true">
-    <div class="modal-content">
-      <span id="closeFilter" class="close" aria-label="Close">&times;</span>
-      <h2>Filter Listings</h2>
-
-      <div class="filter-group">
-        <label for="typeFilter">Type</label>
-        <select id="typeFilter">
-          <option value="">Any</option>
-          <option value="house">House</option>
-          <option value="apartment">Apartment</option>
-        </select>
+    <!-- Newest Developments (original look + controller) -->
+    <div id="newest-development">
+      <div class="optimization-text">
+        <p class="optimization-h1">Newest Developments</p>
+        <p class="optimization-subheader">
+          Streamline planning management, enhance collaboration, and deliver
+          results with Central Quita
+        </p>
       </div>
 
-      <div class="filter-group">
-        <label for="bedFilter">Beds</label>
-        <select id="bedFilter">
-          <option value="">Any</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4+">4+</option>
-        </select>
+      <div class="news-layout" id="devRow">
+        <img src="/Assets/news1.png" alt="news" />
+        <img src="/Assets/news2.png" alt="news" />
+        <img src="/Assets/news3.png" alt="news" />
+        <img src="/Assets/news3.png" alt="news" />
       </div>
 
-      <div class="filter-group">
-        <label for="priceFilter">Price</label>
-        <select id="priceFilter"></select>
+      <!-- ORIGINAL controller -->
+      <div class="controller" id="devCtrl">
+        <img src="/Assets/left-arrow.png" alt="left" />
+        <div class="dots-layout"></div>
+        <img src="/Assets/right-arrow.png" alt="right" />
+      </div>
+    </div>
+
+    <!-- Latest News (now uses the SAME controller UI as above) -->
+    <div id="latest-news">
+      <div class="optimization-text">
+        <p class="optimization-h1">Latest News</p>
+        <p class="optimization-subheader">
+          Streamline planning management, enhance collaboration, and deliver
+          results with Central Quita
+        </p>
       </div>
 
-      <div style="
+      <div id="newsCarousel" class="carousel">
+        <div class="carousel-track" data-track></div>
+      </div>
+
+      <!-- Controller cloned style from Newest Developments -->
+      <div class="controller" id="newsCtrl">
+        <img src="/Assets/left-arrow.png" alt="left" />
+        <div class="dots-layout"></div>
+        <img src="/Assets/right-arrow.png" alt="right" />
+      </div>
+    </div>
+
+    <!-- Filter Modal -->
+    <div id="filterModal" class="modal" aria-hidden="true">
+      <div class="modal-content">
+        <span id="closeFilter" class="close" aria-label="Close">&times;</span>
+        <h2>Filter Listings</h2>
+
+        <div class="filter-group">
+          <label for="typeFilter">Type</label>
+          <select id="typeFilter">
+            <option value="">Any</option>
+            <option value="house">House</option>
+            <option value="apartment">Apartment</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="bedFilter">Beds</label>
+          <select id="bedFilter">
+            <option value="">Any</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4+">4+</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="stateFilter">State</label>
+          <select id="stateFilter">
+            <option value="">Any</option>
+            <option value="NSW">NSW</option>
+            <option value="VIC">VIC</option>
+            <option value="QLD">QLD</option>
+            <option value="SA">SA</option>
+            <option value="WA">WA</option>
+            <option value="TAS">TAS</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="priceFilter">Price</label>
+          <select id="priceFilter"></select>
+        </div>
+
+        <div
+          style="
             margin-top: 20px;
             display: flex;
             justify-content: flex-end;
             gap: 12px;
-          ">
-        <button class="button-secondary" id="resetFilter">Reset</button>
-        <button class="button-primary" id="applyFilter">Apply</button>
+          "
+        >
+          <button class="button-secondary" id="resetFilter">Reset</button>
+          <button class="button-primary" id="applyFilter">Apply</button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Wishlist utils -->
-  <script src="/js/wishlist.js"></script>
+    <!-- Wishlist utils -->
+    <script src="/js/wishlist.js"></script>
 
-  <!-- Core scripts -->
-  <script>
-    // -------- Helpers --------
-    function escapeHtml(str = "") {
-      return String(str).replace(
-        /[&<>"']/g,
-        (s) =>
-        ({
-          "&": "&amp;",
-          "<": "&lt;",
-          ">": "&gt;",
-          '"': "&quot;",
-          "'": "&#39;",
-        }[s])
-      );
-    }
-
-    // -------- Nav: burger + active link --------
-    (function () {
-      const shell = document.querySelector(".nav-shell");
-      const btn = document.getElementById("menuToggle");
-      if (btn && shell) {
-        btn.addEventListener("click", () => {
-          const isOpen = shell.classList.toggle("open");
-          btn.setAttribute("aria-expanded", String(isOpen));
-        });
+    <!-- Core scripts -->
+    <script>
+      // -------- Helpers --------
+      function escapeHtml(str = "") {
+        return String(str).replace(
+          /[&<>"']/g,
+          (s) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            }[s])
+        );
       }
 
-      const path = location.pathname.replace(/\/+$/, "");
-      document.querySelectorAll("#navbar a[href]").forEach((a) => {
-        const href = a.getAttribute("href") || "";
-        const isHome =
-          (path === "" || path === "/") &&
-          (href === "index.html" || href === "/index.html");
-        if (
-          isHome ||
-          path.endsWith(href) ||
-          (href.startsWith("/") && path === href)
-        ) {
-          a.classList.add("nav-active");
+      // -------- Nav: burger + active link --------
+      (function () {
+        const shell = document.querySelector(".nav-shell");
+        const btn = document.getElementById("menuToggle");
+        if (btn && shell) {
+          btn.addEventListener("click", () => {
+            const isOpen = shell.classList.toggle("open");
+            btn.setAttribute("aria-expanded", String(isOpen));
+          });
         }
-      });
-    })();
 
-    // -------- Auth (user dropdown) --------
-    (function () {
-      const navbarUser = document.getElementById("navbarUser");
-      try {
-        const user = JSON.parse(localStorage.getItem("user") || "null");
-        if (!user) return;
-        const firstName = user.first_name || "";
-        const lastName = user.last_name || "";
-        const displayName = `${firstName} ${lastName}`.trim() || user.email;
+        const path = location.pathname.replace(/\/+$/, "");
+        document.querySelectorAll("#navbar a[href]").forEach((a) => {
+          const href = a.getAttribute("href") || "";
+          const isHome =
+            (path === "" || path === "/") &&
+            (href === "index.html" || href === "/index.html");
+          if (
+            isHome ||
+            path.endsWith(href) ||
+            (href.startsWith("/") && path === href)
+          ) {
+            a.classList.add("nav-active");
+          }
+        });
+      })();
 
-        navbarUser.innerHTML = `
+      // -------- Auth (user dropdown) --------
+      (function () {
+        const navbarUser = document.getElementById("navbarUser");
+        try {
+          const user = JSON.parse(localStorage.getItem("user") || "null");
+          if (!user) return;
+          const firstName = user.first_name || "";
+          const lastName = user.last_name || "";
+          const displayName = `${firstName} ${lastName}`.trim() || user.email;
+
+          navbarUser.innerHTML = `
             <div style="display:flex; align-items:center; gap:16px; color:#047857; font-weight:600;">
               <div class="dropdown">
                 <span style="cursor: pointer;">Welcome, ${escapeHtml(
-          displayName
-        )}</span>
+                  displayName
+                )}</span>
                 <div class="dropdown-content">
                   <a href="profile.html">My Profile</a>
                   <a href="wishlist.html">My Wishlist</a>
@@ -284,38 +323,39 @@
             </div>
           `;
 
-        document.getElementById("logoutBtn").addEventListener("click", () => {
-          localStorage.removeItem("user");
-          window.location.reload();
+          document.getElementById("logoutBtn").addEventListener("click", () => {
+            localStorage.removeItem("user");
+            window.location.reload();
+          });
+        } catch (err) {
+          console.error("Failed to initialize user navbar:", err);
+        }
+      })();
+
+      function money(n) {
+        const num = Number(n);
+        if (!Number.isFinite(num)) return "";
+        return num.toLocaleString("en-AU", {
+          style: "currency",
+          currency: "AUD",
+          maximumFractionDigits: 0,
         });
-      } catch (err) {
-        console.error("Failed to initialize user navbar:", err);
       }
-    })();
 
-    function money(n) {
-      const num = Number(n);
-      if (!Number.isFinite(num)) return "";
-      return num.toLocaleString("en-AU", {
-        style: "currency",
-        currency: "AUD",
-        maximumFractionDigits: 0,
-      });
-    }
+      // --- Card renderer copied from Buy Results (small tweak for status) ---
+      function card(p) {
+        const label = money(p.price);
+        const cover =
+          p.image || (p.images && p.images[0]) || "/Assets/placeholder.png";
+        const payload = encodeURIComponent(JSON.stringify(p));
+        const filled = inWishlist(p); // from wishlist.js
+        const status = p.status || "buy"; // homepage may show mixed statuses
 
-    // --- Card renderer copied from Buy Results (small tweak for status) ---
-    function card(p) {
-      const label = money(p.price);
-      const cover =
-        p.image || (p.images && p.images[0]) || "/Assets/placeholder.png";
-      const payload = encodeURIComponent(JSON.stringify(p));
-      const filled = inWishlist(p); // from wishlist.js
-      const status = p.status || "buy"; // homepage may show mixed statuses
-
-      return `
+        return `
     <article class="property-card">
-      <div class="prop-photo-wrap" onclick="location.href='property.html?id=${p.id
-        }&status=${encodeURIComponent(status)}'">
+      <div class="prop-photo-wrap" onclick="location.href='property.html?id=${
+        p.id
+      }&status=${encodeURIComponent(status)}'">
         <img class="prop-photo" src="${escapeHtml(cover)}" alt="${escapeHtml(
           p.address || ""
         )}">
@@ -336,16 +376,11 @@
         </div>
 
         <div class="prop-actions">
-          <a class="btn btn-primary btn-equal"
-             href="enquire.html?propertyId=${p.id}&address=${encodeURIComponent(
-          p.address || ""
-        )}&price=${encodeURIComponent(p.price || "")}">
-             Enquire
-          </a>
-          <a class="btn btn-primary btn-equal"
-             href="bookInspection.html?propertyId=${p.id}&address=${encodeURIComponent(
-          p.address || ""
-        )}&price=${encodeURIComponent(p.price || "")}">
+          <button class="btn-primary-full">Enquire</button>
+          <a class="btn btn-primary"
+             href="bookInspection.html?propertyId=${p.id}
+             &address=${encodeURIComponent(p.address || "")}
+             &price=${encodeURIComponent(p.price || "")}">
              Book inspection
           </a>
 
@@ -354,172 +389,164 @@
           <img
             class="love-icon"
             data-listing="${payload}"
-            src="${filled ? "/Assets/ri_heart-fill.png" : "/Assets/love-icon.png"
-        }"
+            src="${
+              filled ? "/Assets/ri_heart-fill.png" : "/Assets/love-icon.png"
+            }"
             alt="Save to wishlist"
           />
         </div>
       </div>
     </article>
   `;
-    }
+      }
 
-    // --- Best optimization loader (now renders Buy Results-style cards) ---
-    document.addEventListener("DOMContentLoaded", async () => {
-      const container = document.getElementById("listingContainer");
-      if (!container) return;
+      // --- Best optimization loader  ---
+      document.addEventListener("DOMContentLoaded", async () => {
+        const container = document.getElementById("listingContainer");
+        if (!container) return;
 
-      async function loadListings() {
-        try {
-          const res = await fetch("/api/listings");
-          if (!res.ok) throw new Error("Failed to load listings");
-          const data = await res.json();
-          const results = Array.isArray(data.results) ? data.results : [];
-          // show first 4 (same count you had before)
-          container.innerHTML = results.slice(0, 3).map(card).join("");
-        } catch (err) {
-          console.error(err);
-          container.innerHTML = "<p>Could not load listings.</p>";
+        async function loadListings() {
+          try {
+            const res = await fetch("/api/listings");
+            if (!res.ok) throw new Error("Failed to load listings");
+            const data = await res.json();
+            const results = Array.isArray(data.results) ? data.results : [];
+            // show first 3
+            container.innerHTML = results.slice(0, 3).map(card).join("");
+          } catch (err) {
+            console.error(err);
+            container.innerHTML = "<p>Could not load listings.</p>";
+          }
+
+          // init wishlist hearts after render
+          container.querySelectorAll(".love-icon").forEach((el) => {
+            try {
+              const listing = JSON.parse(
+                decodeURIComponent(el.dataset.listing || "{}")
+              );
+              setHeart(el, inWishlist(listing));
+            } catch {
+              setHeart(el, false);
+            }
+          });
         }
 
-        // init wishlist hearts after render
-        container.querySelectorAll(".love-icon").forEach((el) => {
+        container.addEventListener("click", (e) => {
+          const el = e.target.closest(".love-icon");
+          if (!el) return;
+          let listing;
           try {
-            const listing = JSON.parse(
+            listing = JSON.parse(
               decodeURIComponent(el.dataset.listing || "{}")
             );
-            setHeart(el, inWishlist(listing));
           } catch {
-            setHeart(el, false);
+            listing = {};
           }
+          const { added } = toggleWishlist(listing);
+          setHeart(el, added);
         });
-      }
 
-      // click-to-toggle wishlist (like Buy Results)
-      container.addEventListener("click", (e) => {
-        const el = e.target.closest(".love-icon");
-        if (!el) return;
-        let listing;
-        try {
-          listing = JSON.parse(
-            decodeURIComponent(el.dataset.listing || "{}")
-          );
-        } catch {
-          listing = {};
-        }
-        const { added } = toggleWishlist(listing);
-        setHeart(el, added);
+        await loadListings();
       });
 
-      await loadListings();
-    });
-    // -------- Build results URL from top search / filters --------
-    (function () {
-      function getActiveTab() {
-        const active = document.querySelector(
-          "#searchTabs .search-tab.active"
-        );
-        return active ? active.dataset.type : "rent";
-      }
-
-      function buildResultsUrl() {
-        const activeTab = getActiveTab();
-
-        const qEl =
-          document.querySelector("#mainQuery") ||
-          document.querySelector(".search-placeholder input");
-        const q = (qEl && qEl.value.trim()) || "";
-
-        const type = document.getElementById("typeFilter")?.value || "";
-        const beds = document.getElementById("bedFilter")?.value || "";
-        const price = document.getElementById("priceFilter")?.value || "";
-
-        let page = "buyResults.html";
-        if (activeTab === "rent") page = "rentResults.html";
-        else if (activeTab === "sold") page = "buyResults.html";
-        else if (activeTab === "agent") page = "findAgent.html";
-        else if (activeTab === "address") {
-          page = price.startsWith("rent-")
-            ? "rentResults.html"
-            : "buyResults.html";
+      (function () {
+        function getActiveTab() {
+          const active = document.querySelector(
+            "#searchTabs .search-tab.active"
+          );
+          return active ? active.dataset.type : "rent";
         }
 
-        const status =
-          activeTab === "rent" || price.startsWith("rent-")
-            ? "rent"
-            : activeTab === "sold" || price.startsWith("sold-")
+        function buildResultsUrl() {
+          const activeTab = getActiveTab();
+
+          const qEl =
+            document.querySelector("#mainQuery") ||
+            document.querySelector(".search-placeholder input");
+          const q = (qEl && qEl.value.trim()) || "";
+
+          const type = document.getElementById("typeFilter")?.value || "";
+          const beds = document.getElementById("bedFilter")?.value || "";
+          const price = document.getElementById("priceFilter")?.value || "";
+          const state = document.getElementById("stateFilter")?.value || ""; // NEW
+
+          let page = "buyResults.html";
+          if (activeTab === "rent") page = "rentResults.html";
+          else if (activeTab === "sold") page = "buyResults.html";
+          else if (activeTab === "agent") page = "findAgent.html";
+          else if (activeTab === "address") {
+            page = price.startsWith("rent-")
+              ? "rentResults.html"
+              : "buyResults.html";
+          }
+
+          const status =
+            activeTab === "rent" || price.startsWith("rent-")
+              ? "rent"
+              : activeTab === "sold" || price.startsWith("sold-")
               ? "buy"
               : "";
 
-        const params = new URLSearchParams();
-        if (q) params.set("q", q);
-        if (status) params.set("status", status);
-        if (type) params.set("type", type);
-        if (beds) params.set("beds", beds);
-        if (price) params.set("price", price.replace(/^rent-|^sold-/, ""));
+          const params = new URLSearchParams();
+          if (q) params.set("q", q);
+          if (status) params.set("status", status);
+          if (type) params.set("type", type);
+          if (beds) params.set("beds", beds);
+          if (price) params.set("price", price.replace(/^rent-|^sold-/, ""));
+          if (state) params.set("state", state); // NEW
 
-        return page + (params.toString() ? "?" + params.toString() : "");
-      }
+          return page + (params.toString() ? "?" + params.toString() : "");
+        }
 
-      function go() {
-        location.href = buildResultsUrl();
-      }
+        function go() {
+          location.href = buildResultsUrl();
+        }
 
-      const searchBtn = document.getElementById("searchBtn");
-      const input =
-        document.querySelector("#mainQuery") ||
-        document.querySelector(".search-placeholder input");
+        const searchBtn = document.getElementById("searchBtn");
+        const input =
+          document.querySelector("#mainQuery") ||
+          document.querySelector(".search-placeholder input");
 
-      if (searchBtn) searchBtn.addEventListener("click", go);
-      if (input)
-        input.addEventListener("keydown", (e) => {
-          if (e.key === "Enter") {
-            e.preventDefault();
-            go();
-          }
+        if (searchBtn) searchBtn.addEventListener("click", go);
+        if (input)
+          input.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              go();
+            }
+          });
+
+        const applyBtn = document.getElementById("applyFilter");
+        if (applyBtn) applyBtn.addEventListener("click", go);
+      })();
+
+      (function () {
+        // Tabs
+        const tabs = document.querySelectorAll(
+          "#searchTabs .search-tab:not(.comingsoon)"
+        );
+        let activeTab = "rent";
+        tabs.forEach((tab) => {
+          tab.addEventListener("click", () => {
+            tabs.forEach((t) => t.classList.remove("active"));
+            tab.classList.add("active");
+            activeTab = tab.dataset.type;
+            const filterBtn = document.querySelector(".button-secondary-round");
+            if (filterBtn)
+              filterBtn.style.display =
+                activeTab === "agent" ? "none" : "inline-flex";
+            updatePriceOptions();
+          });
         });
 
-      const applyBtn = document.getElementById("applyFilter");
-      if (applyBtn) applyBtn.addEventListener("click", go);
-    })();
+        // Modal wiring
+        const filterBtn = document.querySelector(".button-secondary-round");
+        const modal = document.getElementById("filterModal");
+        const closeBtn = document.getElementById("closeFilter");
+        const priceFilter = document.getElementById("priceFilter");
+        const resetBtn = document.getElementById("resetFilter");
 
-    // -------- Tabs + Filter modal wiring --------
-    (function () {
-      // Tabs
-      const tabs = document.querySelectorAll(
-        "#searchTabs .search-tab:not(.comingsoon)"
-      );
-      let activeTab = "rent";
-      tabs.forEach((tab) => {
-        tab.addEventListener("click", () => {
-          tabs.forEach((t) => t.classList.remove("active"));
-          tab.classList.add("active");
-          activeTab = tab.dataset.type;
-          const filterBtn = document.querySelector(".button-secondary-round");
-          if (filterBtn)
-            filterBtn.style.display =
-              activeTab === "agent" ? "none" : "inline-flex";
-          updatePriceOptions();
-        });
-      });
-
-      // Modal wiring
-      const filterBtn = document.querySelector(".button-secondary-round");
-      const modal = document.getElementById("filterModal");
-      const closeBtn = document.getElementById("closeFilter");
-      const priceFilter = document.getElementById("priceFilter");
-      const resetBtn = document.getElementById("resetFilter");
-
-      const priceOptions = {
-        rent: [
-          "Any",
-          "0-500/week",
-          "500-800/week",
-          "800-1200/week",
-          "1200+/week",
-        ],
-        sold: ["Any", "0-600k", "600k-900k", "900k-1.5M", "1.5M+"],
-        address: {
+        const priceOptions = {
           rent: [
             "Any",
             "0-500/week",
@@ -528,269 +555,130 @@
             "1200+/week",
           ],
           sold: ["Any", "0-600k", "600k-900k", "900k-1.5M", "1.5M+"],
-        },
-      };
+          address: {
+            rent: [
+              "Any",
+              "0-500/week",
+              "500-800/week",
+              "800-1200/week",
+              "1200+/week",
+            ],
+            sold: ["Any", "0-600k", "600k-900k", "900k-1.5M", "1.5M+"],
+          },
+        };
 
-      function updatePriceOptions() {
-        if (!priceFilter) return;
-        if (activeTab === "address") {
-          priceFilter.innerHTML = `
+        function updatePriceOptions() {
+          if (!priceFilter) return;
+          if (activeTab === "address") {
+            priceFilter.innerHTML = `
               <optgroup label="Rent">
                 ${priceOptions.address.rent
-              .map((p) => `<option value="rent-${p}">${p}</option>`)
-              .join("")}
+                  .map((p) => `<option value="rent-${p}">${p}</option>`)
+                  .join("")}
               </optgroup>
               <optgroup label="Sold">
                 ${priceOptions.address.sold
-              .map((p) => `<option value="sold-${p}">${p}</option>`)
-              .join("")}
+                  .map((p) => `<option value="sold-${p}">${p}</option>`)
+                  .join("")}
               </optgroup>
             `;
-        } else {
-          priceFilter.innerHTML = priceOptions[activeTab]
-            .map((p) => `<option value="${p}">${p}</option>`)
-            .join("");
+          } else {
+            priceFilter.innerHTML = priceOptions[activeTab]
+              .map((p) => `<option value="${p}">${p}</option>`)
+              .join("");
+          }
         }
-      }
-      updatePriceOptions();
+        updatePriceOptions();
 
-      if (filterBtn && modal) {
-        filterBtn.addEventListener("click", () => {
-          modal.style.display = "flex";
-          modal.setAttribute("aria-hidden", "false");
-        });
-      }
-      if (closeBtn && modal) {
-        closeBtn.addEventListener("click", () => {
-          modal.style.display = "none";
-          modal.setAttribute("aria-hidden", "true");
-        });
-        window.addEventListener("click", (e) => {
-          if (e.target === modal) {
+        if (filterBtn && modal) {
+          filterBtn.addEventListener("click", () => {
+            modal.style.display = "flex";
+            modal.setAttribute("aria-hidden", "false");
+          });
+        }
+        if (closeBtn && modal) {
+          closeBtn.addEventListener("click", () => {
             modal.style.display = "none";
             modal.setAttribute("aria-hidden", "true");
-          }
-        });
+          });
+          window.addEventListener("click", (e) => {
+            if (e.target === modal) {
+              modal.style.display = "none";
+              modal.setAttribute("aria-hidden", "true");
+            }
+          });
+        }
+
+        if (resetBtn) {
+          resetBtn.addEventListener("click", () => {
+            document.getElementById("typeFilter").value = "";
+            document.getElementById("bedFilter").value = "";
+            document.getElementById("stateFilter").value = "";
+            priceFilter.value = "";
+          });
+        }
+      })();
+    </script>
+
+    <script>
+      // How many items per view for news cards
+      function itemsPerView() {
+        const w = window.innerWidth;
+        if (w >= 1200) return 4;
+        if (w >= 900) return 3;
+        if (w >= 600) return 2;
+        return 1;
       }
 
-      if (resetBtn) {
-        resetBtn.addEventListener("click", () => {
-          document.getElementById("typeFilter").value = "";
-          document.getElementById("bedFilter").value = "";
-          priceFilter.value = "";
-        });
-      }
-    })();
-  </script>
-
-  <!-- News carousel + Newest Developments behavior (unified controller) -->
-  <script>
-    // How many items per view for news cards
-    function itemsPerView() {
-      const w = window.innerWidth;
-      if (w >= 1200) return 4;
-      if (w >= 900) return 3;
-      if (w >= 600) return 2;
-      return 1;
-    }
-
-    // Render a news card
-    function renderNewsCard(n) {
-      return `
+      // Render a news card
+      function renderNewsCard(n) {
+        return `
           <article class="carousel-card">
             <img src="${n.image}" alt="${(n.title || "").replace(
-        /"/g,
-        "&quot;"
-      )}"
+          /"/g,
+          "&quot;"
+        )}"
                  style="width:100%;height:180px;object-fit:cover;display:block;">
             <div style="padding:12px;">
-              <div style="font-weight:600;margin-bottom:6px;">${n.title || ""
-        }</div>
+              <div style="font-weight:600;margin-bottom:6px;">${
+                n.title || ""
+              }</div>
               <div style="color:#6b7280;font-size:14px;">${n.when || ""}</div>
             </div>
           </article>
         `;
-    }
-
-    // Use the SAME controller UI (left/right images + image dots)
-    function createCarouselWithController({
-      rootId,
-      ctrlId,
-      items,
-      renderItem,
-    }) {
-      const root = document.getElementById(rootId);
-      const track = root?.querySelector("[data-track]");
-      const ctrl = document.getElementById(ctrlId);
-      if (!root || !track || !ctrl) return;
-
-      const btnPrev = ctrl.querySelector("img[alt='left']");
-      const btnNext = ctrl.querySelector("img[alt='right']");
-      const dotsWrap = ctrl.querySelector(".dots-layout");
-      if (!btnPrev || !btnNext || !dotsWrap) return;
-
-      let page = 0;
-      let perView = itemsPerView();
-      let pageCount = Math.max(1, Math.ceil(items.length / perView));
-      const GAP = 16;
-
-      function sizeCells() {
-        perView = itemsPerView();
-        pageCount = Math.max(1, Math.ceil(items.length / perView));
-        const rootWidth = root.clientWidth;
-        const cardWidth = (rootWidth - GAP * (perView - 1)) / perView;
-        [...track.children].forEach((el) => {
-          el.style.minWidth = cardWidth + "px";
-          el.style.maxWidth = cardWidth + "px";
-        });
       }
 
-      function renderDots() {
-        const chosen = "/Assets/choosen-dot.png";
-        const unchosen = "/Assets/unchoosen-dot.png";
-        dotsWrap.innerHTML = "";
-        for (let i = 0; i < pageCount; i++) {
-          const img = document.createElement("img");
-          img.src = i === page ? chosen : unchosen;
-          img.alt = "dot";
-          img.style.cursor = "pointer";
-          img.addEventListener("click", () => goTo(i));
-          dotsWrap.appendChild(img);
-        }
-      }
-
-      function updateDots() {
-        const chosen = "/Assets/choosen-dot.png";
-        const unchosen = "/Assets/unchoosen-dot.png";
-        [...dotsWrap.children].forEach((d, i) => {
-          d.src = i === page ? chosen : unchosen;
-        });
-      }
-
-      function goTo(p, animate = true) {
-        page = Math.max(0, Math.min(pageCount - 1, p));
-        const width = track.children[0]?.getBoundingClientRect().width || 0;
-        const offset = page * (width * perView + GAP * perView);
-        track.style.transition = animate ? "transform 320ms ease" : "none";
-        track.style.transform = `translateX(-${offset}px)`;
-        updateDots();
-      }
-
-      function renderTrack() {
-        track.innerHTML = items.map(renderItem).join("");
-        sizeCells();
-        renderDots();
-        goTo(0, false);
-      }
-
-      btnNext.addEventListener("click", () => goTo(page + 1));
-      btnPrev.addEventListener("click", () => goTo(page - 1));
-
-      window.addEventListener("resize", () => {
-        const old = perView;
-        sizeCells();
-        if (perView !== old) {
-          pageCount = Math.max(1, Math.ceil(items.length / perView));
-          renderDots();
-          goTo(0, false);
-        } else {
-          goTo(page, false);
-        }
-      });
-
-      renderTrack();
-    }
-
-    // Boot the News carousel and the Newest Developments scroller
-    document.addEventListener("DOMContentLoaded", () => {
-      // --- Latest News (uses unified controller) ---
-      const newsItems = [
-        {
-          image: "/Assets/berita1.png",
-          title: "Prince Hill period home sells for $2.9m after rate cut",
-          when: "3 days ago",
-        },
-        {
-          image: "/Assets/berita4.png",
-          title: "Inner-city apartment demand keeps rising",
-          when: "5 days ago",
-        },
-        {
-          image: "/Assets/berita2.png",
-          title: "Regional markets cool as rates stabilise",
-          when: "1 week ago",
-        },
-        {
-          image: "/Assets/berita3.png",
-          title: "Auctions bounce back this spring",
-          when: "2 weeks ago",
-        },
-        {
-          image: "/Assets/berita1.png",
-          title: "Renovation surge across suburbs",
-          when: "3 weeks ago",
-        },
-      ];
-
-      createCarouselWithController({
-        rootId: "newsCarousel",
-        ctrlId: "newsCtrl",
-        items: newsItems,
-        renderItem: renderNewsCard,
-      });
-
-      // --- Newest Developments (original UI, made responsive, duplicated once) ---
-      (function () {
-        const section = document.getElementById("newest-development");
-        const track = section?.querySelector("#devRow");
-        const ctrl = section?.querySelector("#devCtrl");
-        if (!section || !track || !ctrl) return;
+      // Use the SAME controller UI (left/right images + image dots)
+      function createCarouselWithController({
+        rootId,
+        ctrlId,
+        items,
+        renderItem,
+      }) {
+        const root = document.getElementById(rootId);
+        const track = root?.querySelector("[data-track]");
+        const ctrl = document.getElementById(ctrlId);
+        if (!root || !track || !ctrl) return;
 
         const btnPrev = ctrl.querySelector("img[alt='left']");
         const btnNext = ctrl.querySelector("img[alt='right']");
         const dotsWrap = ctrl.querySelector(".dots-layout");
         if (!btnPrev || !btnNext || !dotsWrap) return;
 
-        const originals = [...track.querySelectorAll("img")].map((img) =>
-          img.getAttribute("src")
-        );
-        const items = [...originals, ...originals];
-
-        function renderTrack() {
-          track.innerHTML = items
-            .map((src) => `<img src="${src}" alt="news" />`)
-            .join("");
-          track.style.display = "flex";
-          track.style.gap = "20px";
-          track.style.willChange = "transform";
-          track.style.transition = "transform 320ms ease";
-        }
-
-        function perView() {
-          const w = window.innerWidth;
-          if (w >= 1200) return 4;
-          if (w >= 900) return 3;
-          if (w >= 600) return 2;
-          return 1;
-        }
-
         let page = 0;
-        let pv = perView();
-        let pageCount = Math.max(1, Math.ceil(items.length / pv));
-        const GAP = 20;
+        let perView = itemsPerView();
+        let pageCount = Math.max(1, Math.ceil(items.length / perView));
+        const GAP = 16;
 
         function sizeCells() {
-          pv = perView();
-          pageCount = Math.max(1, Math.ceil(items.length / pv));
-          const rootWidth = track.clientWidth;
-          const cardWidth = (rootWidth - GAP * (pv - 1)) / pv;
+          perView = itemsPerView();
+          pageCount = Math.max(1, Math.ceil(items.length / perView));
+          const rootWidth = root.clientWidth;
+          const cardWidth = (rootWidth - GAP * (perView - 1)) / perView;
           [...track.children].forEach((el) => {
-            el.style.flex = `0 0 ${cardWidth}px`;
-            el.style.width = `${cardWidth}px`;
-            el.style.height = `auto`;
-            el.style.objectFit = `cover`;
-            el.style.borderRadius = `12px`;
-            el.style.display = `block`;
+            el.style.minWidth = cardWidth + "px";
+            el.style.maxWidth = cardWidth + "px";
           });
         }
 
@@ -818,104 +706,285 @@
 
         function goTo(p, animate = true) {
           page = Math.max(0, Math.min(pageCount - 1, p));
-          const first = track.children[0];
-          if (!first) return;
-          const cellWidth = first.getBoundingClientRect().width;
-          const offset = page * (cellWidth * pv + GAP * pv);
+          const width = track.children[0]?.getBoundingClientRect().width || 0;
+          const offset = page * (width * perView + GAP * perView);
           track.style.transition = animate ? "transform 320ms ease" : "none";
           track.style.transform = `translateX(-${offset}px)`;
           updateDots();
         }
 
-        renderTrack();
-        sizeCells();
-        renderDots();
-        goTo(0, false);
+        function renderTrack() {
+          track.innerHTML = items.map(renderItem).join("");
+          sizeCells();
+          renderDots();
+          goTo(0, false);
+        }
 
         btnNext.addEventListener("click", () => goTo(page + 1));
         btnPrev.addEventListener("click", () => goTo(page - 1));
 
         window.addEventListener("resize", () => {
-          const prev = pv;
+          const old = perView;
           sizeCells();
-          if (pv !== prev) {
+          if (perView !== old) {
+            pageCount = Math.max(1, Math.ceil(items.length / perView));
             renderDots();
             goTo(0, false);
           } else {
             goTo(page, false);
           }
         });
-      })();
-    });
-  </script>
 
-  <!-- Footer -->
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <div class="footer-cols">
-        <div class="footer-col footer-brand">
-          <div class="brand">
-            <img src="/Assets/Logo.png" alt="MyHome logo" class="footer-logo" />
+        renderTrack();
+      }
+
+      // Boot the News carousel and the Newest Developments scroller
+      document.addEventListener("DOMContentLoaded", () => {
+        // --- Latest News (uses unified controller) ---
+        const newsItems = [
+          {
+            image: "/Assets/berita1.png",
+            title: "Prince Hill period home sells for $2.9m after rate cut",
+            when: "3 days ago",
+          },
+          {
+            image: "/Assets/berita4.png",
+            title: "Inner-city apartment demand keeps rising",
+            when: "5 days ago",
+          },
+          {
+            image: "/Assets/berita2.png",
+            title: "Regional markets cool as rates stabilise",
+            when: "1 week ago",
+          },
+          {
+            image: "/Assets/berita3.png",
+            title: "Auctions bounce back this spring",
+            when: "2 weeks ago",
+          },
+          {
+            image: "/Assets/berita1.png",
+            title: "Renovation surge across suburbs",
+            when: "3 weeks ago",
+          },
+        ];
+
+        createCarouselWithController({
+          rootId: "newsCarousel",
+          ctrlId: "newsCtrl",
+          items: newsItems,
+          renderItem: renderNewsCard,
+        });
+
+        // --- Newest Developments (original UI, made responsive, duplicated once) ---
+        (function () {
+          const section = document.getElementById("newest-development");
+          const track = section?.querySelector("#devRow");
+          const ctrl = section?.querySelector("#devCtrl");
+          if (!section || !track || !ctrl) return;
+
+          const btnPrev = ctrl.querySelector("img[alt='left']");
+          const btnNext = ctrl.querySelector("img[alt='right']");
+          const dotsWrap = ctrl.querySelector(".dots-layout");
+          if (!btnPrev || !btnNext || !dotsWrap) return;
+
+          const originals = [...track.querySelectorAll("img")].map((img) =>
+            img.getAttribute("src")
+          );
+          const items = [...originals, ...originals];
+
+          function renderTrack() {
+            track.innerHTML = items
+              .map((src) => `<img src="${src}" alt="news" />`)
+              .join("");
+            track.style.display = "flex";
+            track.style.gap = "20px";
+            track.style.willChange = "transform";
+            track.style.transition = "transform 320ms ease";
+          }
+
+          function perView() {
+            const w = window.innerWidth;
+            if (w >= 1200) return 4;
+            if (w >= 900) return 3;
+            if (w >= 600) return 2;
+            return 1;
+          }
+
+          let page = 0;
+          let pv = perView();
+          let pageCount = Math.max(1, Math.ceil(items.length / pv));
+          const GAP = 20;
+
+          function sizeCells() {
+            pv = perView();
+            pageCount = Math.max(1, Math.ceil(items.length / pv));
+            const rootWidth = track.clientWidth;
+            const cardWidth = (rootWidth - GAP * (pv - 1)) / pv;
+            [...track.children].forEach((el) => {
+              el.style.flex = `0 0 ${cardWidth}px`;
+              el.style.width = `${cardWidth}px`;
+              el.style.height = `auto`;
+              el.style.objectFit = `cover`;
+              el.style.borderRadius = `12px`;
+              el.style.display = `block`;
+            });
+          }
+
+          function renderDots() {
+            const chosen = "/Assets/choosen-dot.png";
+            const unchosen = "/Assets/unchoosen-dot.png";
+            dotsWrap.innerHTML = "";
+            for (let i = 0; i < pageCount; i++) {
+              const img = document.createElement("img");
+              img.src = i === page ? chosen : unchosen;
+              img.alt = "dot";
+              img.style.cursor = "pointer";
+              img.addEventListener("click", () => goTo(i));
+              dotsWrap.appendChild(img);
+            }
+          }
+
+          function updateDots() {
+            const chosen = "/Assets/choosen-dot.png";
+            const unchosen = "/Assets/unchoosen-dot.png";
+            [...dotsWrap.children].forEach((d, i) => {
+              d.src = i === page ? chosen : unchosen;
+            });
+          }
+
+          function goTo(p, animate = true) {
+            page = Math.max(0, Math.min(pageCount - 1, p));
+            const first = track.children[0];
+            if (!first) return;
+            const cellWidth = first.getBoundingClientRect().width;
+            const offset = page * (cellWidth * pv + GAP * pv);
+            track.style.transition = animate ? "transform 320ms ease" : "none";
+            track.style.transform = `translateX(-${offset}px)`;
+            updateDots();
+          }
+
+          renderTrack();
+          sizeCells();
+          renderDots();
+          goTo(0, false);
+
+          btnNext.addEventListener("click", () => goTo(page + 1));
+          btnPrev.addEventListener("click", () => goTo(page - 1));
+
+          window.addEventListener("resize", () => {
+            const prev = pv;
+            sizeCells();
+            if (pv !== prev) {
+              renderDots();
+              goTo(0, false);
+            } else {
+              goTo(page, false);
+            }
+          });
+        })();
+      });
+    </script>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-cols">
+          <div class="footer-col footer-brand">
+            <div class="brand">
+              <img
+                src="/Assets/Logo.png"
+                alt="MyHome logo"
+                class="footer-logo"
+              />
+            </div>
+          </div>
+
+          <div class="footer-col">
+            <h4 class="footer-title">Product</h4>
+            <a href="#">How it works</a>
+            <a href="#">Who we help</a>
+            <a href="#">Features</a>
+            <a href="#">Pricing</a>
+          </div>
+
+          <div class="footer-col">
+            <h4 class="footer-title">Resources</h4>
+            <a href="#">Get Help</a>
+            <a href="#">Partnership</a>
+            <a href="#">Blog</a>
+            <a href="#">Legal</a>
+          </div>
+
+          <div class="footer-col">
+            <h4 class="footer-title">About</h4>
+            <a href="#">About</a>
+            <a href="#">Sponsorship</a>
+            <a href="#">Hardship</a>
+            <a href="#">Contact</a>
+          </div>
+
+          <div class="footer-col footer-connect">
+            <h4 class="footer-title">Connect with us</h4>
+            <div class="footer-socials">
+              <a href="#" aria-label="Facebook" class="icon">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="18"
+                  height="18"
+                  aria-hidden="true"
+                >
+                  <image
+                    href="/Assets/facebook.png"
+                    xlink:href="/Assets/facebook-app-symbol.png"
+                    width="18"
+                    height="18"
+                  />
+                </svg>
+              </a>
+              <a href="#" aria-label="YouTube" class="icon">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="18"
+                  height="18"
+                  aria-hidden="true"
+                >
+                  <image
+                    href="/Assets/youtube.png"
+                    xlink:href="/Assets/youtube.png"
+                    width="18"
+                    height="18"
+                  />
+                </svg>
+              </a>
+              <a href="#" aria-label="Twitter" class="icon">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="18"
+                  height="18"
+                  aria-hidden="true"
+                >
+                  <image
+                    href="/Assets/twitter.png"
+                    xlink:href="/Assets/twitter.png"
+                    width="18"
+                    height="18"
+                  />
+                </svg>
+              </a>
+            </div>
           </div>
         </div>
 
-        <div class="footer-col">
-          <h4 class="footer-title">Product</h4>
-          <a href="#">How it works</a>
-          <a href="#">Who we help</a>
-          <a href="#">Features</a>
-          <a href="#">Pricing</a>
-        </div>
-
-        <div class="footer-col">
-          <h4 class="footer-title">Resources</h4>
-          <a href="#">Get Help</a>
-          <a href="#">Partnership</a>
-          <a href="#">Blog</a>
-          <a href="#">Legal</a>
-        </div>
-
-        <div class="footer-col">
-          <h4 class="footer-title">About</h4>
-          <a href="#">About</a>
-          <a href="#">Sponsorship</a>
-          <a href="#">Hardship</a>
-          <a href="#">Contact</a>
-        </div>
-
-        <div class="footer-col footer-connect">
-          <h4 class="footer-title">Connect with us</h4>
-          <div class="footer-socials">
-            <a href="#" aria-label="Facebook" class="icon">
-              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-                <image href="/Assets/facebook.png" xlink:href="/Assets/facebook-app-symbol.png" width="18"
-                  height="18" />
-              </svg>
-            </a>
-            <a href="#" aria-label="YouTube" class="icon">
-              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-                <image href="/Assets/youtube.png" xlink:href="/Assets/youtube.png" width="18" height="18" />
-              </svg>
-            </a>
-            <a href="#" aria-label="Twitter" class="icon">
-              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-                <image href="/Assets/twitter.png" xlink:href="/Assets/twitter.png" width="18" height="18" />
-              </svg>
-            </a>
+        <hr class="footer-divider" />
+        <div class="footer-bottom">
+          <div>Copyright 2025 · MyHome</div>
+          <div class="footer-legal">
+            <a href="#">Terms of Service</a>
+            <a href="#">Privacy Policy</a>
           </div>
         </div>
       </div>
-
-      <hr class="footer-divider" />
-      <div class="footer-bottom">
-        <div>Copyright 2025 · MyHome</div>
-        <div class="footer-legal">
-          <a href="#">Terms of Service</a>
-          <a href="#">Privacy Policy</a>
-        </div>
-      </div>
-    </div>
-  </footer>
-</body>
-
+    </footer>
+  </body>
 </html>
