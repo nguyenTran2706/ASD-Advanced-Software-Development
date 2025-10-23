@@ -465,6 +465,7 @@ form button {
 
 /* Responsive adjustments for arrows and news */
 @media (max-width: 1024px) {
+
   #newest-development,
   #latest-news,
   #optimization {
@@ -473,6 +474,7 @@ form button {
 }
 
 @media (max-width: 768px) {
+
   #newest-development,
   #latest-news,
   #optimization {
@@ -490,6 +492,7 @@ form button {
 }
 
 @media (max-width: 600px) {
+
   #newest-development,
   #latest-news,
   #optimization {
