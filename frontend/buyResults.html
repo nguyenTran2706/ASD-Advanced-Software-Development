@@ -97,9 +97,21 @@
         </div>
 
         <div class="filter-group">
+          <label for="stateFilter">State</label>
+          <select id="stateFilter">
+            <option value="">Any</option>
+            <option value="NSW">NSW</option>
+            <option value="VIC">VIC</option>
+            <option value="QLD">QLD</option>
+            <option value="SA">SA</option>
+            <option value="WA">WA</option>
+            <option value="TAS">TAS</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
           <label for="priceFilter">Price</label>
           <select id="priceFilter">
-            <!-- buy page uses SOLD/BUY buckets -->
             <option value="">Any</option>
             <option value="0-600k">0-600k</option>
             <option value="600k-900k">600k-900k</option>
@@ -149,25 +161,63 @@
         });
       }
 
-      (async function () {
-        try {
-          const res = await fetch("index.html");
-          const html = await res.text();
-          const doc = new DOMParser().parseFromString(html, "text/html");
-          const navShell = doc.querySelector(".nav-shell");
-          // Find the nav bar's inline script in index.html
-          const navScriptText = Array.from(
-            doc.querySelectorAll("script:not([src])")
-          ).find((s) =>
-            s.innerText.includes("// -------- Auth area")
-          )?.innerText;
+      (function () {
+        const shell = document.querySelector(".nav-shell");
+        const btn = document.getElementById("menuToggle");
+        if (btn && shell) {
+          btn.addEventListener("click", () => {
+            const isOpen = shell.classList.toggle("open");
+            btn.setAttribute("aria-expanded", String(isOpen));
+          });
+        }
 
-          document.querySelector(".nav-shell").replaceWith(navShell);
-          if (navScriptText) {
-            eval(navScriptText); // Re-run the auth/nav script
+        const path = location.pathname.replace(/\/+$/, "");
+        document.querySelectorAll("#navbar a[href]").forEach((a) => {
+          const href = a.getAttribute("href") || "";
+          const isHome =
+            (path === "" || path === "/") &&
+            (href === "index.html" || href === "/index.html");
+          if (
+            isHome ||
+            path.endsWith(href) ||
+            (href.startsWith("/") && path === href)
+          ) {
+            a.classList.add("nav-active");
           }
-        } catch (e) {
-          console.error("Could not load navigation bar.", e);
+        });
+      })();
+      (function () {
+        const navbarUser = document.getElementById("navbarUser");
+        if (!navbarUser) return;
+        try {
+          const user = JSON.parse(localStorage.getItem("user") || "null");
+          if (!user) return; // If no user in localStorage, show Sign Up / Login
+
+          const firstName = user.first_name || "";
+          const lastName = user.last_name || "";
+          const displayName = `${firstName} ${lastName}`.trim() || user.email;
+
+          navbarUser.innerHTML = `
+      <div style="display:flex; align-items:center; gap:16px; color:#047857; font-weight:600;">
+        <div class="dropdown">
+          <span style="cursor:pointer;">Welcome, ${escapeHtml(
+            displayName
+          )}</span>
+          <div class="dropdown-content">
+            <a href="profile.html">My Profile</a>
+            <a href="wishlist.html">My Wishlist</a>
+          </div>
+        </div>
+        <button class="button-secondary" id="logoutBtn">Logout</button>
+      </div>
+    `;
+
+          document.getElementById("logoutBtn").addEventListener("click", () => {
+            localStorage.removeItem("user");
+            window.location.reload();
+          });
+        } catch (err) {
+          console.error("Auth navbar error:", err);
         }
       })();
 
@@ -177,6 +227,7 @@
       const type = params.get("type") || "";
       const beds = params.get("beds") || "";
       const price = params.get("price") || "";
+      const state = params.get("state") || "";
 
       function renderChips() {
         const c = document.getElementById("chips");
@@ -189,6 +240,8 @@
           chips.push(`<span class="chip">Type: ${escapeHtml(type)}</span>`);
         if (beds)
           chips.push(`<span class="chip">Beds: ${escapeHtml(beds)}</span>`);
+        if (state)
+          chips.push(`<span class="chip">State: ${escapeHtml(state)}</span>`);
         if (price)
           chips.push(`<span class="chip">Price: ${escapeHtml(price)}</span>`);
         c.innerHTML = chips.join(" ");
@@ -200,6 +253,8 @@
         if (t) t.value = type;
         const b = document.getElementById("bedFilter");
         if (b) b.value = beds;
+        const s = document.getElementById("stateFilter");
+        if (s) s.value = state;
         const p = document.getElementById("priceFilter");
         if (p) p.value = price;
       }
@@ -217,6 +272,8 @@
           newVals.beds ? sp.set("beds", newVals.beds) : sp.delete("beds");
         if ("price" in newVals)
           newVals.price ? sp.set("price", newVals.price) : sp.delete("price");
+        if ("state" in newVals)
+          newVals.state ? sp.set("state", newVals.state) : sp.delete("state");
 
         return u.toString();
       }
@@ -297,7 +354,8 @@
         qs.set("status", "buy");
         if (q) qs.set("q", q);
         if (type) qs.set("type", type);
-        if (beds) qs.set("minBeds", beds); // backend expects minBeds
+        if (beds) qs.set("minBeds", beds);
+        if (state) qs.set("state", state);
 
         const url = "/api/listings?" + qs.toString();
 
@@ -318,10 +376,64 @@
             }
           }
 
+          if (state) {
+            const S = state.toUpperCase();
+            results = results.filter(
+              (r) => (r.state || "").toUpperCase() === S
+            );
+          }
+
           return results;
         } catch (e) {
           console.error(e);
-          return [];
+
+          const res = await fetch("/api/listings");
+          const data = await res.json();
+          let arr = Array.isArray(data.results) ? data.results : [];
+
+          arr = arr.filter((x) => (x.status || "").toLowerCase() === "buy");
+
+          // query match
+          if (q) {
+            const Q = q.toLowerCase();
+            arr = arr.filter(
+              (x) =>
+                (x.address || "").toLowerCase().includes(Q) ||
+                (x.suburb || "").toLowerCase().includes(Q) ||
+                (x.state || "").toLowerCase().includes(Q)
+            );
+          }
+
+          if (type) {
+            arr = arr.filter(
+              (x) => (x.type || "").toLowerCase() === type.toLowerCase()
+            );
+          }
+
+          if (beds) {
+            arr =
+              beds === "4+"
+                ? arr.filter((x) => (x.bedrooms || 0) >= 4)
+                : arr.filter((x) => String(x.bedrooms || "") === beds);
+          }
+
+          if (state) {
+            const S = state.toUpperCase();
+            arr = arr.filter((x) => (x.state || "").toUpperCase() === S);
+          }
+
+          if (price) {
+            const range = priceBucketToRange(price);
+            if (range) {
+              const [min, max] = range;
+              arr = arr.filter((r) => {
+                const p = Number(r.price);
+                return !isNaN(p) && p >= min && p < max;
+              });
+            }
+          }
+
+          return arr;
         }
       }
 
@@ -380,6 +492,7 @@
         resetBtn.addEventListener("click", () => {
           document.getElementById("typeFilter").value = "";
           document.getElementById("bedFilter").value = "";
+          document.getElementById("stateFilter").value = "";
           document.getElementById("priceFilter").value = "";
         });
 
@@ -387,6 +500,7 @@
           const newVals = {
             type: document.getElementById("typeFilter").value,
             beds: document.getElementById("bedFilter").value,
+            state: document.getElementById("stateFilter").value,
             price: document.getElementById("priceFilter").value,
           };
           location.href = buildUrlWith(newVals);

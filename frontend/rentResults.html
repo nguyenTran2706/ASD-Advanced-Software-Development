@@ -97,6 +97,19 @@
         </div>
 
         <div class="filter-group">
+          <label for="stateFilter">State</label>
+          <select id="stateFilter">
+            <option value="">Any</option>
+            <option value="NSW">NSW</option>
+            <option value="VIC">VIC</option>
+            <option value="QLD">QLD</option>
+            <option value="SA">SA</option>
+            <option value="WA">WA</option>
+            <option value="TAS">TAS</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
           <label for="priceFilter">Price</label>
           <select id="priceFilter">
             <option value="">Any</option>
@@ -148,25 +161,64 @@
         });
       }
 
-      (async function () {
-        try {
-          const res = await fetch("index.html");
-          const html = await res.text();
-          const doc = new DOMParser().parseFromString(html, "text/html");
-          const navShell = doc.querySelector(".nav-shell");
-          // Find the nav bar's inline script in index.html
-          const navScriptText = Array.from(
-            doc.querySelectorAll("script:not([src])")
-          ).find((s) =>
-            s.innerText.includes("// -------- Auth area")
-          )?.innerText;
+      (function () {
+        const shell = document.querySelector(".nav-shell");
+        const btn = document.getElementById("menuToggle");
+        if (btn && shell) {
+          btn.addEventListener("click", () => {
+            const isOpen = shell.classList.toggle("open");
+            btn.setAttribute("aria-expanded", String(isOpen));
+          });
+        }
 
-          document.querySelector(".nav-shell").replaceWith(navShell);
-          if (navScriptText) {
-            eval(navScriptText); // Re-run the auth/nav script
+        const path = location.pathname.replace(/\/+$/, "");
+        document.querySelectorAll("#navbar a[href]").forEach((a) => {
+          const href = a.getAttribute("href") || "";
+          const isHome =
+            (path === "" || path === "/") &&
+            (href === "index.html" || href === "/index.html");
+          if (
+            isHome ||
+            path.endsWith(href) ||
+            (href.startsWith("/") && path === href)
+          ) {
+            a.classList.add("nav-active");
           }
-        } catch (e) {
-          console.error("Could not load navigation bar.", e);
+        });
+      })();
+
+      (function () {
+        const navbarUser = document.getElementById("navbarUser");
+        if (!navbarUser) return;
+        try {
+          const user = JSON.parse(localStorage.getItem("user") || "null");
+          if (!user) return; // If no user in localStorage, show Sign Up / Login
+
+          const firstName = user.first_name || "";
+          const lastName = user.last_name || "";
+          const displayName = `${firstName} ${lastName}`.trim() || user.email;
+
+          navbarUser.innerHTML = `
+      <div style="display:flex; align-items:center; gap:16px; color:#047857; font-weight:600;">
+        <div class="dropdown">
+          <span style="cursor:pointer;">Welcome, ${escapeHtml(
+            displayName
+          )}</span>
+          <div class="dropdown-content">
+            <a href="profile.html">My Profile</a>
+            <a href="wishlist.html">My Wishlist</a>
+          </div>
+        </div>
+        <button class="button-secondary" id="logoutBtn">Logout</button>
+      </div>
+    `;
+
+          document.getElementById("logoutBtn").addEventListener("click", () => {
+            localStorage.removeItem("user");
+            window.location.reload();
+          });
+        } catch (err) {
+          console.error("Auth navbar error:", err);
         }
       })();
 
@@ -175,6 +227,7 @@
       const status = (params.get("status") || "rent").toLowerCase();
       const type = params.get("type") || "";
       const beds = params.get("beds") || "";
+      const state = params.get("state") || "";
       const price = params.get("price") || "";
 
       function renderChips() {
@@ -187,6 +240,8 @@
           chips.push(`<span class="chip">Type: ${escapeHtml(type)}</span>`);
         if (beds)
           chips.push(`<span class="chip">Beds: ${escapeHtml(beds)}</span>`);
+        if (state)
+          chips.push(`<span class="chip">State: ${escapeHtml(state)}</span>`);
         if (price)
           chips.push(`<span class="chip">Price: ${escapeHtml(price)}</span>`);
         c.innerHTML = chips.join(" ");
@@ -197,6 +252,8 @@
         if (t) t.value = type;
         const b = document.getElementById("bedFilter");
         if (b) b.value = beds;
+        const s = document.getElementById("stateFilter");
+        if (s) s.value = state;
         const p = document.getElementById("priceFilter");
         if (p) p.value = price;
       }
@@ -206,12 +263,16 @@
         const sp = u.searchParams;
         sp.set("status", "rent");
         q ? sp.set("q", q) : sp.delete("q");
+
         "type" in newVals &&
           (newVals.type ? sp.set("type", newVals.type) : sp.delete("type"));
         "beds" in newVals &&
           (newVals.beds ? sp.set("beds", newVals.beds) : sp.delete("beds"));
         "price" in newVals &&
           (newVals.price ? sp.set("price", newVals.price) : sp.delete("price"));
+        "state" in newVals &&
+          (newVals.state ? sp.set("state", newVals.state) : sp.delete("state")); // NEW
+
         return u.toString();
       }
 
@@ -287,12 +348,14 @@
         if (q) qs.set("q", q);
         if (type) qs.set("type", type);
         if (beds) qs.set("minBeds", beds);
+        if (state) qs.set("state", state);
+
         const url = "/api/listings?" + qs.toString();
 
         try {
           const res = await fetch(url);
-          if (!res.ok) throw new Error();
-          let data = await res.json();
+          if (!res.ok) throw new Error("fetch failed");
+          const data = await res.json();
           let results = Array.isArray(data.results) ? data.results : [];
 
           if (price) {
@@ -306,11 +369,24 @@
             }
           }
 
+          // STATE filter (server results)
+          if (state) {
+            const S = state.toUpperCase();
+            results = results.filter(
+              (r) => (r.state || "").toUpperCase() === S
+            );
+          }
+
           return results;
-        } catch {
+        } catch (e) {
+          console.error(e);
+
           const res = await fetch("/api/listings");
           const data = await res.json();
-          let arr = (data.results || []).filter((x) => x.status === "rent");
+          let arr = Array.isArray(data.results) ? data.results : [];
+
+          arr = arr.filter((x) => (x.status || "").toLowerCase() === "rent");
+
           if (q) {
             const Q = q.toLowerCase();
             arr = arr.filter(
@@ -320,15 +396,25 @@
                 (x.state || "").toLowerCase().includes(Q)
             );
           }
-          if (type)
+
+          if (type) {
             arr = arr.filter(
               (x) => (x.type || "").toLowerCase() === type.toLowerCase()
             );
-          if (beds)
+          }
+
+          if (beds) {
             arr =
               beds === "4+"
                 ? arr.filter((x) => (x.bedrooms || 0) >= 4)
                 : arr.filter((x) => String(x.bedrooms || "") === beds);
+          }
+
+          if (state) {
+            const S = state.toUpperCase();
+            arr = arr.filter((x) => (x.state || "").toUpperCase() === S);
+          }
+
           if (price) {
             const range = rentBucketToRange(price);
             if (range) {
@@ -339,6 +425,7 @@
               });
             }
           }
+
           return arr;
         }
       }
@@ -392,12 +479,14 @@
         resetBtn.addEventListener("click", () => {
           document.getElementById("typeFilter").value = "";
           document.getElementById("bedFilter").value = "";
+          document.getElementById("stateFilter").value = "";
           document.getElementById("priceFilter").value = "";
         });
         applyBtn.addEventListener("click", () => {
           const newVals = {
             type: document.getElementById("typeFilter").value,
             beds: document.getElementById("bedFilter").value,
+            state: document.getElementById("stateFilter").value,
             price: document.getElementById("priceFilter").value,
           };
           location.href = buildUrlWith(newVals);

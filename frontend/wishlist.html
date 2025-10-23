@@ -120,24 +120,30 @@
       })();
 
       // ----- Reuse the same nav/auth script from index.html (like other pages)
-      (async function () {
-        try {
-          const res = await fetch("index.html");
-          const html = await res.text();
-          const doc = new DOMParser().parseFromString(html, "text/html");
-          const navShell = doc.querySelector(".nav-shell");
-
-          const navScriptText = Array.from(
-            doc.querySelectorAll("script:not([src])")
-          ).find((s) =>
-            s.innerText.includes("// -------- Auth area")
-          )?.innerText;
-
-          document.querySelector(".nav-shell").replaceWith(navShell);
-          if (navScriptText) eval(navScriptText);
-        } catch (e) {
-          console.error("Could not load navigation bar.", e);
+      (function () {
+        const shell = document.querySelector(".nav-shell");
+        const btn = document.getElementById("menuToggle");
+        if (btn && shell) {
+          btn.addEventListener("click", () => {
+            const isOpen = shell.classList.toggle("open");
+            btn.setAttribute("aria-expanded", String(isOpen));
+          });
         }
+
+        const path = location.pathname.replace(/\/+$/, "");
+        document.querySelectorAll("#navbar a[href]").forEach((a) => {
+          const href = a.getAttribute("href") || "";
+          const isHome =
+            (path === "" || path === "/") &&
+            (href === "index.html" || href === "/index.html");
+          if (
+            isHome ||
+            path.endsWith(href) ||
+            (href.startsWith("/") && path === href)
+          ) {
+            a.classList.add("nav-active");
+          }
+        });
       })();
 
       (function () {
