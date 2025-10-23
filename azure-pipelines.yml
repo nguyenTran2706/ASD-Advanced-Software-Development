@@ -33,6 +33,17 @@ steps:
     npx jest --ci --reporters=default --reporters=jest-junit
   displayName: 'Run unit tests (Jest → JUnit)'
 
+# ---------- Tests & Database Setup ----------
+- script: |
+    mkdir -p $(Build.SourcesDirectory)/test-results
+    # Initialize test database
+    node scripts/seed.js
+    # Run tests with initialized DB
+    export JEST_JUNIT_OUTPUT=$(Build.SourcesDirectory)/test-results/junit.xml
+    npx jest --ci --reporters=default --reporters=jest-junit
+  displayName: 'Setup DB and Run Tests'
+  continueOnError: false
+
 # ---------- Package for deploy (lean zip; exclude node_modules/tests/etc.) ----------
 # Stage only deployable files into a temp folder
 - task: CopyFiles@2
@@ -49,6 +60,7 @@ steps:
       !**/*.test.*
       !**/*.spec.*
       scripts/seed.js
+      database.js
     TargetFolder: '$(Build.ArtifactStagingDirectory)/package'
 
 # Zip the staged folder
@@ -86,14 +98,17 @@ steps:
     package: '$(Build.ArtifactStagingDirectory)/$(artifactZip)'
   condition: succeeded()   # deploy only if tests passed
 
-  # ---------- Run Database Setup & Seed ----------
+# Add database initialization after deployment
 - task: AzureCLI@2
-  displayName: 'Initialize and Seed Database'
+  displayName: 'Initialize Production Database'
   inputs:
     azureSubscription: '$(azureServiceConnection)'
     scriptType: bash
     scriptLocation: inlineScript
     inlineScript: |
-      # Execute database seed script via SSH
-      az webapp ssh --resource-group "$(resourceGroup)" --name "$(webAppName)" --command "cd /home/site/wwwroot && npm run db:seed"
-  condition: succeeded()   # only if deployment succeeded
+      echo "Initializing database..."
+      az webapp ssh --resource-group "$(resourceGroup)" --name "$(webAppName)" --command "cd /home/site/wwwroot && node scripts/seed.js" || {
+        echo "Database initialization failed"
+        exit 1
+      }
+  condition: succeeded()
