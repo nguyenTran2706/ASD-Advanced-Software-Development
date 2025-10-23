@@ -159,3 +159,5 @@ db.get("SELECT COUNT(*) AS c FROM listings", [], (err, row) => {
   rows.forEach((r) => seed.run(r));
   seed.finalize(() => console.log("Seeded demo listings ✅"));
 });
+
+module.exports = db;

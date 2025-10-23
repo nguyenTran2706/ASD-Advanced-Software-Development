@@ -1,72 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Rent Results · MyHome</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="/css/style.css" />
-  </head>
-  <body>
-    <header class="nav-shell">
-      <div class="nav-top">
-        <button
-          id="menuToggle"
-          class="menu-btn"
-          aria-expanded="false"
-          aria-controls="navLinks"
-        >
-          <span class="menu-icon"></span>
-          <span class="menu-text">Menu</span>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rent Results · MyHome</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+
+<body>
+  <header class="nav-shell">
+    <div class="nav-top">
+      <button id="menuToggle" class="menu-btn" aria-expanded="false" aria-controls="navLinks">
+        <span class="menu-icon"></span>
+        <span class="menu-text">Menu</span>
+      </button>
+
+      <a href="index.html" class="brand">
+        <img src="/Assets/Logo.png" alt="logo" style="height: 40px" />
+      </a>
+
+      <div class="navbar-buttons" id="navbarUser">
+        <a class="button-primary" href="signUp.html" style="text-decoration: none; color: #fff">Sign Up</a>
+        <a class="button-primary" href="login.html" style="text-decoration: none; color: #fff">Login</a>
+      </div>
+    </div>
+
+    <div id="navLinks" class="nav-links">
+      <nav id="navbar" class="navbar-selector">
+        <a href="buy.html">Buy</a>
+        <a href="rent.html">Rent</a>
+        <a href="sold.html">Sold</a>
+        <a href="findAgent.html">Find Agent</a>
+        <a href="news.html">News</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="prop-hero">
+    <div class="prop-hero-inner">
+      <div class="prop-search">
+        <div id="chips" class="prop-chips"></div>
+      </div>
+      <div>
+        <button id="editFilters" class="button-secondary">
+          Edit filters
         </button>
+      </div>
+    </div>
+  </section>
 
-        <a href="index.html" class="brand">
-          <img src="/Assets/Logo.png" alt="logo" style="height: 40px" />
-        </a>
+  <main style="padding: 24px 32px">
+    <div id="listingContainer" class="prop-grid"></div>
+  </main>
 
-        <div class="navbar-buttons" id="navbarUser">
-          <a
-            class="button-primary"
-            href="signUp.html"
-            style="text-decoration: none; color: #fff"
-            >Sign Up</a
-          >
-          <a
-            class="button-primary"
-            href="login.html"
-            style="text-decoration: none; color: #fff"
-            >Login</a
-          >
-        </div>
+  <div id="filterModal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <span id="closeFilter" class="close" aria-label="Close">&times;</span>
+      <h2>Filter Listings</h2>
+
+      <div class="filter-group">
+        <label for="typeFilter">Type</label>
+        <select id="typeFilter">
+          <option value="">Any</option>
+          <option value="house">House</option>
+          <option value="apartment">Apartment</option>
+        </select>
       </div>
 
-      <div id="navLinks" class="nav-links">
-        <nav id="navbar" class="navbar-selector">
-          <a href="buy.html">Buy</a>
-          <a href="rent.html">Rent</a>
-          <a href="sold.html">Sold</a>
-          <a href="findAgent.html">Find Agent</a>
-          <a href="news.html">News</a>
-        </nav>
+      <div class="filter-group">
+        <label for="bedFilter">Beds</label>
+        <select id="bedFilter">
+          <option value="">Any</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4+">4+</option>
+        </select>
       </div>
-    </header>
 
-    <section class="prop-hero">
-      <div class="prop-hero-inner">
-        <div class="prop-search">
-          <div id="chips" class="prop-chips"></div>
-        </div>
-        <div>
-          <button id="editFilters" class="button-secondary">
-            Edit filters
-          </button>
-        </div>
+      <div class="filter-group">
+        <label for="priceFilter">Price</label>
+        <select id="priceFilter">
+          <option value="">Any</option>
+          <option value="0-500/week">0-500/week</option>
+          <option value="500-800/week">500-800/week</option>
+          <option value="800-1200/week">800-1200/week</option>
+          <option value="1200+/week">1200+/week</option>
+        </select>
       </div>
-    </section>
 
+<<<<<<< HEAD
+      <div style="
+=======
     <main style="padding: 24px 32px">
       <div id="listingContainer" class="prop-grid"></div>
     </main>
@@ -97,6 +124,19 @@
         </div>
 
         <div class="filter-group">
+          <label for="stateFilter">State</label>
+          <select id="stateFilter">
+            <option value="">Any</option>
+            <option value="NSW">NSW</option>
+            <option value="VIC">VIC</option>
+            <option value="QLD">QLD</option>
+            <option value="SA">SA</option>
+            <option value="WA">WA</option>
+            <option value="TAS">TAS</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
           <label for="priceFilter">Price</label>
           <select id="priceFilter">
             <option value="">Any</option>
@@ -109,72 +149,165 @@
 
         <div
           style="
+>>>>>>> 3af726fc9ac34282917250b91a3704c51201b093
             margin-top: 20px;
             display: flex;
             justify-content: flex-end;
             gap: 12px;
-          "
-        >
-          <button class="button-secondary" id="resetFilter">Reset</button>
-          <button class="button-primary" id="applyFilter">Apply</button>
-        </div>
+          ">
+        <button class="button-secondary" id="resetFilter">Reset</button>
+        <button class="button-primary" id="applyFilter">Apply</button>
       </div>
     </div>
+  </div>
 
-    <script src="/js/wishlist.js"></script>
+  <script src="/js/wishlist.js"></script>
 
-    <script>
-      function escapeHtml(str = "") {
-        return String(str).replace(
-          /[&<>"']/g,
-          (s) =>
-            ({
-              "&": "&amp;",
-              "<": "&lt;",
-              ">": "&gt;",
-              '"': "&quot;",
-              "'": "&#39;",
-            }[s])
-        );
-      }
+  <script>
+    function escapeHtml(str = "") {
+      return String(str).replace(
+        /[&<>"']/g,
+        (s) =>
+        ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;",
+        }[s])
+      );
+    }
 
-      function money(n) {
-        const num = Number(n);
-        if (!Number.isFinite(num)) return "";
-        return num.toLocaleString("en-AU", {
-          style: "currency",
-          currency: "AUD",
-          maximumFractionDigits: 0,
+    function money(n) {
+      const num = Number(n);
+      if (!Number.isFinite(num)) return "";
+      return num.toLocaleString("en-AU", {
+        style: "currency",
+        currency: "AUD",
+        maximumFractionDigits: 0,
+      });
+    }
+
+    // -------- Nav: burger + active link --------
+    (function () {
+      const shell = document.querySelector(".nav-shell");
+      const btn = document.getElementById("menuToggle");
+      if (btn && shell) {
+        btn.addEventListener("click", () => {
+          const isOpen = shell.classList.toggle("open");
+          btn.setAttribute("aria-expanded", String(isOpen));
         });
       }
 
-      (async function () {
-        try {
-          const res = await fetch("index.html");
-          const html = await res.text();
-          const doc = new DOMParser().parseFromString(html, "text/html");
-          const navShell = doc.querySelector(".nav-shell");
-          // Find the nav bar's inline script in index.html
-          const navScriptText = Array.from(
-            doc.querySelectorAll("script:not([src])")
-          ).find((s) =>
-            s.innerText.includes("// -------- Auth area")
-          )?.innerText;
-
-          document.querySelector(".nav-shell").replaceWith(navShell);
-          if (navScriptText) {
-            eval(navScriptText); // Re-run the auth/nav script
-          }
-        } catch (e) {
-          console.error("Could not load navigation bar.", e);
+<<<<<<< HEAD
+      const path = location.pathname.replace(/\/+$/, "");
+      document.querySelectorAll("#navbar a[href]").forEach((a) => {
+        const href = a.getAttribute("href") || "";
+        if (path.endsWith(href) || (href.startsWith("/") && path === href)) {
+          a.classList.add("nav-active");
+=======
+      (function () {
+        const shell = document.querySelector(".nav-shell");
+        const btn = document.getElementById("menuToggle");
+        if (btn && shell) {
+          btn.addEventListener("click", () => {
+            const isOpen = shell.classList.toggle("open");
+            btn.setAttribute("aria-expanded", String(isOpen));
+          });
         }
+
+        const path = location.pathname.replace(/\/+$/, "");
+        document.querySelectorAll("#navbar a[href]").forEach((a) => {
+          const href = a.getAttribute("href") || "";
+          const isHome =
+            (path === "" || path === "/") &&
+            (href === "index.html" || href === "/index.html");
+          if (
+            isHome ||
+            path.endsWith(href) ||
+            (href.startsWith("/") && path === href)
+          ) {
+            a.classList.add("nav-active");
+          }
+        });
       })();
 
+      (function () {
+        const navbarUser = document.getElementById("navbarUser");
+        if (!navbarUser) return;
+        try {
+          const user = JSON.parse(localStorage.getItem("user") || "null");
+          if (!user) return; // If no user in localStorage, show Sign Up / Login
+
+          const firstName = user.first_name || "";
+          const lastName = user.last_name || "";
+          const displayName = `${firstName} ${lastName}`.trim() || user.email;
+
+          navbarUser.innerHTML = `
+      <div style="display:flex; align-items:center; gap:16px; color:#047857; font-weight:600;">
+        <div class="dropdown">
+          <span style="cursor:pointer;">Welcome, ${escapeHtml(
+            displayName
+          )}</span>
+          <div class="dropdown-content">
+            <a href="profile.html">My Profile</a>
+            <a href="wishlist.html">My Wishlist</a>
+          </div>
+        </div>
+        <button class="button-secondary" id="logoutBtn">Logout</button>
+      </div>
+    `;
+
+          document.getElementById("logoutBtn").addEventListener("click", () => {
+            localStorage.removeItem("user");
+            window.location.reload();
+          });
+        } catch (err) {
+          console.error("Auth navbar error:", err);
+>>>>>>> 3af726fc9ac34282917250b91a3704c51201b093
+        }
+      });
+    })();
+
+<<<<<<< HEAD
+    // -------- Auth (user dropdown) --------
+    (function () {
+      const navbarUser = document.getElementById("navbarUser");
+      try {
+        const user = JSON.parse(localStorage.getItem("user") || "null");
+        if (!user) return;
+        const firstName = user.first_name || "";
+        const lastName = user.last_name || "";
+        const displayName = `${firstName} ${lastName}`.trim() || user.email;
+
+        navbarUser.innerHTML = `
+            <div style="display:flex; align-items:center; gap:16px; color:#047857; font-weight:600;">
+              <div class="dropdown">
+                <span style="cursor: pointer;">Welcome, ${escapeHtml(
+          displayName
+        )}</span>
+                <div class="dropdown-content">
+                  <a href="profile.html">My Profile</a>
+                  <a href="wishlist.html">My Wishlist</a>
+                </div>
+              </div>
+              <button class="button-secondary" id="logoutBtn">Logout</button>
+            </div>
+          `;
+
+        document.getElementById("logoutBtn").addEventListener("click", () => {
+          localStorage.removeItem("user");
+          window.location.reload();
+        });
+      } catch (err) {
+        console.error("Failed to initialize user navbar:", err);
+=======
       const params = new URLSearchParams(location.search);
       const q = params.get("q") || "";
       const status = (params.get("status") || "rent").toLowerCase();
       const type = params.get("type") || "";
       const beds = params.get("beds") || "";
+      const state = params.get("state") || "";
       const price = params.get("price") || "";
 
       function renderChips() {
@@ -187,16 +320,45 @@
           chips.push(`<span class="chip">Type: ${escapeHtml(type)}</span>`);
         if (beds)
           chips.push(`<span class="chip">Beds: ${escapeHtml(beds)}</span>`);
+        if (state)
+          chips.push(`<span class="chip">State: ${escapeHtml(state)}</span>`);
         if (price)
           chips.push(`<span class="chip">Price: ${escapeHtml(price)}</span>`);
         c.innerHTML = chips.join(" ");
+>>>>>>> 3af726fc9ac34282917250b91a3704c51201b093
       }
+    })();
 
+<<<<<<< HEAD
+    const params = new URLSearchParams(location.search);
+    const q = params.get("q") || "";
+    const status = (params.get("status") || "rent").toLowerCase();
+    const type = params.get("type") || "";
+    const beds = params.get("beds") || "";
+    const price = params.get("price") || "";
+
+    function renderChips() {
+      const c = document.getElementById("chips");
+      const chips = [
+        `<span class="chip active">Status: ${escapeHtml(status)}</span>`,
+      ];
+      if (q) chips.push(`<span class="chip">Query: ${escapeHtml(q)}</span>`);
+      if (type)
+        chips.push(`<span class="chip">Type: ${escapeHtml(type)}</span>`);
+      if (beds)
+        chips.push(`<span class="chip">Beds: ${escapeHtml(beds)}</span>`);
+      if (price)
+        chips.push(`<span class="chip">Price: ${escapeHtml(price)}</span>`);
+      c.innerHTML = chips.join(" ");
+    }
+=======
       function prefillModal() {
         const t = document.getElementById("typeFilter");
         if (t) t.value = type;
         const b = document.getElementById("bedFilter");
         if (b) b.value = beds;
+        const s = document.getElementById("stateFilter");
+        if (s) s.value = state;
         const p = document.getElementById("priceFilter");
         if (p) p.value = price;
       }
@@ -206,27 +368,54 @@
         const sp = u.searchParams;
         sp.set("status", "rent");
         q ? sp.set("q", q) : sp.delete("q");
+
         "type" in newVals &&
           (newVals.type ? sp.set("type", newVals.type) : sp.delete("type"));
         "beds" in newVals &&
           (newVals.beds ? sp.set("beds", newVals.beds) : sp.delete("beds"));
         "price" in newVals &&
           (newVals.price ? sp.set("price", newVals.price) : sp.delete("price"));
+        "state" in newVals &&
+          (newVals.state ? sp.set("state", newVals.state) : sp.delete("state"));
+
         return u.toString();
       }
+>>>>>>> 3af726fc9ac34282917250b91a3704c51201b093
 
-      function card(p) {
-        const label = money(p.price) + " / wk";
-        const cover =
-          p.image || (p.images && p.images[0]) || "/Assets/placeholder.png";
-        const payload = encodeURIComponent(JSON.stringify(p));
-        const filled = inWishlist(p);
+    function prefillModal() {
+      const t = document.getElementById("typeFilter");
+      if (t) t.value = type;
+      const b = document.getElementById("bedFilter");
+      if (b) b.value = beds;
+      const p = document.getElementById("priceFilter");
+      if (p) p.value = price;
+    }
 
-        return `
+    function buildUrlWith(newVals = {}) {
+      const u = new URL(location.href);
+      const sp = u.searchParams;
+      sp.set("status", "rent");
+      q ? sp.set("q", q) : sp.delete("q");
+      "type" in newVals &&
+        (newVals.type ? sp.set("type", newVals.type) : sp.delete("type"));
+      "beds" in newVals &&
+        (newVals.beds ? sp.set("beds", newVals.beds) : sp.delete("beds"));
+      "price" in newVals &&
+        (newVals.price ? sp.set("price", newVals.price) : sp.delete("price"));
+      return u.toString();
+    }
+
+    function card(p) {
+      const label = money(p.price) + " / wk";
+      const cover =
+        p.image || (p.images && p.images[0]) || "/Assets/placeholder.png";
+      const payload = encodeURIComponent(JSON.stringify(p));
+      const filled = inWishlist(p);
+
+      return `
     <article class="property-card">
-      <div class="prop-photo-wrap" onclick="location.href='property.html?id=${
-        p.id
-      }&status=rent'">
+      <div class="prop-photo-wrap" onclick="location.href='property.html?id=${p.id
+        }&status=rent'">
         <img class="prop-photo" src="${escapeHtml(cover)}" alt="${escapeHtml(
           p.address || ""
         )}">
@@ -245,11 +434,14 @@
         </div>
 
         <div class="prop-actions">
-          <button class="btn-primary-full">Enquire</button>
-          <a class="btn btn-primary"
-             href="bookInspection.html?propertyId=${
-               p.id
-             }&address=${encodeURIComponent(
+          <a class="btn btn-primary btn-equal"
+             href="enquire.html?propertyId=${p.id}&address=${encodeURIComponent(
+          p.address || ""
+        )}&price=${encodeURIComponent(p.price || "")}">
+             Enquire
+          </a>
+          <a class="btn btn-primary btn-equal"
+             href="bookInspection.html?propertyId=${p.id}&address=${encodeURIComponent(
           p.address || ""
         )}&price=${encodeURIComponent(p.price || "")}">
              Book inspection
@@ -257,42 +449,126 @@
 
           <span class="spacer"></span>
 
-          <!-- ❤️ wishlist icon at far right -->
           <img
             class="love-icon"
             data-listing="${payload}"
-            src="${
-              filled ? "/Assets/ri_heart-fill.png" : "/Assets/love-icon.png"
-            }"
+            src="${filled ? "/Assets/ri_heart-fill.png" : "/Assets/love-icon.png"
+        }"
             alt="Save to wishlist"
           />
         </div>
       </div>
     </article>
   `;
-      }
+    }
 
-      function rentBucketToRange(bucket) {
-        const b = (bucket || "").toLowerCase();
-        if (b === "0-500/week") return [0, 500];
-        if (b === "500-800/week") return [500, 800];
-        if (b === "800-1200/week") return [800, 1200];
-        if (b === "1200+/week") return [1200, Infinity];
-        return null;
-      }
+    function rentBucketToRange(bucket) {
+      const b = (bucket || "").toLowerCase();
+      if (b === "0-500/week") return [0, 500];
+      if (b === "500-800/week") return [500, 800];
+      if (b === "800-1200/week") return [800, 1200];
+      if (b === "1200+/week") return [1200, Infinity];
+      return null;
+    }
 
+    async function fetchListings() {
+      const qs = new URLSearchParams();
+      qs.set("status", "rent");
+      if (q) qs.set("q", q);
+      if (type) qs.set("type", type);
+      if (beds) qs.set("minBeds", beds);
+      const url = "/api/listings?" + qs.toString();
+
+      try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error();
+        let data = await res.json();
+        let results = Array.isArray(data.results) ? data.results : [];
+
+        if (price) {
+          const range = rentBucketToRange(price);
+          if (range) {
+            const [min, max] = range;
+            results = results.filter((r) => {
+              const p = Number(r.price);
+              return !isNaN(p) && p >= min && p < max;
+            });
+          }
+        }
+
+        return results;
+      } catch {
+        const res = await fetch("/api/listings");
+        const data = await res.json();
+        let arr = (data.results || []).filter((x) => x.status === "rent");
+        if (q) {
+          const Q = q.toLowerCase();
+          arr = arr.filter(
+            (x) =>
+              (x.address || "").toLowerCase().includes(Q) ||
+              (x.suburb || "").toLowerCase().includes(Q) ||
+              (x.state || "").toLowerCase().includes(Q)
+          );
+        }
+        if (type)
+          arr = arr.filter(
+            (x) => (x.type || "").toLowerCase() === type.toLowerCase()
+          );
+        if (beds)
+          arr =
+            beds === "4+"
+              ? arr.filter((x) => (x.bedrooms || 0) >= 4)
+              : arr.filter((x) => String(x.bedrooms || "") === beds);
+        if (price) {
+          const range = rentBucketToRange(price);
+          if (range) {
+            const [min, max] = range;
+            arr = arr.filter((r) => {
+              const p = Number(r.price);
+              return !isNaN(p) && p >= min && p < max;
+            });
+          }
+        }
+        return arr;
+      }
+    }
+
+    async function load() {
+      renderChips();
+      prefillModal();
+      const container = document.getElementById("listingContainer");
+      container.innerHTML = "<p>Loading…</p>";
+      const results = await fetchListings();
+      if (!results.length) {
+        container.innerHTML = "<p>No properties found.</p>";
+        return;
+      }
+      container.innerHTML = results.map(card).join("");
+
+<<<<<<< HEAD
+      container.querySelectorAll(".love-icon").forEach((el) => {
+        try {
+          const listing = JSON.parse(
+            decodeURIComponent(el.dataset.listing || "{}")
+          );
+          setHeart(el, inWishlist(listing));
+        } catch {
+          setHeart(el, false);
+=======
       async function fetchListings() {
         const qs = new URLSearchParams();
         qs.set("status", "rent");
         if (q) qs.set("q", q);
         if (type) qs.set("type", type);
         if (beds) qs.set("minBeds", beds);
+        if (state) qs.set("state", state);
+
         const url = "/api/listings?" + qs.toString();
 
         try {
           const res = await fetch(url);
-          if (!res.ok) throw new Error();
-          let data = await res.json();
+          if (!res.ok) throw new Error("fetch failed");
+          const data = await res.json();
           let results = Array.isArray(data.results) ? data.results : [];
 
           if (price) {
@@ -306,11 +582,23 @@
             }
           }
 
+          if (state) {
+            const S = state.toUpperCase();
+            results = results.filter(
+              (r) => (r.state || "").toUpperCase() === S
+            );
+          }
+
           return results;
-        } catch {
+        } catch (e) {
+          console.error(e);
+
           const res = await fetch("/api/listings");
           const data = await res.json();
-          let arr = (data.results || []).filter((x) => x.status === "rent");
+          let arr = Array.isArray(data.results) ? data.results : [];
+
+          arr = arr.filter((x) => (x.status || "").toLowerCase() === "rent");
+
           if (q) {
             const Q = q.toLowerCase();
             arr = arr.filter(
@@ -320,15 +608,25 @@
                 (x.state || "").toLowerCase().includes(Q)
             );
           }
-          if (type)
+
+          if (type) {
             arr = arr.filter(
               (x) => (x.type || "").toLowerCase() === type.toLowerCase()
             );
-          if (beds)
+          }
+
+          if (beds) {
             arr =
               beds === "4+"
                 ? arr.filter((x) => (x.bedrooms || 0) >= 4)
                 : arr.filter((x) => String(x.bedrooms || "") === beds);
+          }
+
+          if (state) {
+            const S = state.toUpperCase();
+            arr = arr.filter((x) => (x.state || "").toUpperCase() === S);
+          }
+
           if (price) {
             const range = rentBucketToRange(price);
             if (range) {
@@ -339,41 +637,93 @@
               });
             }
           }
+
           return arr;
+>>>>>>> 3af726fc9ac34282917250b91a3704c51201b093
         }
-      }
+      });
+    }
 
-      async function load() {
-        renderChips();
+    (function modalWiring() {
+      const editBtn = document.getElementById("editFilters");
+      const modal = document.getElementById("filterModal");
+      const closeBtn = document.getElementById("closeFilter");
+      const resetBtn = document.getElementById("resetFilter");
+      const applyBtn = document.getElementById("applyFilter");
+
+      editBtn.addEventListener("click", () => {
         prefillModal();
-        const container = document.getElementById("listingContainer");
-        container.innerHTML = "<p>Loading…</p>";
-        const results = await fetchListings();
-        if (!results.length) {
-          container.innerHTML = "<p>No properties found.</p>";
-          return;
+        modal.style.display = "flex";
+        modal.setAttribute("aria-hidden", "false");
+      });
+      closeBtn.addEventListener("click", () => {
+        modal.style.display = "none";
+        modal.setAttribute("aria-hidden", "true");
+      });
+      window.addEventListener("click", (e) => {
+        if (e.target === modal) {
+          modal.style.display = "none";
+          modal.setAttribute("aria-hidden", "true");
         }
-        container.innerHTML = results.map(card).join("");
+      });
+      resetBtn.addEventListener("click", () => {
+        document.getElementById("typeFilter").value = "";
+        document.getElementById("bedFilter").value = "";
+        document.getElementById("priceFilter").value = "";
+      });
+      applyBtn.addEventListener("click", () => {
+        const newVals = {
+          type: document.getElementById("typeFilter").value,
+          beds: document.getElementById("bedFilter").value,
+          price: document.getElementById("priceFilter").value,
+        };
+        location.href = buildUrlWith(newVals);
+      });
+    })();
 
+    (function setupWishlistListeners() {
+      const container = document.getElementById("listingContainer");
+      if (!container) return;
+
+      container.addEventListener("click", (e) => {
+        const el = e.target.closest(".love-icon");
+        if (!el) return;
+
+        let listing;
+        try {
+          listing = JSON.parse(
+            decodeURIComponent(el.dataset.listing || "{}")
+          );
+        } catch {
+          listing = {};
+        }
+
+        const { added } = toggleWishlist(listing);
+        setHeart(el, added);
+      });
+
+      window.addEventListener("storage", (evt) => {
+        if (!evt.key || !evt.key.startsWith("wishlist:")) return;
         container.querySelectorAll(".love-icon").forEach((el) => {
           try {
-            const listing = JSON.parse(
+            const l = JSON.parse(
               decodeURIComponent(el.dataset.listing || "{}")
             );
-            setHeart(el, inWishlist(listing));
+            setHeart(el, inWishlist(l));
           } catch {
             setHeart(el, false);
           }
         });
-      }
+      });
+    })();
 
-      (function modalWiring() {
-        const editBtn = document.getElementById("editFilters");
-        const modal = document.getElementById("filterModal");
-        const closeBtn = document.getElementById("closeFilter");
-        const resetBtn = document.getElementById("resetFilter");
-        const applyBtn = document.getElementById("applyFilter");
+    load();
+  </script>
+</body>
 
+<<<<<<< HEAD
+</html>
+=======
         editBtn.addEventListener("click", () => {
           prefillModal();
           modal.style.display = "flex";
@@ -392,12 +742,14 @@
         resetBtn.addEventListener("click", () => {
           document.getElementById("typeFilter").value = "";
           document.getElementById("bedFilter").value = "";
+          document.getElementById("stateFilter").value = "";
           document.getElementById("priceFilter").value = "";
         });
         applyBtn.addEventListener("click", () => {
           const newVals = {
             type: document.getElementById("typeFilter").value,
             beds: document.getElementById("bedFilter").value,
+            state: document.getElementById("stateFilter").value,
             price: document.getElementById("priceFilter").value,
           };
           location.href = buildUrlWith(newVals);
@@ -444,3 +796,4 @@
     </script>
   </body>
 </html>
+>>>>>>> 3af726fc9ac34282917250b91a3704c51201b093

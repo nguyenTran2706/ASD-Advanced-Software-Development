@@ -465,7 +465,6 @@ form button {
 
 /* Responsive adjustments for arrows and news */
 @media (max-width: 1024px) {
-
   #newest-development,
   #latest-news,
   #optimization {
@@ -474,7 +473,6 @@ form button {
 }
 
 @media (max-width: 768px) {
-
   #newest-development,
   #latest-news,
   #optimization {
@@ -492,7 +490,6 @@ form button {
 }
 
 @media (max-width: 600px) {
-
   #newest-development,
   #latest-news,
   #optimization {
@@ -4626,4 +4623,10 @@ img {
   .related-news-grid {
     grid-template-columns: 1fr;
   }
+}
+
+#newest-development .controller {
+  justify-content: flex-end;
+  align-self: flex-end;
+  gap: 20px;
 }
