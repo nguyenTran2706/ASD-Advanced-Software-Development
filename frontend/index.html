@@ -11,7 +11,6 @@
     />
     <link rel="stylesheet" href="/css/style.css" />
 
-    <!-- Minimal extras used by the news cards layout -->
     <style>
       .carousel {
         position: relative;
@@ -79,7 +78,7 @@
       </div>
     </header>
 
-    <!-- Hero -->
+    <!-- Hero section -->
     <div id="hero-section">
       <div class="hero-section-center">
         <div class="hero-text">
@@ -132,7 +131,7 @@
       </div>
     </div>
 
-    <!-- Optimization / Featured -->
+    <!-- Optimization -->
     <div id="optimization">
       <div class="optimization-text">
         <p class="optimization-h1">
@@ -146,7 +145,7 @@
       <div id="listingContainer" class="prop-grid"></div>
     </div>
 
-    <!-- Newest Developments (original look + controller) -->
+    <!-- Newest Developments -->
     <div id="newest-development">
       <div class="optimization-text">
         <p class="optimization-h1">Newest Developments</p>
@@ -163,7 +162,6 @@
         <img src="/Assets/news3.png" alt="news" />
       </div>
 
-      <!-- ORIGINAL controller -->
       <div class="controller" id="devCtrl">
         <img src="/Assets/left-arrow.png" alt="left" />
         <div class="dots-layout"></div>
@@ -171,7 +169,7 @@
       </div>
     </div>
 
-    <!-- Latest News (now uses the SAME controller UI as above) -->
+    <!-- Latest News -->
     <div id="latest-news">
       <div class="optimization-text">
         <p class="optimization-h1">Latest News</p>
@@ -185,7 +183,6 @@
         <div class="carousel-track" data-track></div>
       </div>
 
-      <!-- Controller cloned style from Newest Developments -->
       <div class="controller" id="newsCtrl">
         <img src="/Assets/left-arrow.png" alt="left" />
         <div class="dots-layout"></div>
@@ -254,9 +251,7 @@
     <!-- Wishlist utils -->
     <script src="/js/wishlist.js"></script>
 
-    <!-- Core scripts -->
     <script>
-      // -------- Helpers --------
       function escapeHtml(str = "") {
         return String(str).replace(
           /[&<>"']/g,
@@ -271,7 +266,7 @@
         );
       }
 
-      // -------- Nav: burger + active link --------
+      // -------- Nav: burger --------
       (function () {
         const shell = document.querySelector(".nav-shell");
         const btn = document.getElementById("menuToggle");
@@ -342,14 +337,14 @@
         });
       }
 
-      // --- Card renderer copied from Buy Results (small tweak for status) ---
+      // --- Card renderer  ---
       function card(p) {
         const label = money(p.price);
         const cover =
           p.image || (p.images && p.images[0]) || "/Assets/placeholder.png";
         const payload = encodeURIComponent(JSON.stringify(p));
-        const filled = inWishlist(p); // from wishlist.js
-        const status = p.status || "buy"; // homepage may show mixed statuses
+        const filled = inWishlist(p); 
+        const status = p.status || "buy"; 
 
         return `
     <article class="property-card">
@@ -493,7 +488,7 @@
           if (type) params.set("type", type);
           if (beds) params.set("beds", beds);
           if (price) params.set("price", price.replace(/^rent-|^sold-/, ""));
-          if (state) params.set("state", state); // NEW
+          if (state) params.set("state", state); 
 
           return page + (params.toString() ? "?" + params.toString() : "");
         }
@@ -649,7 +644,6 @@
         `;
       }
 
-      // Use the SAME controller UI (left/right images + image dots)
       function createCarouselWithController({
         rootId,
         ctrlId,
@@ -738,9 +732,8 @@
         renderTrack();
       }
 
-      // Boot the News carousel and the Newest Developments scroller
       document.addEventListener("DOMContentLoaded", () => {
-        // --- Latest News (uses unified controller) ---
+        // --- Latest News ---
         const newsItems = [
           {
             image: "/Assets/berita1.png",
@@ -776,7 +769,7 @@
           renderItem: renderNewsCard,
         });
 
-        // --- Newest Developments (original UI, made responsive, duplicated once) ---
+        // --- Newest Developments ---
         (function () {
           const section = document.getElementById("newest-development");
           const track = section?.querySelector("#devRow");
