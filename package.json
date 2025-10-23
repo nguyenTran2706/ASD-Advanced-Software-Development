@@ -5,7 +5,7 @@
   "main": "db.js",
   "scripts": {
     "test": "jest",
-    "start": "node app.js",
+    "start": "node scripts/startup.js && node app.js",
     "dev": "nodemon app.js",
     "db:seed": "node scripts/seed.js",
     "db:reset": "del database.db && npm run db:seed",
